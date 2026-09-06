@@ -129,6 +129,9 @@ def validate_graph(root: Path) -> list[GraphIssue]:
                 issues.append(GraphIssue('error', path, f"pack name must match filename stem '{path.stem}'"))
             if not isinstance(data.get('description'), str) or not data.get('description'):
                 issues.append(GraphIssue('error', path, 'pack description must be a non-empty string'))
+            domain_issues = _validate_string_list(data, 'domains', path, allow_empty=False)
+            for issue in domain_issues:
+                issues.append(GraphIssue(issue.level, issue.path, 'pack domains ' + issue.message.removeprefix('domains ')))
             for key in ('skills', 'default_flow'):
                 issues.extend(_validate_string_list(data, key, path, allow_empty=False))
             pack_skills = data.get('skills') if isinstance(data.get('skills'), list) else []
@@ -136,12 +139,27 @@ def validate_graph(root: Path) -> list[GraphIssue]:
             entrypoint = data.get('entrypoint')
             if not isinstance(entrypoint, str) or entrypoint not in names:
                 issues.append(GraphIssue('error', path, f'pack entrypoint must reference a known skill: {entrypoint}'))
+            elif entrypoint not in pack_skills:
+                issues.append(GraphIssue('error', path, 'pack entrypoint must be listed in pack skills'))
             for name in pack_skills:
                 if isinstance(name, str) and name not in names:
                     issues.append(GraphIssue('error', path, f'pack references unknown skill: {name}'))
             for name in flow:
                 if isinstance(name, str) and name not in pack_skills:
                     issues.append(GraphIssue('error', path, f'default_flow skill is not listed in pack skills: {name}'))
+
+            flow_positions = {name: i for i, name in enumerate(flow) if isinstance(name, str)}
+            for name, position in flow_positions.items():
+                for prerequisite in prereqs.get(name, []):
+                    prerequisite_position = flow_positions.get(prerequisite)
+                    if prerequisite_position is not None and prerequisite_position > position:
+                        issues.append(
+                            GraphIssue(
+                                'error',
+                                path,
+                                f'default_flow prerequisite appears after dependent skill: {prerequisite} -> {name}',
+                            )
+                        )
 
     return issues
 

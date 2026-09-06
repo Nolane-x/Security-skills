@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "maturity": "beta",
+  "domains": [
+    "cryptography",
+    "protocols",
+    "assurance"
+  ],
+  "prerequisites": [
+    "secure-code-review"
+  ],
+  "composes_with": [
+    "evidence-driven-vulnerability-validation"
+  ],
+  "evidence_stage": "hypothesis"
+}

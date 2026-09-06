@@ -77,3 +77,54 @@ When a source inspires a skill:
 6. separate candidate discovery from causal validation;
 7. validate the resulting skill and graph metadata;
 8. prefer general invariants that transfer across tools and vendors.
+
+## Wave 3 domain standards and research systems
+
+### Mobile application security
+
+- OWASP MASVS / MASTG — https://mas.owasp.org/
+- MobSF — https://github.com/MobSF/Mobile-Security-Framework-MobSF
+
+These sources inform platform component, deep-link, WebView, local-storage, entitlement, link-routing and network-trust analysis. The skills retain a strict split between exposed mobile surface, policy mismatch, and demonstrated security consequence.
+
+### Firmware and embedded systems
+
+- Binwalk — https://github.com/ReFirmLabs/binwalk
+- FirmAE — https://github.com/pr0v3rbs/FirmAE
+
+These sources inform firmware decomposition, emulation, recovery planning and parser/update/boot-surface mapping. Physical/debug and update-chain work remains explicitly authorized and benign-by-default.
+
+### Virtualization boundaries
+
+- QEMU security model — https://www.qemu.org/docs/master/system/security.html
+- Nyx / kAFL ecosystem — https://github.com/nyx-fuzz/Nyx
+
+These sources inform guest-isolation threat models, virtual-device attack surfaces, shared-memory/ring analysis and conservative guest-to-host evidence claims.
+
+### Web framework internals
+
+- OWASP Web Security Testing Guide — https://owasp.org/www-project-web-security-testing-guide/
+
+WSTG contributes broad testing methodology while Wave 3 focuses on framework-internal interpretation boundaries: routing/middleware composition, outbound request policy, uploads, template/expression evaluation and multi-tenant context propagation.
+
+### Cryptographic assurance
+
+- NIST SP 800-57 Part 1 — https://csrc.nist.gov/pubs/sp/800/57/pt1/r5/final
+- NIST cryptographic standards/key-management guidance — https://csrc.nist.gov/Projects/Key-Management/Key-Management-Guidelines
+
+These sources inform key roles/lifecycle, randomness/nonce requirements and standards-based review. Security Skills explicitly avoids inventing cryptographic constructions or treating nonstandard code alone as proof of weakness.
+
+### Smart contracts
+
+- Slither — https://github.com/crytic/slither
+- Echidna — https://github.com/crytic/echidna
+
+These sources inform invariant-centered static analysis and property-based fuzzing. Wave 3 contracts skills require local/forked test chains and synthetic assets rather than live-fund exploitation.
+
+### AI-agent deep security
+
+- AgentDojo — https://github.com/ethz-spylab/agentdojo
+- OWASP AI Agent Security Cheat Sheet — https://cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html
+- OWASP Agentic Security Initiative — https://genai.owasp.org/initiatives/agentic-security-initiative/
+
+These sources inform prompt/context authority, tool capability and confirmation, memory/RAG isolation, plugin/connector trust, and reproducible benign agent-security evaluation.

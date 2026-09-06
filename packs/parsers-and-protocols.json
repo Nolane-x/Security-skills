@@ -2,6 +2,10 @@
   "schema_version": 1,
   "name": "parsers-and-protocols",
   "description": "Structured input and temporal-state research for parsers, file formats, decoders, RPC/IPC, and network protocols.",
+  "domains": [
+    "parsers",
+    "protocols"
+  ],
   "entrypoint": "parser-state-machine-analysis",
   "skills": [
     "security-scope-and-authorization",

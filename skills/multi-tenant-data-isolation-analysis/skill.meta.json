@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "maturity": "beta",
+  "domains": [
+    "web",
+    "multi-tenant",
+    "authorization"
+  ],
+  "prerequisites": [
+    "authorization-boundary-analysis"
+  ],
+  "composes_with": [
+    "evidence-driven-vulnerability-validation"
+  ],
+  "evidence_stage": "observed"
+}

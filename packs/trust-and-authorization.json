@@ -2,6 +2,11 @@
   "schema_version": 1,
   "name": "trust-and-authorization",
   "description": "Identity, namespace, authorization, delegation, cache identity, token, and confused-deputy analysis across trust boundaries.",
+  "domains": [
+    "authorization",
+    "identity",
+    "trust-boundary"
+  ],
   "entrypoint": "authorization-boundary-analysis",
   "skills": [
     "security-scope-and-authorization",

@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "name": "web-framework-internals",
+  "description": "Server-side web framework and application-internal boundary analysis for routing/middleware, outbound requests, upload pipelines, template engines, and multi-tenant isolation.",
+  "domains": [
+    "web",
+    "routing",
+    "multi-tenant"
+  ],
+  "entrypoint": "web-routing-and-middleware-analysis",
+  "skills": [
+    "security-scope-and-authorization",
+    "attack-surface-mapping",
+    "web-routing-and-middleware-analysis",
+    "server-side-request-boundary-analysis",
+    "file-upload-processing-analysis",
+    "template-expression-boundary-analysis",
+    "multi-tenant-data-isolation-analysis",
+    "authorization-boundary-analysis",
+    "canonicalization-and-namespace-analysis",
+    "parser-state-machine-analysis",
+    "cache-key-identity-analysis",
+    "evidence-driven-vulnerability-validation"
+  ],
+  "default_flow": [
+    "security-scope-and-authorization",
+    "attack-surface-mapping",
+    "web-routing-and-middleware-analysis",
+    "evidence-driven-vulnerability-validation"
+  ]
+}

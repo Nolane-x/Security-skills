@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "maturity": "beta",
+  "domains": [
+    "mobile",
+    "android",
+    "routing"
+  ],
+  "prerequisites": [
+    "android-component-exposure-analysis"
+  ],
+  "composes_with": [
+    "evidence-driven-vulnerability-validation"
+  ],
+  "evidence_stage": "observed"
+}

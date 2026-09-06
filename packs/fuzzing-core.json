@@ -2,6 +2,9 @@
   "schema_version": 1,
   "name": "fuzzing-core",
   "description": "Core authorized fuzzing and crash triage workflow.",
+  "domains": [
+    "fuzzing"
+  ],
   "entrypoint": "fuzzing-workflow",
   "skills": [
     "security-scope-and-authorization",

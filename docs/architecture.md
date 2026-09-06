@@ -24,6 +24,7 @@ Schema version 1 records:
 
 `packs/*.json` groups existing canonical skills into reusable domain routes. Packs do not copy skill text. Each pack declares:
 
+- routing `domains`;
 - an entrypoint;
 - the permitted member skill set;
 - an opinionated `default_flow`.
@@ -39,7 +40,7 @@ The graph has six reasoning layers:
 3. **Semantic root cause:** lifetime, bounds/integer, type, concurrency, parser/protocol state, identity/canonicalization, authorization/delegation.
 4. **Verification:** minimization, sanitizers, controls, causal validation, conservative impact triage, version matrices.
 5. **Remediation:** patch analysis, variant hunting, invariant-level fixes, regression closure.
-6. **Meta-reasoner:** routing through packs/skills based on target evidence and failed hypotheses.
+6. **Meta-reasoner:** research-case state, deterministic routing, evidence ledgers, experiment design, false-positive elimination, correlation, fix validation and reporting.
 
 ## 5. Evidence state machine
 
@@ -63,13 +64,22 @@ regression-verified
 
 A graph edge never upgrades evidence by itself. The destination skill's evidence contract must actually be satisfied.
 
-## 6. Generated artifacts
+
+## 6. Research-case control plane
+
+`schemas/research-case.schema.json` defines the portable case envelope and `scripts/research_case.py` provides dependency-free semantic validation. A case carries authorized scope, domain labels, goal, evidence state, pinned environment, observations, controls, reproducer identity, causal claim, bounded consequence, uncertainties and fix-validation status.
+
+`scripts/route_skills.py` is advisory-only. It validates the case and graph, applies domain guards, selects goal/state anchors, closes prerequisites transitively, orders the resulting DAG by evidence stage, and recommends matching packs. Routing cannot grant authorization or upgrade evidence state.
+
+The control plane separates **what the investigation currently knows** from **which skill should run next**. This prevents a long-running agent from treating its own previous prose as proof.
+
+## 7. Generated artifacts
 
 - `catalog.json` / `CATALOG.md`: build-on-demand portable skill inventory.
 - `graph.json` / `GRAPH.md`: build-on-demand routing graph, pack membership, prerequisites, maturity, domains and evidence stage.
 
 Generated indexes are intentionally ignored by Git. `SKILL.md`, `skill.meta.json`, and `packs/*.json` are the canonical source; CI generates the indexes and immediately runs `--check` to verify deterministic output.
 
-## 7. Why not one giant security prompt?
+## 8. Why not one giant security prompt?
 
 A giant always-on prompt wastes context, creates ambiguous routing, and encourages agents to skip verification. Progressive disclosure lets an agent first inspect metadata, activate a focused pack/skill, then read only locally relevant detail.

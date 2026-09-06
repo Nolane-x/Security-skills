@@ -10,7 +10,8 @@ This repository is a portable, verification-first security-research skill graph.
 4. Do not put vendor-only routing/tool metadata in canonical frontmatter.
 5. Keep the skill self-contained; local Markdown links may not escape its directory.
 6. Update graph relationships only when the dependency is semantically required; do not create dependency cycles.
-7. If a pack flow changes, ensure every flow node is explicitly listed in that pack.
+7. If a pack flow changes, ensure every flow node is explicitly listed in that pack and its prerequisites appear earlier when both are in the flow.
+8. Treat pack `domains` as routing constraints; do not broaden them merely to increase matches.
 
 ## Security research quality bar
 
@@ -22,6 +23,8 @@ This repository is a portable, verification-first security-research skill graph.
 - Record uncertainty, mitigations, and environment dependence instead of overstating exploitability.
 - Tool output or LLM judgment alone never confirms a vulnerability.
 - Keep chain claims hop-by-hop: renderer bug ≠ sandbox escape; memory corruption ≠ code execution; exposed interface ≠ authorization bypass.
+- For multi-step investigations, preserve state in the research-case contract rather than inferring evidence level from chat history.
+- The skill router is advisory-only. It may suggest a path but cannot grant authorization, confirm a claim, or skip evidence gates.
 
 ## Completion gate
 
@@ -34,6 +37,8 @@ python scripts/build_catalog.py
 python scripts/build_graph.py
 python scripts/build_catalog.py --check
 python scripts/build_graph.py --check
+python scripts/validate_case.py examples/research-case.example.json
+python scripts/route_skills.py examples/research-case.example.json --limit 12
 python -m unittest discover -s tests -v
 ```
 

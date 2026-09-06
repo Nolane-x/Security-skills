@@ -55,7 +55,7 @@ Rules:
 
 ## Packs
 
-A `packs/<name>.json` manifest must list every skill used by its `default_flow`. Pack entrypoints and members must reference canonical skill names. Packs never duplicate skill prose.
+A `packs/<name>.json` manifest must declare one or more routing `domains` and list every skill used by its `default_flow`. Pack entrypoints and members must reference canonical skill names. When a prerequisite and its dependent both appear in `default_flow`, the prerequisite must come first. Packs never duplicate skill prose.
 
 ## Evidence language
 
@@ -80,4 +80,4 @@ python scripts/build_graph.py --check
 python -m unittest discover -s tests -v
 ```
 
-CI repeats the stale checks and tests on Linux, macOS, and Windows.
+CI repeats the stale checks and tests on Linux, macOS, and Windows. Research-case and router changes must also keep `examples/research-case.example.json` valid and routeable.

@@ -2,6 +2,10 @@
   "schema_version": 1,
   "name": "fuzzing-research",
   "description": "Deep fuzzing workflow spanning harness design, corpus engineering, structured/stateful generation, triage, sanitizer interpretation, and validation.",
+  "domains": [
+    "fuzzing",
+    "dynamic-analysis"
+  ],
   "entrypoint": "fuzz-harness-design",
   "skills": [
     "security-scope-and-authorization",

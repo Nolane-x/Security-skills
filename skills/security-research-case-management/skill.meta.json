@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "maturity": "beta",
+  "domains": [
+    "research",
+    "orchestration",
+    "evidence"
+  ],
+  "prerequisites": [
+    "security-scope-and-authorization"
+  ],
+  "composes_with": [
+    "research-route-selection",
+    "evidence-ledger-and-claim-tracking"
+  ],
+  "evidence_stage": "hypothesis"
+}

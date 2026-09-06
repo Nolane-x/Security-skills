@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "name": "ai-agent-deep-security",
+  "description": "Deep AI-agent boundary analysis for prompt injection, tool authorization/confirmation, RAG-memory isolation, connector/plugin trust, and evidence-driven validation.",
+  "domains": [
+    "ai-security",
+    "agent-security",
+    "rag",
+    "plugins"
+  ],
+  "entrypoint": "ai-agent-security-assessment",
+  "skills": [
+    "security-scope-and-authorization",
+    "ai-agent-security-assessment",
+    "prompt-injection-boundary-analysis",
+    "tool-capability-and-confirmation-analysis",
+    "rag-memory-data-isolation-analysis",
+    "connector-plugin-trust-analysis",
+    "authorization-boundary-analysis",
+    "multi-tenant-data-isolation-analysis",
+    "cache-key-identity-analysis",
+    "supply-chain-dependency-review",
+    "evidence-driven-vulnerability-validation"
+  ],
+  "default_flow": [
+    "security-scope-and-authorization",
+    "ai-agent-security-assessment",
+    "prompt-injection-boundary-analysis",
+    "tool-capability-and-confirmation-analysis",
+    "evidence-driven-vulnerability-validation"
+  ]
+}

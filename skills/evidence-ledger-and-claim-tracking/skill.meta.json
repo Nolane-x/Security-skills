@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "maturity": "beta",
+  "domains": [
+    "research",
+    "evidence",
+    "provenance"
+  ],
+  "prerequisites": [
+    "security-research-case-management"
+  ],
+  "composes_with": [
+    "security-research-case-management"
+  ],
+  "evidence_stage": "hypothesis"
+}

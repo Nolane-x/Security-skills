@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "maturity": "beta",
+  "domains": [
+    "reproducibility",
+    "environment",
+    "verification"
+  ],
+  "prerequisites": [
+    "security-research-case-management"
+  ],
+  "composes_with": [
+    "security-research-case-management"
+  ],
+  "evidence_stage": "hypothesis"
+}

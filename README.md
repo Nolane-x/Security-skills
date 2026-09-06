@@ -6,10 +6,10 @@ The canonical capability format is the open **Agent Skills** structure: each reu
 
 The project teaches agents **how to reason, route, collect evidence, reject false positives, and close regressions**. It is deliberately not a payload collection.
 
-## Current Wave 2
+## Current Wave 4
 
-- **43 canonical skills**
-- **12 validated skill packs**
+- **83 canonical skills**
+- **20 validated skill packs**
 - deterministic build-on-demand catalog and graph indexes
 - source-controlled graph metadata and pack manifests
 - prerequisite cycle detection and unknown-node rejection
@@ -27,7 +27,10 @@ The current graph spans:
 - authorization, confused deputy, cache identity, secret/token flow;
 - kernel, driver/IOCTL, sandbox, browser process and JIT invariant analysis;
 - container isolation, cloud IAM, supply-chain dependency review;
-- remediation, patch-diff analysis, regression matrices, secure code review and AI-agent security.
+- remediation, patch-diff analysis, regression matrices, secure code review and AI-agent security;
+- mobile Android/iOS trust boundaries, firmware/update/boot/debug surfaces, virtualization guest-host/device/shared-memory boundaries;
+- web-framework routing/SSRF/upload/template/multi-tenant internals, cryptographic protocol/randomness/PKI assurance, smart-contract invariants/reentrancy/upgrades/oracles, and deep AI-agent prompt/tool/RAG/plugin trust;
+- research-case state management, controlled experiments, evidence ledgers, false-positive elimination, static/dynamic correlation, route selection, fix-validation experiments and security-research reporting.
 
 Generate the human and machine indexes on demand with `python scripts/build_catalog.py` and `python scripts/build_graph.py`. The generated files are intentionally ignored so `SKILL.md`, `skill.meta.json`, and pack manifests remain the only source of truth.
 
@@ -63,6 +66,18 @@ attack surface
 
 Every hop has its own evidence contract and stop conditions.
 
+
+## Research-case engine
+
+Wave 4 adds a dependency-free machine-readable case contract so an agent can preserve evidence state across long investigations instead of re-deriving status from prose. The case validator enforces authorization and evidence gates; the router is advisory-only and closes skill prerequisites transitively before returning a deterministic route.
+
+```bash
+python scripts/validate_case.py examples/research-case.example.json
+python scripts/route_skills.py examples/research-case.example.json --limit 12
+```
+
+A case cannot skip directly from `hypothesis` to `validated`. `validated` requires a pinned reproducer, causal root cause, bounded security consequence, and positive/negative controls. `regression-verified` additionally requires a fixed revision where the same evidence no longer reproduces while controls remain healthy. See [docs/research-case-contract.md](docs/research-case-contract.md).
+
 ## Portability model
 
 `skills/` is the single canonical source. Do not fork the prose per vendor.
@@ -91,6 +106,14 @@ Packs are routing manifests under `packs/`; they reference canonical skills rath
 - `kernel-sandbox-browser`
 - `cloud-and-supply-chain`
 - `verification-engineering`
+- `mobile-security`
+- `firmware-and-boot`
+- `virtualization-boundaries`
+- `web-framework-internals`
+- `cryptographic-assurance`
+- `smart-contracts`
+- `ai-agent-deep-security`
+- `autonomous-research-orchestration`
 - plus compact foundation/program-analysis/remediation/AI-agent packs.
 
 See [packs/README.md](packs/README.md).
@@ -106,6 +129,8 @@ python scripts/build_catalog.py
 python scripts/build_graph.py
 python scripts/build_catalog.py --check
 python scripts/build_graph.py --check
+python scripts/validate_case.py examples/research-case.example.json
+python scripts/route_skills.py examples/research-case.example.json --limit 12
 python -m unittest discover -s tests -v
 ```
 

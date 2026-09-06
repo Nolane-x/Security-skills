@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "maturity": "beta",
+  "domains": [
+    "mobile",
+    "network",
+    "transport-security"
+  ],
+  "prerequisites": [
+    "attack-surface-mapping"
+  ],
+  "composes_with": [
+    "evidence-driven-vulnerability-validation"
+  ],
+  "evidence_stage": "observed"
+}

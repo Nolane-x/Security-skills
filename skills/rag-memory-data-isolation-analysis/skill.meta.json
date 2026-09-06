@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "maturity": "beta",
+  "domains": [
+    "ai-security",
+    "rag",
+    "memory",
+    "multi-tenant"
+  ],
+  "prerequisites": [
+    "ai-agent-security-assessment"
+  ],
+  "composes_with": [
+    "evidence-driven-vulnerability-validation"
+  ],
+  "evidence_stage": "observed"
+}

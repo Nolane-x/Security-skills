@@ -2,6 +2,11 @@
   "schema_version": 1,
   "name": "program-analysis",
   "description": "Static, symbolic, and binary analysis workflows for source and compiled targets.",
+  "domains": [
+    "static-analysis",
+    "symbolic-execution",
+    "binary"
+  ],
   "entrypoint": "attack-surface-mapping",
   "skills": [
     "security-scope-and-authorization",

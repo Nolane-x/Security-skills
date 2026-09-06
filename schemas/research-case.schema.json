@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nolane-x.github.io/security-skills/schemas/research-case.schema.json",
+  "title": "Security Skills Research Case",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "case_id", "title", "scope", "domains", "goal", "state", "claim",
+    "environment", "observations", "controls", "reproducer", "root_cause",
+    "security_consequence", "uncertainties", "fix_validation"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "case_id": {"type": "string", "minLength": 1},
+    "title": {"type": "string", "minLength": 1},
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["authorized", "kind", "target"],
+      "properties": {
+        "authorized": {"const": true},
+        "kind": {"enum": ["local", "owned", "sandbox", "ctf", "explicit"]},
+        "target": {"type": "string", "minLength": 1}
+      }
+    },
+    "domains": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "goal": {"enum": ["discover", "root-cause", "validate", "remediate", "report"]},
+    "state": {"enum": ["hypothesis", "observed", "validated", "regression-verified"]},
+    "claim": {"type": "string", "minLength": 1},
+    "environment": {
+      "type": "object",
+      "properties": {
+        "target_revision": {"type": "string"},
+        "platform": {"type": "string"}
+      },
+      "additionalProperties": {"type": ["string", "number", "boolean", "null"]}
+    },
+    "observations": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "controls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["positive", "negative"],
+      "properties": {
+        "positive": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "negative": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "reproducer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["steps", "fixture_digest"],
+      "properties": {
+        "steps": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "fixture_digest": {"type": "string"}
+      }
+    },
+    "root_cause": {"type": "string"},
+    "security_consequence": {"type": "string"},
+    "uncertainties": {"type": "array", "items": {"type": "string"}},
+    "fix_validation": {
+      "type": "object",
+      "properties": {
+        "fixed_revision": {"type": "string"},
+        "vulnerability_no_longer_reproduces": {"type": "boolean"},
+        "controls_still_pass": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"state": {"enum": ["observed", "validated", "regression-verified"]}}},
+      "then": {
+        "properties": {
+          "environment": {"required": ["target_revision", "platform"]},
+          "observations": {"minItems": 1}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"state": {"enum": ["validated", "regression-verified"]}}},
+      "then": {
+        "properties": {
+          "root_cause": {"minLength": 1},
+          "security_consequence": {"minLength": 1},
+          "controls": {
+            "properties": {
+              "positive": {"minItems": 1},
+              "negative": {"minItems": 1}
+            }
+          },
+          "reproducer": {
+            "properties": {
+              "steps": {"minItems": 1},
+              "fixture_digest": {"minLength": 1}
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"state": {"const": "regression-verified"}}},
+      "then": {
+        "properties": {
+          "fix_validation": {
+            "required": ["fixed_revision", "vulnerability_no_longer_reproduces", "controls_still_pass"],
+            "properties": {
+              "fixed_revision": {"minLength": 1},
+              "vulnerability_no_longer_reproduces": {"const": true},
+              "controls_still_pass": {"const": true}
+            }
+          }
+        }
+      }
+    }
+  ]
+}

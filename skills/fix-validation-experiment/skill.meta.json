@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "maturity": "beta",
+  "domains": [
+    "remediation",
+    "verification",
+    "regression"
+  ],
+  "prerequisites": [
+    "remediation-and-regression"
+  ],
+  "composes_with": [
+    "security-research-case-management"
+  ],
+  "evidence_stage": "regression-verified"
+}

@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "maturity": "beta",
+  "domains": [
+    "firmware",
+    "updates",
+    "supply-chain"
+  ],
+  "prerequisites": [
+    "firmware-attack-surface-analysis"
+  ],
+  "composes_with": [
+    "evidence-driven-vulnerability-validation"
+  ],
+  "evidence_stage": "observed"
+}
