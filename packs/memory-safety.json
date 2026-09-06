@@ -2,6 +2,9 @@
   "schema_version": 1,
   "name": "memory-safety",
   "description": "Root-cause and impact workflow for lifetime, spatial/integer, type, and concurrency memory-safety failures.",
+  "domains": [
+    "memory-safety"
+  ],
   "entrypoint": "sanitizer-guided-memory-analysis",
   "skills": [
     "security-scope-and-authorization",

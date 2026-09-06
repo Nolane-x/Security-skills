@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "case_id": "example-parser-001",
+  "title": "Synthetic parser state mismatch",
+  "scope": {
+    "authorized": true,
+    "kind": "sandbox",
+    "target": "local parser fixture"
+  },
+  "domains": ["parsers", "memory-safety"],
+  "goal": "validate",
+  "state": "observed",
+  "claim": "A state/length mismatch may reach an invalid memory access in the local fixture.",
+  "environment": {
+    "target_revision": "abc123",
+    "platform": "linux-x64"
+  },
+  "observations": [
+    "The minimized synthetic fixture reproduces the same sanitizer invalid-read at parser.c:42."
+  ],
+  "controls": {
+    "positive": [],
+    "negative": []
+  },
+  "reproducer": {
+    "steps": [],
+    "fixture_digest": ""
+  },
+  "root_cause": "",
+  "security_consequence": "",
+  "uncertainties": [
+    "Causal root cause and security impact are not yet validated."
+  ],
+  "fix_validation": {}
+}

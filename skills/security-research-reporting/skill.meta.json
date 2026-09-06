@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "maturity": "beta",
+  "domains": [
+    "research",
+    "reporting",
+    "evidence"
+  ],
+  "prerequisites": [
+    "evidence-ledger-and-claim-tracking"
+  ],
+  "composes_with": [
+    "security-research-case-management"
+  ],
+  "evidence_stage": "hypothesis"
+}

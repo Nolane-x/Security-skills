@@ -2,6 +2,10 @@
   "schema_version": 1,
   "name": "research-foundation",
   "description": "Core routing, authorization, attack-surface, hypothesis, and evidence workflow for security research.",
+  "domains": [
+    "research",
+    "foundation"
+  ],
   "entrypoint": "security-research-router",
   "skills": [
     "security-research-router",

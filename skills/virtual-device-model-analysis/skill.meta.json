@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "maturity": "beta",
+  "domains": [
+    "virtualization",
+    "device-emulation",
+    "memory-safety"
+  ],
+  "prerequisites": [
+    "guest-host-boundary-analysis"
+  ],
+  "composes_with": [
+    "evidence-driven-vulnerability-validation"
+  ],
+  "evidence_stage": "observed"
+}

@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "maturity": "beta",
+  "domains": [
+    "research",
+    "orchestration",
+    "routing"
+  ],
+  "prerequisites": [
+    "security-research-case-management"
+  ],
+  "composes_with": [
+    "security-research-case-management"
+  ],
+  "evidence_stage": "hypothesis"
+}

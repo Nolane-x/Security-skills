@@ -64,6 +64,7 @@ regression-verified
 
 A graph edge never upgrades evidence by itself. The destination skill's evidence contract must actually be satisfied.
 
+
 ## 6. Research-case control plane
 
 `schemas/research-case.schema.json` defines the portable case envelope and `scripts/research_case.py` provides dependency-free semantic validation. A case carries authorized scope, domain labels, goal, evidence state, pinned environment, observations, controls, reproducer identity, causal claim, bounded consequence, uncertainties and fix-validation status.

@@ -1,14 +1,10 @@
-# Skill packs
+# Skill Packs
 
-Packs are thin routing manifests over canonical skills. They do not duplicate `SKILL.md` bodies.
+Packs are routing manifests, not copied prompt bundles. A pack references canonical skills under `skills/`, declares routing `domains`, one entrypoint, and an opinionated default flow.
 
-Each `packs/*.json` file declares:
+Agents should start with the pack entrypoint when the domain is clear, then follow evidence rather than blindly executing every step. Pack domains are routing constraints used to prevent unrelated packs from surfacing merely because they share a generic primitive. `default_flow` is a common path, not a mandatory pipeline. A skill may appear in several packs because primitives such as authorization, validation, lifetime, and canonicalization cross domain boundaries.
 
-- `entrypoint` - the most useful first capability for that pack;
-- `skills` - the complete canonical skill set exposed by the pack;
-- `default_flow` - an evidence-aware suggested route, not an unconditional execution chain.
-
-Validate packs and dependency references with:
+Validate pack references and graph topology with:
 
 ```bash
 python scripts/validate_graph.py

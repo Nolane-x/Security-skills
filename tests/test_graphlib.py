@@ -101,6 +101,63 @@ class GraphValidationTests(unittest.TestCase):
             issues = validate_graph(root)
             self.assertTrue(any('default_flow skill is not listed' in i.message for i in issues))
 
+
+    def test_pack_domains_are_required(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            write_skill(root, 'alpha-skill', meta())
+            pack_root = root / 'packs'
+            pack_root.mkdir()
+            manifest = {
+                'schema_version': 1,
+                'name': 'no-domain-pack',
+                'description': 'fixture',
+                'entrypoint': 'alpha-skill',
+                'skills': ['alpha-skill'],
+                'default_flow': ['alpha-skill'],
+            }
+            (pack_root / 'no-domain-pack.json').write_text(json.dumps(manifest), encoding='utf-8')
+            issues = validate_graph(root)
+            self.assertTrue(any('pack domains' in i.message for i in issues))
+
+    def test_pack_entrypoint_must_be_pack_member(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            write_skill(root, 'alpha-skill', meta())
+            write_skill(root, 'beta-skill', meta())
+            pack_root = root / 'packs'
+            pack_root.mkdir()
+            manifest = {
+                'schema_version': 1,
+                'name': 'bad-entrypoint-pack',
+                'description': 'fixture',
+                'entrypoint': 'beta-skill',
+                'skills': ['alpha-skill'],
+                'default_flow': ['alpha-skill'],
+            }
+            (pack_root / 'bad-entrypoint-pack.json').write_text(json.dumps(manifest), encoding='utf-8')
+            issues = validate_graph(root)
+            self.assertTrue(any('entrypoint must be listed in pack skills' in i.message for i in issues))
+
+    def test_pack_flow_respects_prerequisite_order(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            write_skill(root, 'alpha-skill', meta())
+            write_skill(root, 'beta-skill', meta(prereq=['alpha-skill']))
+            pack_root = root / 'packs'
+            pack_root.mkdir()
+            manifest = {
+                'schema_version': 1,
+                'name': 'bad-order-pack',
+                'description': 'fixture',
+                'entrypoint': 'alpha-skill',
+                'skills': ['alpha-skill', 'beta-skill'],
+                'default_flow': ['beta-skill', 'alpha-skill'],
+            }
+            (pack_root / 'bad-order-pack.json').write_text(json.dumps(manifest), encoding='utf-8')
+            issues = validate_graph(root)
+            self.assertTrue(any('prerequisite appears after dependent skill' in i.message for i in issues))
+
     def test_valid_graph_has_no_errors(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)

@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "name": "virtualization-boundaries",
+  "description": "Guest-host security analysis for hypervisors, virtual device models, shared-memory protocols, state machines, memory safety, and boundary validation.",
+  "domains": [
+    "virtualization",
+    "hypervisor",
+    "shared-memory"
+  ],
+  "entrypoint": "guest-host-boundary-analysis",
+  "skills": [
+    "security-scope-and-authorization",
+    "guest-host-boundary-analysis",
+    "virtual-device-model-analysis",
+    "hypervisor-shared-memory-analysis",
+    "bounds-and-integer-analysis",
+    "memory-lifetime-analysis",
+    "concurrency-race-analysis",
+    "sanitizer-guided-memory-analysis",
+    "exploitability-triage",
+    "evidence-driven-vulnerability-validation"
+  ],
+  "default_flow": [
+    "security-scope-and-authorization",
+    "guest-host-boundary-analysis",
+    "virtual-device-model-analysis",
+    "evidence-driven-vulnerability-validation",
+    "exploitability-triage"
+  ]
+}

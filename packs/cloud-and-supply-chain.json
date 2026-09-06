@@ -2,6 +2,11 @@
   "schema_version": 1,
   "name": "cloud-and-supply-chain",
   "description": "Cloud/container identity, isolation, secret flow, dependency provenance, and build/release trust analysis.",
+  "domains": [
+    "cloud",
+    "supply-chain",
+    "containers"
+  ],
   "entrypoint": "container-isolation-review",
   "skills": [
     "security-scope-and-authorization",

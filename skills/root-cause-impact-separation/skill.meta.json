@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "maturity": "beta",
+  "domains": [
+    "verification",
+    "impact",
+    "root-cause"
+  ],
+  "prerequisites": [
+    "evidence-ledger-and-claim-tracking"
+  ],
+  "composes_with": [
+    "security-research-case-management"
+  ],
+  "evidence_stage": "observed"
+}

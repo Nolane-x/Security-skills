@@ -2,6 +2,10 @@
   "schema_version": 1,
   "name": "ai-agent-security",
   "description": "Assessment workflow for AI agents, tool boundaries, untrusted context, and action authorization.",
+  "domains": [
+    "ai-security",
+    "agent-security"
+  ],
   "entrypoint": "ai-agent-security-assessment",
   "skills": [
     "security-scope-and-authorization",

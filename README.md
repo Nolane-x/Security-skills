@@ -66,6 +66,7 @@ attack surface
 
 Every hop has its own evidence contract and stop conditions.
 
+
 ## Research-case engine
 
 Wave 4 adds a dependency-free machine-readable case contract so an agent can preserve evidence state across long investigations instead of re-deriving status from prose. The case validator enforces authorization and evidence gates; the router is advisory-only and closes skill prerequisites transitively before returning a deterministic route.
@@ -77,21 +78,45 @@ python scripts/route_skills.py examples/research-case.example.json --limit 12
 
 A case cannot skip directly from `hypothesis` to `validated`. `validated` requires a pinned reproducer, causal root cause, bounded security consequence, and positive/negative controls. `regression-verified` additionally requires a fixed revision where the same evidence no longer reproduces while controls remain healthy. See [docs/research-case-contract.md](docs/research-case-contract.md).
 
-## Portability
+## Portability model
 
-The canonical source is `skills/`. Current agents increasingly support this format directly.
+`skills/` is the single canonical source. Do not fork the prose per vendor.
 
 A broadly interoperable project layout is:
 
 ```text
-<your-project>/
+<project>/
 └── .agents/
     └── skills/
         └── <skill-name>/
-            └── SKILL.md
+            ├── SKILL.md
+            └── ...optional local resources...
 ```
 
-Copy or install the desired skill directories into your agent's supported skills location. See [docs/compatibility.md](docs/compatibility.md) for current native paths and fallbacks for Gemini CLI, Cursor, GitHub Copilot, OpenCode, Kiro, Claude Code/Codex-style consumers, and generic agents.
+`skill.meta.json` is Nolane graph metadata. Hosts that only understand Agent Skills can ignore it. Agents without native skill discovery can use the repository-level `AGENTS.md` plus the same canonical skill files as explicit context. See [docs/compatibility.md](docs/compatibility.md).
+
+## Packs
+
+Packs are routing manifests under `packs/`; they reference canonical skills rather than copying them. Current deep packs include:
+
+- `fuzzing-research`
+- `memory-safety`
+- `parsers-and-protocols`
+- `trust-and-authorization`
+- `kernel-sandbox-browser`
+- `cloud-and-supply-chain`
+- `verification-engineering`
+- `mobile-security`
+- `firmware-and-boot`
+- `virtualization-boundaries`
+- `web-framework-internals`
+- `cryptographic-assurance`
+- `smart-contracts`
+- `ai-agent-deep-security`
+- `autonomous-research-orchestration`
+- plus compact foundation/program-analysis/remediation/AI-agent packs.
+
+See [packs/README.md](packs/README.md).
 
 ## Validate
 

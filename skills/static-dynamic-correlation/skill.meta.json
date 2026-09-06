@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "maturity": "beta",
+  "domains": [
+    "program-analysis",
+    "dynamic-analysis",
+    "verification"
+  ],
+  "prerequisites": [
+    "controlled-security-experiment-design"
+  ],
+  "composes_with": [
+    "security-research-case-management"
+  ],
+  "evidence_stage": "observed"
+}

@@ -2,8 +2,38 @@
   "schema_version": 1,
   "name": "autonomous-research-orchestration",
   "description": "Evidence-aware orchestration for long-running authorized security research: case state, routing, controlled experiments, provenance, false-positive elimination, root-cause/impact separation, fix validation and reporting.",
-  "domains": ["research", "orchestration", "verification"],
+  "domains": [
+    "research",
+    "orchestration",
+    "verification"
+  ],
   "entrypoint": "security-research-case-management",
-  "skills": ["security-scope-and-authorization", "security-research-case-management", "research-route-selection", "reproduction-environment-capture", "controlled-security-experiment-design", "evidence-ledger-and-claim-tracking", "false-positive-elimination", "static-dynamic-correlation", "root-cause-impact-separation", "evidence-driven-vulnerability-validation", "remediation-and-regression", "regression-matrix-testing", "fix-validation-experiment", "security-research-reporting"],
-  "default_flow": ["security-scope-and-authorization", "security-research-case-management", "research-route-selection", "reproduction-environment-capture", "controlled-security-experiment-design", "evidence-ledger-and-claim-tracking", "false-positive-elimination", "root-cause-impact-separation", "evidence-driven-vulnerability-validation", "security-research-reporting"]
+  "skills": [
+    "security-scope-and-authorization",
+    "security-research-case-management",
+    "research-route-selection",
+    "reproduction-environment-capture",
+    "controlled-security-experiment-design",
+    "evidence-ledger-and-claim-tracking",
+    "false-positive-elimination",
+    "static-dynamic-correlation",
+    "root-cause-impact-separation",
+    "evidence-driven-vulnerability-validation",
+    "remediation-and-regression",
+    "regression-matrix-testing",
+    "fix-validation-experiment",
+    "security-research-reporting"
+  ],
+  "default_flow": [
+    "security-scope-and-authorization",
+    "security-research-case-management",
+    "research-route-selection",
+    "reproduction-environment-capture",
+    "controlled-security-experiment-design",
+    "evidence-ledger-and-claim-tracking",
+    "false-positive-elimination",
+    "root-cause-impact-separation",
+    "evidence-driven-vulnerability-validation",
+    "security-research-reporting"
+  ]
 }

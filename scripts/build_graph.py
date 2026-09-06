@@ -39,6 +39,7 @@ def render_json(data: dict) -> str:
         'packs': [
             {
                 'name': pack['name'],
+                'domains': pack.get('domains', []),
                 'entrypoint': pack['entrypoint'],
                 'skills': pack['skills'],
                 'default_flow': pack['default_flow'],
@@ -58,12 +59,13 @@ def render_markdown(data: dict) -> str:
         '',
         '## Packs',
         '',
-        '| Pack | Entrypoint | Skills | Default flow |',
-        '| --- | --- | ---: | --- |',
+        '| Pack | Domains | Entrypoint | Skills | Default flow |',
+        '| --- | --- | --- | ---: | --- |',
     ]
     for pack in data['packs']:
         flow = ' → '.join(f'`{x}`' for x in pack['default_flow'])
-        lines.append(f"| `{pack['name']}` | `{pack['entrypoint']}` | {len(pack['skills'])} | {flow} |")
+        domains = ', '.join(pack.get('domains', []))
+        lines.append(f"| `{pack['name']}` | {domains} | `{pack['entrypoint']}` | {len(pack['skills'])} | {flow} |")
     lines += ['', '## Skills', '', '| Skill | Maturity | Domains | Evidence stage | Prerequisites |', '| --- | --- | --- | --- | --- |']
     for skill in data['skills']:
         domains = ', '.join(skill['domains'])

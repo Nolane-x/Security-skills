@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "name": "smart-contracts",
+  "description": "Smart-contract security reasoning driven by explicit invariants, with reentrancy/state, upgradeability, oracle/external-data trust, and local-chain validation.",
+  "domains": [
+    "smart-contracts"
+  ],
+  "entrypoint": "smart-contract-invariant-analysis",
+  "skills": [
+    "security-scope-and-authorization",
+    "smart-contract-invariant-analysis",
+    "smart-contract-reentrancy-state-analysis",
+    "smart-contract-upgradeability-analysis",
+    "oracle-and-external-data-trust-analysis",
+    "authorization-boundary-analysis",
+    "concurrency-race-analysis",
+    "differential-testing",
+    "evidence-driven-vulnerability-validation",
+    "regression-matrix-testing"
+  ],
+  "default_flow": [
+    "security-scope-and-authorization",
+    "smart-contract-invariant-analysis",
+    "smart-contract-reentrancy-state-analysis",
+    "evidence-driven-vulnerability-validation",
+    "regression-matrix-testing"
+  ]
+}

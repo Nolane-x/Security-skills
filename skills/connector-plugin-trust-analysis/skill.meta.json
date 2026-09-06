@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "maturity": "beta",
+  "domains": [
+    "ai-security",
+    "plugins",
+    "connectors",
+    "supply-chain"
+  ],
+  "prerequisites": [
+    "ai-agent-security-assessment"
+  ],
+  "composes_with": [
+    "evidence-driven-vulnerability-validation"
+  ],
+  "evidence_stage": "hypothesis"
+}

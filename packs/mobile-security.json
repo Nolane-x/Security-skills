@@ -2,8 +2,31 @@
   "schema_version": 1,
   "name": "mobile-security",
   "description": "Android and iOS application trust-boundary analysis across components, routing, WebViews, storage, entitlements, links, and network trust.",
-  "domains": ["mobile", "android", "ios"],
+  "domains": [
+    "mobile",
+    "android",
+    "ios"
+  ],
   "entrypoint": "android-component-exposure-analysis",
-  "skills": ["security-scope-and-authorization", "attack-surface-mapping", "android-component-exposure-analysis", "android-intent-and-deeplink-analysis", "android-webview-bridge-analysis", "android-keystore-and-local-storage-analysis", "ios-entitlement-and-sandbox-analysis", "ios-url-scheme-and-universal-link-analysis", "mobile-network-trust-analysis", "authorization-boundary-analysis", "canonicalization-and-namespace-analysis", "secrets-and-token-flow-analysis", "evidence-driven-vulnerability-validation"],
-  "default_flow": ["security-scope-and-authorization", "android-component-exposure-analysis", "android-intent-and-deeplink-analysis", "evidence-driven-vulnerability-validation"]
+  "skills": [
+    "security-scope-and-authorization",
+    "attack-surface-mapping",
+    "android-component-exposure-analysis",
+    "android-intent-and-deeplink-analysis",
+    "android-webview-bridge-analysis",
+    "android-keystore-and-local-storage-analysis",
+    "ios-entitlement-and-sandbox-analysis",
+    "ios-url-scheme-and-universal-link-analysis",
+    "mobile-network-trust-analysis",
+    "authorization-boundary-analysis",
+    "canonicalization-and-namespace-analysis",
+    "secrets-and-token-flow-analysis",
+    "evidence-driven-vulnerability-validation"
+  ],
+  "default_flow": [
+    "security-scope-and-authorization",
+    "android-component-exposure-analysis",
+    "android-intent-and-deeplink-analysis",
+    "evidence-driven-vulnerability-validation"
+  ]
 }
