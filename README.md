@@ -1,46 +1,106 @@
 # Security Skills
 
-A portable, verification-first security research skill graph for AI agents.
+[![CI](https://github.com/Nolane-x/Security-skills/actions/workflows/validate.yml/badge.svg)](https://github.com/Nolane-x/Security-skills/actions/workflows/validate.yml)
 
-The canonical capability format is the open **Agent Skills** structure: each reusable capability lives under `skills/<name>/SKILL.md`, with optional local references/scripts/assets. Nolane adds a machine-readable sidecar (`skill.meta.json`) and pack manifests without polluting portable Agent Skills frontmatter.
+**English** · [Tiếng Việt](README-VN.md) · [简体中文](README-CN.md)
 
-The project teaches agents **how to reason, route, collect evidence, reject false positives, and close regressions**. It is deliberately not a payload collection.
+A **verification-first security skill graph and deterministic cross-agent evaluation framework for AI agents**.
 
-## Current Wave 6
+Security Skills gives coding agents, research agents, and autonomous security systems a portable set of reusable security reasoning skills — plus the evidence gates, routing logic, benchmarks, and cross-agent conformance tooling needed to verify that those skills are being used correctly.
 
-- **83 canonical skills**
-- **20 validated skill packs**
-- **36 deterministic benchmark fixtures** across six conformance categories
-- **12-fixture portability smoke suite** for cross-platform CI
-- **vendor-neutral cross-agent evaluation harness** with oracle-free tasks and normalized agent-run artifacts
-- deterministic `reference`, `cautious`, and `faulty` offline replay profiles
-- deterministic build-on-demand catalog and graph indexes
-- source-controlled graph metadata and pack manifests
-- prerequisite cycle detection and unknown-node rejection
-- dependency-free Python validation
-- Linux/macOS/Windows CI on Python 3.11 and 3.13
+> **Stable baseline: Wave 6** — 83 canonical skills, 20 packs, 36 deterministic benchmark fixtures, and a vendor-neutral cross-agent evaluation harness.
 
-The current graph spans:
+## Why this project exists
 
-- research routing, scope, authorization, attack-surface mapping, hypothesis generation;
-- fuzz harness design, corpus engineering, coverage-guided, grammar-aware and stateful fuzzing;
-- crash minimization, sanitizer-guided analysis, exploitability triage, evidence validation;
-- static/dataflow, symbolic execution, binary reconnaissance, differential testing, variant hunting;
-- memory lifetime, bounds/integer, type confusion, concurrency/race analysis;
-- parser and protocol state machines, canonicalization/namespaces, deserialization trust;
-- authorization, confused deputy, cache identity, secret/token flow;
-- kernel, driver/IOCTL, sandbox, browser process and JIT invariant analysis;
-- container isolation, cloud IAM, supply-chain dependency review;
-- remediation, patch-diff analysis, regression matrices, secure code review and AI-agent security;
-- mobile Android/iOS trust boundaries, firmware/update/boot/debug surfaces, virtualization guest-host/device/shared-memory boundaries;
-- web-framework routing/SSRF/upload/template/multi-tenant internals, cryptographic protocol/randomness/PKI assurance, smart-contract invariants/reentrancy/upgrades/oracles, and deep AI-agent prompt/tool/RAG/plugin trust;
-- research-case state management, controlled experiments, evidence ledgers, false-positive elimination, static/dynamic correlation, route selection, fix-validation experiments and security-research reporting.
+Security agents should not jump from a scanner alert, crash, static-analysis warning, or model hypothesis directly to “confirmed vulnerability.” Good security research requires explicit scope, evidence, controls, causal reasoning, reproducibility, and regression validation.
 
-Generate the human and machine indexes on demand with `python scripts/build_catalog.py` and `python scripts/build_graph.py`. The generated files are intentionally ignored so `SKILL.md`, `skill.meta.json`, and pack manifests remain the only source of truth.
+This repository turns that discipline into a portable machine-readable system.
 
-## Why the graph matters
+```text
+security knowledge
+      │
+      ▼
+83 canonical Agent Skills
+      │
+      ▼
+deterministic research router
+      │
+      ▼
+evidence-state machine
+      │
+      ▼
+Wave 5 benchmark authority
+      │
+      ▼
+Wave 6 cross-agent evaluator
+```
 
-A security agent should not jump from “tool output” to “confirmed vulnerability.” The graph routes through explicit research states:
+The result is not just a collection of prompts. It is a **security intelligence system that can validate its own routing and evaluate how external AI agents follow the same security contract**.
+
+## What it is — and what it is not
+
+**Security Skills is:**
+
+- a portable security reasoning graph for AI agents;
+- a set of reusable Agent Skills with explicit applicability and evidence contracts;
+- a deterministic prerequisite-aware router;
+- a machine-readable research-case and evidence-state model;
+- a benchmark suite for routing, authorization, evidence, false-positive control, and remediation;
+- a vendor-neutral harness for comparing normalized agent runs;
+- a defensive research framework designed for local, owned, sandboxed, CTF, benchmark, or explicitly authorized targets.
+
+**Security Skills is not:**
+
+- a payload or exploit collection;
+- a replacement for authorization or human security judgment;
+- a mechanism for declaring vulnerabilities from tool output alone;
+- a vendor-specific prompt pack;
+- a benchmark of “general intelligence.” Cross-agent scores measure conformance to this repository's reviewed security contract.
+
+## Current snapshot
+
+| Capability | Current baseline |
+| --- | ---: |
+| Canonical skills | **83** |
+| Validated packs | **20** |
+| Benchmark fixtures | **36** |
+| Benchmark categories | **6** |
+| Cross-agent portability fixtures | **12** |
+| Evidence states | **4** |
+| CI environments | **6** |
+| Python dependencies | **0 third-party packages** |
+
+CI validates Linux, macOS, and Windows on Python 3.11 and 3.13.
+
+## Three-layer architecture
+
+### 1. Security intelligence graph
+
+Each canonical capability lives once under:
+
+```text
+skills/<skill-name>/
+├── SKILL.md
+└── skill.meta.json
+```
+
+`SKILL.md` follows the open Agent Skills model. `skill.meta.json` adds Nolane graph metadata such as domains, prerequisites, composition edges, maturity, and evidence stage without polluting portable skill frontmatter.
+
+Packs under `packs/` reference canonical skills instead of duplicating them.
+
+### 2. Deterministic benchmark authority
+
+Wave 5 evaluates the production case validator and router against reviewed synthetic fixtures. Hard failures such as unauthorized acceptance, invalid evidence promotion, domain leakage, or broken prerequisite ordering cannot be averaged away by a high score.
+
+### 3. Cross-agent evaluation
+
+Wave 6 converts reviewed benchmark fixtures into **oracle-free agent tasks**, accepts normalized `agent-run` artifacts from external wrappers, and scores them using deterministic repository code.
+
+The core does not hard-code model vendors or proprietary CLIs. Any agent host can integrate through the same normalized artifact contract.
+
+## Evidence model
+
+Every investigation moves through explicit states:
 
 ```text
 hypothesis
@@ -52,63 +112,176 @@ validated
 regression-verified
 ```
 
-A typical memory-safety route may become:
+A finding is not promoted just because a tool, fuzzer, model, or analyzer says so.
 
-```text
-attack surface
-  → fuzz harness
-  → corpus/campaign
-  → crash minimization
-  → sanitizer evidence
-  → lifetime/bounds/type/race root cause
-  → evidence validation
-  → conservative exploitability triage
-  → variant hunt
-  → remediation
-  → regression matrix
+A validated case requires, at minimum, evidence such as:
+
+- a pinned environment or target revision;
+- a reproducible observation;
+- a causal root cause;
+- a bounded security consequence;
+- positive and negative controls;
+- reproducer steps and fixture identity.
+
+`regression-verified` additionally requires evidence that the fixed revision no longer reproduces the issue while controls still behave correctly.
+
+See [docs/research-case-contract.md](docs/research-case-contract.md).
+
+## Capability coverage
+
+The graph currently includes deep workflows across:
+
+- scope, authorization, research routing, attack-surface mapping, and hypothesis generation;
+- fuzz harness design, corpus engineering, coverage-guided fuzzing, grammar-aware fuzzing, and stateful fuzzing;
+- crash triage, minimization, sanitizer-guided analysis, root-cause analysis, and exploitability triage;
+- static/dataflow analysis, symbolic execution, differential testing, binary reconnaissance, and variant hunting;
+- memory lifetime, bounds/integer safety, type confusion, and concurrency/race analysis;
+- parser/protocol state machines, canonicalization, deserialization boundaries, and namespace confusion;
+- authorization, confused-deputy, cache identity, secret/token flow, and tenant isolation;
+- kernel, driver/IOCTL, sandbox, browser-process, and JIT invariant analysis;
+- containers, cloud IAM, supply-chain review, and dependency trust;
+- Android/iOS security, mobile trust boundaries, and local storage/keystore analysis;
+- firmware, update trust chains, secure boot, and embedded debug surfaces;
+- virtualization guest-host boundaries, virtual devices, and shared memory;
+- web routing, SSRF boundaries, uploads, templates, and multi-tenant internals;
+- cryptographic protocol misuse, randomness lifecycle, certificates, and hostname validation;
+- smart-contract invariants, reentrancy, upgradeability, and oracle trust;
+- prompt-injection boundaries, tool confirmation, RAG/memory isolation, connector/plugin trust;
+- controlled experiments, evidence ledgers, false-positive elimination, static/dynamic correlation, remediation, regression validation, and reporting.
+
+## Quick start
+
+Clone the repository and run the full deterministic validation stack:
+
+```bash
+git clone https://github.com/Nolane-x/Security-skills.git
+cd Security-skills
+
+python scripts/validate_skills.py
+python scripts/validate_graph.py
+python scripts/validate_benchmarks.py
+python -m unittest discover -s tests -v
 ```
 
-Every hop has its own evidence contract and stop conditions.
+Generate the human and machine indexes on demand:
+
+```bash
+python scripts/build_catalog.py
+python scripts/build_graph.py
+```
+
+Generated catalog/graph artifacts are intentionally ignored. Canonical truth remains in `SKILL.md`, `skill.meta.json`, and pack manifests.
 
 ## Research-case engine
 
-Wave 4 adds a dependency-free machine-readable case contract so an agent can preserve evidence state across long investigations instead of re-deriving status from prose. The case validator enforces authorization and evidence gates; the router is advisory-only and closes skill prerequisites transitively before returning a deterministic route.
+Validate and route a machine-readable research case:
 
 ```bash
 python scripts/validate_case.py examples/research-case.example.json
 python scripts/route_skills.py examples/research-case.example.json --limit 12
 ```
 
-A case cannot skip directly from `hypothesis` to `validated`. `validated` requires a pinned reproducer, causal root cause, bounded security consequence, and positive/negative controls. `regression-verified` additionally requires a fixed revision where the same evidence no longer reproduces while controls remain healthy. See [docs/research-case-contract.md](docs/research-case-contract.md).
+The router is advisory-only. It validates authorization and case state first, closes transitive prerequisites, applies domain/context filtering, and returns a deterministic skill order.
 
-## Benchmark and evaluation layer
+A representative memory-safety route may look like:
 
-Wave 5 adds a deterministic conformance benchmark above the production case validator and advisory router. Fixtures are synthetic or controlled JSON cases; they never execute exploits or target live external systems.
-
-```bash
-python scripts/validate_benchmarks.py
-python scripts/run_benchmarks.py benchmarks/suites/portability.json
-python scripts/run_benchmarks.py benchmarks/suites/core.json --json /tmp/security-skills-benchmark.json --report /tmp/security-skills-benchmark.md
+```text
+scope + authorization
+  → attack surface
+  → fuzzing
+  → crash minimization
+  → sanitizer evidence
+  → lifetime / bounds / type / race analysis
+  → evidence validation
+  → conservative exploitability triage
+  → variant hunt
+  → remediation
+  → regression verification
 ```
 
-The `core` suite contains 36 fixtures: six each for authorization, domain isolation, evidence-state conformance, false-positive control, remediation/regression routing, and representative domain routing. A passing suite requires zero enabled hard-gate failures and an aggregate score at or above its committed threshold. See [docs/benchmark-contract.md](docs/benchmark-contract.md).
+## Benchmark engine
+
+Wave 5 provides 36 deterministic fixtures across six categories:
+
+1. authorization;
+2. domain isolation;
+3. evidence-state conformance;
+4. false-positive control;
+5. remediation/regression routing;
+6. representative routing correctness.
+
+Run the portability or full core suite:
+
+```bash
+python scripts/run_benchmarks.py benchmarks/suites/portability.json
+python scripts/run_benchmarks.py benchmarks/suites/core.json
+```
+
+Produce machine and human reports:
+
+```bash
+python scripts/run_benchmarks.py benchmarks/suites/core.json \
+  --json /tmp/security-skills-benchmark.json \
+  --report /tmp/security-skills-benchmark.md
+```
+
+See [docs/benchmark-contract.md](docs/benchmark-contract.md).
 
 ## Cross-agent evaluation
 
-Wave 6 converts the reviewed Wave 5 portability cases into **oracle-free agent tasks**. An external wrapper can feed those tasks to any agent host and return the same normalized `agent-run` JSON contract. The repository does not hard-code vendor APIs or proprietary CLI commands; the adapter is an untrusted transport boundary and deterministic repository code remains the scoring authority.
+Wave 6 lets external AI agents be evaluated against the same reviewed security authority without exposing fixture oracles in the task artifact.
+
+Prepare oracle-free tasks:
 
 ```bash
 python scripts/prepare_agent_tasks.py benchmarks/suites/portability.json --out /tmp/agent-tasks
-python scripts/prepare_replay_runs.py benchmarks/suites/portability.json --profile reference --out /tmp/reference-runs
-python scripts/validate_agent_runs.py /tmp/reference-runs
-python scripts/evaluate_agent_runs.py benchmarks/suites/portability.json /tmp/reference-runs --json /tmp/agent-matrix.json --report /tmp/agent-matrix.md
 ```
 
-Real adapters may use `scripts/run_agent_adapter.py` with an explicit argv vector. It uses `shell=False`, time/output limits, and a sanitized child environment; credentials are never forwarded unless explicitly allowlisted. CI uses offline replay profiles only. Comparative matrix scores measure conformance to the selected benchmark contract, not universal model intelligence. See [agent-eval/README.md](agent-eval/README.md).
+Generate the deterministic reference replay profile:
 
-## Portability model
+```bash
+python scripts/prepare_replay_runs.py benchmarks/suites/portability.json \
+  --profile reference \
+  --out /tmp/reference-runs
+```
 
-`skills/` is the single canonical source. Do not fork the prose per vendor.
+Validate and score normalized runs:
+
+```bash
+python scripts/validate_agent_runs.py /tmp/reference-runs
+python scripts/evaluate_agent_runs.py benchmarks/suites/portability.json /tmp/reference-runs \
+  --json /tmp/agent-evaluation.json \
+  --report /tmp/agent-evaluation.md
+```
+
+The committed replay profiles are:
+
+- `reference` — conforming deterministic baseline;
+- `cautious` — safe but intentionally incomplete `needs-evidence` behavior;
+- `faulty` — deterministic negative controls that must fail.
+
+See [agent-eval/README.md](agent-eval/README.md).
+
+## Safe adapter boundary
+
+External agent wrappers may use `scripts/run_agent_adapter.py` with an explicit argv vector.
+
+The adapter boundary is intentionally defensive:
+
+- `shell=False`;
+- explicit argv, no shell interpolation;
+- timeout enforcement;
+- streaming stdout/stderr byte caps;
+- child termination on overflow;
+- sanitized environment by default;
+- credential-like variables only through explicit allowlists;
+- untrusted agent output parsed only as data;
+- subprocess pipes closed deterministically;
+- hidden reasoning / chain-of-thought is neither requested nor stored.
+
+## Portability
+
+`skills/` is the single canonical source. Do not fork skill prose per vendor.
 
 A broadly interoperable project layout is:
 
@@ -121,11 +294,13 @@ A broadly interoperable project layout is:
             └── ...optional local resources...
 ```
 
-`skill.meta.json` is Nolane graph metadata. Hosts that only understand Agent Skills can ignore it. Agents without native skill discovery can use the repository-level `AGENTS.md` plus the same canonical skill files as explicit context. See [docs/compatibility.md](docs/compatibility.md).
+The repository is designed to be usable by modern coding/agent hosts that understand Agent Skills or can consume explicit repository context. Vendor-specific discovery paths can point to the same canonical skill content.
+
+See [docs/compatibility.md](docs/compatibility.md).
 
 ## Packs
 
-Packs are routing manifests under `packs/`; they reference canonical skills rather than copying them. Current deep packs include:
+Packs are curated routing manifests under `packs/`. Major packs include:
 
 - `fuzzing-research`
 - `memory-safety`
@@ -142,13 +317,31 @@ Packs are routing manifests under `packs/`; they reference canonical skills rath
 - `smart-contracts`
 - `ai-agent-deep-security`
 - `autonomous-research-orchestration`
-- plus compact foundation/program-analysis/remediation/AI-agent packs.
 
-See [packs/README.md](packs/README.md).
+See [packs/README.md](packs/README.md) for the full set.
 
-## Validate
+## Repository layout
 
-No third-party Python package is required:
+```text
+Security-skills/
+├── skills/              # canonical Agent Skills
+├── packs/               # curated skill routing manifests
+├── benchmarks/          # Wave 5 deterministic fixtures and suites
+├── agent-eval/          # Wave 6 cross-agent contracts and suites
+├── schemas/             # machine-readable schemas
+├── scripts/             # validators, routers, evaluators, builders
+├── tests/               # deterministic regression tests
+├── examples/            # research-case examples
+├── docs/                # contracts, compatibility, design documentation
+├── sources/             # research-system lineage metadata
+├── AGENTS.md             # repository-level agent guidance
+├── SECURITY.md           # safety and authorization boundary
+└── CONTRIBUTING.md       # contribution requirements
+```
+
+## Full validation
+
+No third-party Python package is required.
 
 ```bash
 python scripts/validate_skills.py
@@ -169,21 +362,51 @@ python scripts/evaluate_agent_runs.py benchmarks/suites/portability.json /tmp/ag
 python -m unittest discover -s tests -v
 ```
 
-After changing canonical skills or graph metadata:
+CI repeats the critical gates across Ubuntu, macOS, and Windows on Python 3.11 and 3.13, then runs dedicated deterministic `benchmark-core` and `agent-eval-core` jobs.
 
-```bash
-python scripts/build_catalog.py
-python scripts/build_graph.py
-```
+## Adding a skill
 
-## Adding skills
+Read [CONTRIBUTING.md](CONTRIBUTING.md) before adding capabilities.
 
-Read [CONTRIBUTING.md](CONTRIBUTING.md). A new skill must encode a reusable decision process rather than a thin tool command. It needs explicit applicability, preconditions, workflow, evidence contract, stop conditions, output, and graph metadata.
+A canonical skill should encode a reusable **decision process**, not a thin wrapper around a tool command. It needs explicit:
 
-## Research lineage
-
-The project distills original workflows from reproducible vulnerability research, autonomous Cyber Reasoning Systems, fuzzing infrastructure, program analysis, reverse engineering, and domain security ecosystems. It does not vendor third-party exploit code or copy third-party prompts. See [docs/sources.md](docs/sources.md) and [sources/research-systems.json](sources/research-systems.json).
+- applicability;
+- preconditions;
+- workflow;
+- evidence contract;
+- stop conditions;
+- output contract;
+- graph metadata.
 
 ## Security boundary
 
-Intrusive techniques are restricted to local, owned, sandboxed, benchmark/CTF, or explicitly authorized targets. Proofs prefer assertions, sanitizer evidence, controlled crashes, synthetic resources, marker files, policy simulation, and regression tests over destructive or persistent effects. See [SECURITY.md](SECURITY.md).
+Intrusive techniques are restricted to local, owned, sandboxed, benchmark/CTF, or explicitly authorized targets.
+
+Proofs should prefer controlled and non-destructive evidence such as assertions, sanitizer reports, minimized crashes, synthetic resources, marker files, policy simulation, and regression tests over persistence, stealth, destructive impact, credential theft, or indiscriminate exploitation.
+
+See [SECURITY.md](SECURITY.md).
+
+## Research lineage
+
+Security Skills distills original workflows from reproducible vulnerability research, autonomous Cyber Reasoning Systems, fuzzing infrastructure, program analysis, reverse engineering, web/mobile/firmware/cloud security, smart-contract analysis, and modern AI-agent security research.
+
+The repository does **not** vendor third-party exploit code or copy third-party prompts.
+
+See [docs/sources.md](docs/sources.md) and [sources/research-systems.json](sources/research-systems.json).
+
+## Documentation
+
+- [Vietnamese README](README-VN.md)
+- [Simplified Chinese README](README-CN.md)
+- [Compatibility](docs/compatibility.md)
+- [Research-case contract](docs/research-case-contract.md)
+- [Benchmark contract](docs/benchmark-contract.md)
+- [Cross-agent evaluation](agent-eval/README.md)
+- [Packs](packs/README.md)
+- [Research sources](docs/sources.md)
+- [Security policy](SECURITY.md)
+- [Contributing](CONTRIBUTING.md)
+
+---
+
+**Security Skills** is built around a simple rule: **a security claim is only as strong as the evidence, controls, and reproducibility behind it.**
