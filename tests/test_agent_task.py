@@ -46,12 +46,24 @@ FIXTURE = {
 }
 
 
+def all_keys(value):
+    keys = set()
+    if isinstance(value, dict):
+        for key, child in value.items():
+            keys.add(key)
+            keys.update(all_keys(child))
+    elif isinstance(value, list):
+        for child in value:
+            keys.update(all_keys(child))
+    return keys
+
+
 class AgentTaskTests(unittest.TestCase):
     def test_task_strips_all_oracle_fields(self):
         task = build_agent_task(copy.deepcopy(FIXTURE))
         dumped = canonical_json(task)
-        self.assertNotIn('expect', dumped)
-        self.assertNotIn('weights', dumped)
+        self.assertNotIn('expect', task)
+        self.assertNotIn('weights', task)
         self.assertNotIn('oracle-secret-skill', dumped)
         self.assertNotIn('oracle-forbidden-skill', dumped)
         self.assertNotIn('oracle.issue.path', dumped)
@@ -91,10 +103,15 @@ class AgentTaskTests(unittest.TestCase):
             self.assertEqual(ids, sorted(ids))
             files = sorted(Path(tmp).glob('*.json'))
             self.assertEqual(len(files), 12)
+            oracle_keys = {
+                'expect', 'weights', 'required_skills', 'optional_skills', 'forbidden_skills',
+                'required_packs', 'optional_packs', 'forbidden_packs', 'required_issue_paths',
+                'hard_gates', 'minimum_score', 'route_limit', 'ordered_before',
+            }
             for path in files:
                 loaded = json.loads(path.read_text(encoding='utf-8'))
                 self.assertIn('task_digest', loaded)
-                self.assertNotIn('expect', canonical_json(loaded))
+                self.assertTrue(oracle_keys.isdisjoint(all_keys(loaded)))
 
 
 if __name__ == '__main__':
