@@ -138,6 +138,11 @@ def run_adapter(task: dict[str, Any], argv: list[str], *, timeout: float = 60.0,
     finally:
         for reader in readers:
             reader.join()
+        for stream in (process.stdout, process.stderr):
+            try:
+                stream.close()
+            except OSError:
+                pass
 
     if overflow['stdout']:
         raise AdapterError('adapter stdout exceeded configured size cap')
