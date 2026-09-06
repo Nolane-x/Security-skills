@@ -5,8 +5,9 @@ import json
 import os
 import subprocess
 import sys
+import threading
 from pathlib import Path
-from typing import Any
+from typing import Any, BinaryIO
 
 from agent_task import stable_json_text
 
@@ -30,6 +31,32 @@ def _sanitized_env(allow_env: list[str] | None = None) -> dict[str, str]:
     return env
 
 
+def _bounded_reader(stream: BinaryIO, *, name: str, limit: int, process: subprocess.Popen[bytes],
+                    buffers: dict[str, bytes], overflow: dict[str, bool]) -> None:
+    data = bytearray()
+    chunk_size = min(64 * 1024, limit + 1)
+    try:
+        while True:
+            chunk = stream.read(chunk_size)
+            if not chunk:
+                break
+            remaining = limit - len(data)
+            if len(chunk) > remaining:
+                if remaining > 0:
+                    data.extend(chunk[:remaining])
+                overflow[name] = True
+                try:
+                    process.kill()
+                except OSError:
+                    pass
+                break
+            data.extend(chunk)
+    except (OSError, ValueError):
+        pass
+    finally:
+        buffers[name] = bytes(data)
+
+
 def run_adapter(task: dict[str, Any], argv: list[str], *, timeout: float = 60.0,
                 max_output_bytes: int = 1024 * 1024, allow_env: list[str] | None = None) -> dict[str, Any]:
     if not argv or any(not isinstance(part, str) or not part for part in argv):
@@ -38,31 +65,92 @@ def run_adapter(task: dict[str, Any], argv: list[str], *, timeout: float = 60.0,
         raise AdapterError('timeout must be positive')
     if max_output_bytes <= 0:
         raise AdapterError('max_output_bytes must be positive')
+
     try:
-        completed = subprocess.run(
+        process = subprocess.Popen(
             argv,
-            input=json.dumps(task, ensure_ascii=False, sort_keys=True),
-            text=True,
-            capture_output=True,
-            timeout=timeout,
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
             shell=False,
             env=_sanitized_env(allow_env),
-            check=False,
         )
-    except subprocess.TimeoutExpired as exc:
-        raise AdapterError(f'adapter timed out after {timeout} seconds') from exc
     except OSError as exc:
         raise AdapterError(f'cannot execute adapter: {exc}') from exc
 
-    stdout = completed.stdout or ''
-    stderr = completed.stderr or ''
-    if len(stdout.encode('utf-8', errors='replace')) > max_output_bytes:
+    assert process.stdin is not None
+    assert process.stdout is not None
+    assert process.stderr is not None
+    buffers: dict[str, bytes] = {'stdout': b'', 'stderr': b''}
+    overflow = {'stdout': False, 'stderr': False}
+    readers = [
+        threading.Thread(
+            target=_bounded_reader,
+            kwargs={
+                'stream': process.stdout,
+                'name': 'stdout',
+                'limit': max_output_bytes,
+                'process': process,
+                'buffers': buffers,
+                'overflow': overflow,
+            },
+            daemon=True,
+        ),
+        threading.Thread(
+            target=_bounded_reader,
+            kwargs={
+                'stream': process.stderr,
+                'name': 'stderr',
+                'limit': max_output_bytes,
+                'process': process,
+                'buffers': buffers,
+                'overflow': overflow,
+            },
+            daemon=True,
+        ),
+    ]
+    for reader in readers:
+        reader.start()
+
+    payload = json.dumps(task, ensure_ascii=False, sort_keys=True).encode('utf-8')
+    try:
+        try:
+            process.stdin.write(payload)
+            process.stdin.flush()
+        except (BrokenPipeError, OSError):
+            pass
+        finally:
+            try:
+                process.stdin.close()
+            except OSError:
+                pass
+
+        timed_out = False
+        try:
+            process.wait(timeout=timeout)
+        except subprocess.TimeoutExpired:
+            timed_out = True
+            try:
+                process.kill()
+            except OSError:
+                pass
+            process.wait()
+    finally:
+        for reader in readers:
+            reader.join()
+
+    if overflow['stdout']:
         raise AdapterError('adapter stdout exceeded configured size cap')
-    if len(stderr.encode('utf-8', errors='replace')) > max_output_bytes:
+    if overflow['stderr']:
         raise AdapterError('adapter stderr exceeded configured size cap')
-    if completed.returncode != 0:
+    if timed_out:
+        raise AdapterError(f'adapter timed out after {timeout} seconds')
+
+    stdout = buffers['stdout'].decode('utf-8', errors='replace')
+    stderr = buffers['stderr'].decode('utf-8', errors='replace')
+    if process.returncode != 0:
         diagnostic = stderr.strip().replace('\n', ' ')[:500]
-        raise AdapterError(f'adapter exited with status {completed.returncode}: {diagnostic}')
+        raise AdapterError(f'adapter exited with status {process.returncode}: {diagnostic}')
     try:
         data = json.loads(stdout)
     except json.JSONDecodeError as exc:
