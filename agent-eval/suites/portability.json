@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "name": "agent-portability",
+  "benchmark_suite": "benchmarks/suites/portability.json",
+  "expected_fixture_count": 12,
+  "profiles": ["reference", "cautious", "faulty"],
+  "network_required": false
+}

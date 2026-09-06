@@ -99,3 +99,22 @@ python scripts/run_benchmarks.py benchmarks/suites/core.json
 ```
 
 See `docs/benchmark-contract.md` for schema semantics, hard gates, scoring, determinism requirements, and future extension boundaries.
+
+## Cross-agent evaluation contributions
+
+Wave 6 agent-facing tasks must be built from existing benchmark fixtures through `scripts/prepare_agent_tasks.py`; do not hand-copy fixture oracles into public task files. Prepared tasks may contain the research case and response contract, but never fixture `expect`, weights, required/optional/forbidden route oracle fields, required issue paths, minimum score, or hard-gate oracle data.
+
+Normalized runs must follow `schemas/agent-run.schema.json`. Adapters are transport only: they must not alter evaluator authority, and they must not store credentials, raw environment variables, browser profiles, hidden reasoning, or chain-of-thought. Vendor-specific wrappers should remain outside the core contract. For local subprocess integration, use the explicit JSON stdin/stdout protocol documented in `agent-eval/adapters/README.md`.
+
+Before submitting agent-evaluation changes, run an offline reference replay and preserve negative controls:
+
+```bash
+python scripts/prepare_agent_tasks.py benchmarks/suites/portability.json --out /tmp/agent-tasks
+python scripts/prepare_replay_runs.py benchmarks/suites/portability.json --profile reference --out /tmp/reference
+python scripts/prepare_replay_runs.py benchmarks/suites/portability.json --profile cautious --out /tmp/cautious
+python scripts/prepare_replay_runs.py benchmarks/suites/portability.json --profile faulty --out /tmp/faulty
+python scripts/validate_agent_runs.py /tmp/reference
+python scripts/evaluate_agent_runs.py benchmarks/suites/portability.json /tmp/reference
+```
+
+Do not weaken hard gates, fixture oracles, or replay negative controls merely to make a real agent score higher.
