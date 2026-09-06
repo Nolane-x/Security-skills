@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nolane.example/schemas/agent-matrix.schema.json",
+  "title": "Cross-Agent Security Conformance Matrix",
+  "type": "object",
+  "required": ["schema_version", "suite", "expected_fixture_count", "task_digests", "agents", "passed"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "suite": {"type": "string"},
+    "expected_fixture_count": {"type": "integer", "minimum": 0},
+    "task_digests": {"type": "object", "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}},
+    "agents": {"type": "array", "items": {"type": "object"}},
+    "passed": {"type": "boolean"}
+  },
+  "additionalProperties": false
+}

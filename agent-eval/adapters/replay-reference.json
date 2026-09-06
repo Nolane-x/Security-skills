@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "adapter_id": "deterministic-replay",
+  "profiles": {
+    "reference": "Uses the production router for valid synthetic cases and authoritative validator issue paths for invalid cases.",
+    "cautious": "Uses needs-evidence on selected valid evidence-sensitive cases without crossing hard evidence or authorization gates.",
+    "faulty": "Injects deterministic evidence or cross-domain errors for negative conformance tests."
+  },
+  "network_required": false,
+  "credentials_required": false
+}

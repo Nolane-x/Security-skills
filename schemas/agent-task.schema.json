@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nolane.example/schemas/agent-task.schema.json",
+  "title": "Security Skills Agent Task",
+  "type": "object",
+  "required": ["schema_version", "benchmark_id", "category", "research_case", "instructions", "response_contract", "task_digest"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "benchmark_id": {"type": "string", "minLength": 1},
+    "category": {"type": "string", "minLength": 1},
+    "research_case": {"type": "object"},
+    "instructions": {"type": "string", "minLength": 1},
+    "response_contract": {"type": "object"},
+    "task_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

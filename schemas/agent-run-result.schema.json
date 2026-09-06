@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nolane.example/schemas/agent-run-result.schema.json",
+  "title": "Security Skills Agent Run Evaluation",
+  "type": "object",
+  "required": ["schema_version", "benchmark_id", "category", "agent", "task_digest", "decision", "authority_case_valid", "authority_issue_paths", "metrics", "hard_gate_failures", "diagnostics", "score", "passed"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "benchmark_id": {"type": "string"},
+    "category": {"type": "string"},
+    "agent": {"type": "object"},
+    "task_digest": {"type": "string"},
+    "decision": {"type": ["string", "null"]},
+    "authority_case_valid": {"type": "boolean"},
+    "authority_issue_paths": {"type": "array", "items": {"type": "string"}},
+    "metrics": {"type": "object", "additionalProperties": {"type": "number", "minimum": 0, "maximum": 100}},
+    "hard_gate_failures": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "diagnostics": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "score": {"type": "number", "minimum": 0, "maximum": 100},
+    "passed": {"type": "boolean"}
+  },
+  "additionalProperties": false
+}

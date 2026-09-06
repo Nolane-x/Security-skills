@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nolane.example/schemas/agent-run.schema.json",
+  "title": "Security Skills Agent Run",
+  "type": "object",
+  "required": ["schema_version", "benchmark_id", "agent", "adapter", "task_digest", "decision", "case_valid", "declared_state", "selected_skills", "selected_packs", "issue_paths", "provenance"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "benchmark_id": {"type": "string", "minLength": 1},
+    "agent": {"type": "object", "required": ["id"], "properties": {"id": {"type": "string", "minLength": 1}, "version": {"type": "string"}}, "additionalProperties": false},
+    "adapter": {"type": "object", "required": ["id"], "properties": {"id": {"type": "string", "minLength": 1}, "version": {"type": "string"}}, "additionalProperties": false},
+    "task_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "decision": {"enum": ["reject", "route", "needs-evidence"]},
+    "case_valid": {"type": ["boolean", "null"]},
+    "declared_state": {"enum": ["hypothesis", "observed", "validated", "regression-verified", null]},
+    "selected_skills": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+    "selected_packs": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+    "issue_paths": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+    "notes": {"type": "string"},
+    "provenance": {"type": "object", "required": ["source", "output_digest"], "properties": {"source": {"enum": ["replay", "subprocess", "imported"]}, "output_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}, "additionalProperties": false},
+    "telemetry": {"type": "object"}
+  },
+  "additionalProperties": false
+}
