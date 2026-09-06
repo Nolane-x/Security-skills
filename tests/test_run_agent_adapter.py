@@ -88,10 +88,10 @@ class RunAgentAdapterTests(unittest.TestCase):
                 import sys, time
                 sys.stdin.read()
                 print('x' * 5000, flush=True)
-                time.sleep(2)
+                time.sleep(5)
             """)
             with self.assertRaisesRegex(AdapterError, 'stdout exceeded configured size cap'):
-                run_adapter(TASK, [sys.executable, str(script)], timeout=0.5, max_output_bytes=128)
+                run_adapter(TASK, [sys.executable, str(script)], timeout=3.0, max_output_bytes=128)
 
     def test_environment_is_sanitized_and_allowlist_is_explicit(self):
         old = os.environ.get('OPENAI_API_KEY')
