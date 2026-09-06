@@ -67,6 +67,18 @@ class AgentRunTests(unittest.TestCase):
         errors = validate_agent_run(ROOT, run, TASK)
         self.assertTrue(any('task_digest' in x for x in errors))
 
+    def test_digest_fields_require_lowercase_hex(self):
+        run = base_run()
+        run['task_digest'] = 'A' * 64
+        refresh_digest(run)
+        errors = validate_agent_run(ROOT, run, TASK)
+        self.assertIn('task_digest must be a lowercase 64-character SHA-256 hex string', errors)
+
+        run = base_run()
+        run['provenance']['output_digest'] = 'A' * 64
+        errors = validate_agent_run(ROOT, run, TASK)
+        self.assertIn('provenance.output_digest must be a lowercase 64-character SHA-256 hex string', errors)
+
     def test_route_requires_declared_state_matching_task(self):
         run = base_run()
         run['declared_state'] = 'observed'
