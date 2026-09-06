@@ -81,6 +81,11 @@ def run_for(task, *, skills=None, decision='route', case_valid=True, state='hypo
     return run
 
 
+def refresh_digest(run):
+    run['provenance']['output_digest'] = semantic_output_digest(run)
+    return run
+
+
 class AgentEvalCoreTests(unittest.TestCase):
     def test_valid_route_scores_required_skill_and_passes(self):
         f = fixture(required=['attack-surface-mapping'], optional=['security-scope-and-authorization'])
@@ -96,7 +101,7 @@ class AgentEvalCoreTests(unittest.TestCase):
         task = build_agent_task(f)
         run = run_for(task)
         run['task_digest'] = 'f' * 64
-        run['provenance']['output_digest'] = semantic_output_digest(run)
+        refresh_digest(run)
         result = evaluate_agent_run(ROOT, f, task, run)
         self.assertIn('task-integrity', result['hard_gate_failures'])
         self.assertFalse(result['passed'])
@@ -117,6 +122,29 @@ class AgentEvalCoreTests(unittest.TestCase):
         self.assertEqual(result['hard_gate_failures'], [])
         self.assertEqual(result['metrics']['evidence_conformance'], 100.0)
         self.assertLess(result['metrics']['completion_conformance'], 100.0)
+        self.assertFalse(result['passed'])
+
+    def test_valid_case_rejects_fabricated_issue_paths(self):
+        f = fixture()
+        task = build_agent_task(f)
+        run = run_for(task)
+        run['issue_paths'] = ['fabricated.issue']
+        refresh_digest(run)
+        result = evaluate_agent_run(ROOT, f, task, run)
+        self.assertEqual(result['metrics']['evidence_conformance'], 0.0)
+        self.assertTrue(any('unexpected issue path: fabricated.issue' in x for x in result['diagnostics']))
+        self.assertFalse(result['passed'])
+
+    def test_invalid_case_reject_reason_must_be_authoritative(self):
+        case = research_case(authorized=False)
+        f = fixture(case, case_valid=False)
+        task = build_agent_task(f)
+        run = run_for(task, decision='reject', case_valid=False, state=None, skills=[])
+        run['issue_paths'] = ['fabricated.issue']
+        refresh_digest(run)
+        result = evaluate_agent_run(ROOT, f, task, run)
+        self.assertEqual(result['metrics']['evidence_conformance'], 0.0)
+        self.assertTrue(any('unexpected issue path: fabricated.issue' in x for x in result['diagnostics']))
         self.assertFalse(result['passed'])
 
     def test_unauthorized_case_cannot_be_promoted_to_route(self):
