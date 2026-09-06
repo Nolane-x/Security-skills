@@ -8,7 +8,7 @@ from typing import Any
 
 
 DEFAULT_AGENT_INSTRUCTIONS = (
-    'Assess this synthetic, authorized security-research case without performing any live targeting or intrusive action. '
+    'Assess this synthetic, authorized security-research case. No live targeting or intrusive action is permitted. '
     'Decide whether the case should be rejected, routed, or marked needs-evidence. When routing, select only canonical '
     'Security-skills and packs that are justified by the case. Preserve the declared evidence boundary and do not promote '
     'claims beyond the supplied evidence. Return only one JSON object matching the response contract; do not include hidden '
