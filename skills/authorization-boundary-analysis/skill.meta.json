@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "maturity": "beta",
+  "domains": [
+    "authorization",
+    "access-control",
+    "trust-boundaries"
+  ],
+  "prerequisites": [
+    "security-scope-and-authorization"
+  ],
+  "composes_with": [
+    "confused-deputy-analysis",
+    "canonicalization-and-namespace-analysis",
+    "secrets-and-token-flow-analysis"
+  ],
+  "evidence_stage": "validated"
+}

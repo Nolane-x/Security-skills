@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "maturity": "beta",
+  "domains": [
+    "kernel",
+    "attack-surface",
+    "systems"
+  ],
+  "prerequisites": [
+    "security-scope-and-authorization"
+  ],
+  "composes_with": [
+    "driver-ioctl-surface-analysis",
+    "fuzz-harness-design",
+    "memory-lifetime-analysis",
+    "concurrency-race-analysis"
+  ],
+  "evidence_stage": "hypothesis"
+}

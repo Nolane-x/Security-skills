@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "maturity": "beta",
+  "domains": [
+    "sandbox",
+    "privilege-boundaries",
+    "systems"
+  ],
+  "prerequisites": [
+    "security-scope-and-authorization"
+  ],
+  "composes_with": [
+    "confused-deputy-analysis",
+    "canonicalization-and-namespace-analysis",
+    "browser-process-boundary-analysis"
+  ],
+  "evidence_stage": "observed"
+}

@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "maturity": "beta",
+  "domains": [
+    "memory-safety",
+    "integer-safety",
+    "bounds"
+  ],
+  "prerequisites": [
+    "security-scope-and-authorization"
+  ],
+  "composes_with": [
+    "sanitizer-guided-memory-analysis",
+    "parser-state-machine-analysis",
+    "variant-hunting"
+  ],
+  "evidence_stage": "observed"
+}

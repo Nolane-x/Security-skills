@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "maturity": "beta",
+  "domains": [
+    "verification",
+    "regression",
+    "version-analysis"
+  ],
+  "prerequisites": [
+    "evidence-driven-vulnerability-validation"
+  ],
+  "composes_with": [
+    "remediation-and-regression",
+    "patch-diff-variant-analysis"
+  ],
+  "evidence_stage": "regression-verified"
+}

@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "maturity": "stable",
+  "domains": [
+    "orchestration"
+  ],
+  "prerequisites": [],
+  "composes_with": [
+    "security-scope-and-authorization",
+    "attack-surface-mapping",
+    "vulnerability-hypothesis-generation"
+  ],
+  "evidence_stage": "hypothesis"
+}

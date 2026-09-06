@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "name": "kernel-sandbox-browser",
+  "description": "Systems-level attack-surface and boundary analysis for kernels, drivers, sandboxes, browsers, and JIT runtimes.",
+  "entrypoint": "kernel-attack-surface-analysis",
+  "skills": [
+    "security-scope-and-authorization",
+    "kernel-attack-surface-analysis",
+    "driver-ioctl-surface-analysis",
+    "sandbox-boundary-analysis",
+    "browser-process-boundary-analysis",
+    "jit-invariant-analysis",
+    "memory-lifetime-analysis",
+    "bounds-and-integer-analysis",
+    "concurrency-race-analysis",
+    "differential-testing",
+    "exploitability-triage",
+    "evidence-driven-vulnerability-validation"
+  ],
+  "default_flow": [
+    "security-scope-and-authorization",
+    "kernel-attack-surface-analysis",
+    "driver-ioctl-surface-analysis",
+    "evidence-driven-vulnerability-validation",
+    "exploitability-triage"
+  ]
+}

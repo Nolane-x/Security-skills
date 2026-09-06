@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "maturity": "stable",
+  "domains": [
+    "triage",
+    "dynamic-analysis"
+  ],
+  "prerequisites": [
+    "security-scope-and-authorization"
+  ],
+  "composes_with": [
+    "fuzzing-workflow",
+    "evidence-driven-vulnerability-validation"
+  ],
+  "evidence_stage": "observed"
+}

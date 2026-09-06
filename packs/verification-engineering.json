@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "name": "verification-engineering",
+  "description": "Evidence-strengthening workflow from observed behavior through causal validation, impact triage, variant search, fix closure, and version matrices.",
+  "entrypoint": "evidence-driven-vulnerability-validation",
+  "skills": [
+    "evidence-driven-vulnerability-validation",
+    "sanitizer-guided-memory-analysis",
+    "exploitability-triage",
+    "variant-hunting",
+    "patch-diff-variant-analysis",
+    "remediation-and-regression",
+    "regression-matrix-testing"
+  ],
+  "default_flow": [
+    "evidence-driven-vulnerability-validation",
+    "exploitability-triage",
+    "variant-hunting",
+    "remediation-and-regression",
+    "regression-matrix-testing"
+  ]
+}

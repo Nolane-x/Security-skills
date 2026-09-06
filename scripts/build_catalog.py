@@ -28,7 +28,21 @@ def build_data(root: Path) -> dict:
 
 
 def render_json(data: dict) -> str:
-    return json.dumps(data, indent=2, ensure_ascii=False) + "\n"
+    compact = {
+        "schema_version": data["schema_version"],
+        "skill_count": data["skill_count"],
+        "skills": [
+            {
+                "name": item["name"],
+                "category": item["category"],
+                "authorization": item["authorization"],
+                "version": item["version"],
+                "path": item["path"],
+            }
+            for item in data["skills"]
+        ],
+    }
+    return json.dumps(compact, ensure_ascii=False, separators=(",", ":")) + "\n"
 
 
 def render_markdown(data: dict) -> str:

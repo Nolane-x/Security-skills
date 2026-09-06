@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "name": "memory-safety",
+  "description": "Root-cause and impact workflow for lifetime, spatial/integer, type, and concurrency memory-safety failures.",
+  "entrypoint": "sanitizer-guided-memory-analysis",
+  "skills": [
+    "security-scope-and-authorization",
+    "sanitizer-guided-memory-analysis",
+    "memory-lifetime-analysis",
+    "bounds-and-integer-analysis",
+    "type-confusion-analysis",
+    "concurrency-race-analysis",
+    "crash-triage-and-minimization",
+    "exploitability-triage",
+    "variant-hunting",
+    "regression-matrix-testing",
+    "evidence-driven-vulnerability-validation"
+  ],
+  "default_flow": [
+    "security-scope-and-authorization",
+    "sanitizer-guided-memory-analysis",
+    "memory-lifetime-analysis",
+    "evidence-driven-vulnerability-validation",
+    "exploitability-triage",
+    "regression-matrix-testing"
+  ]
+}

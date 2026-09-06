@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "maturity": "beta",
+  "domains": [
+    "concurrency",
+    "race-conditions",
+    "memory-safety"
+  ],
+  "prerequisites": [
+    "security-scope-and-authorization"
+  ],
+  "composes_with": [
+    "memory-lifetime-analysis",
+    "sanitizer-guided-memory-analysis",
+    "authorization-boundary-analysis"
+  ],
+  "evidence_stage": "observed"
+}

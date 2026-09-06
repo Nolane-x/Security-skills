@@ -1,55 +1,99 @@
 # Security Skills
 
-A portable, verification-first security research skill library for AI agents.
+A portable, verification-first security research skill graph for AI agents.
 
-The repository is built around the open **Agent Skills** format: each capability is a self-contained directory under `skills/` with a `SKILL.md` file and optional references, scripts, or assets. The goal is to teach an agent *how to reason through security research and verify claims*, not merely how to invoke a tool.
+The canonical capability format is the open **Agent Skills** structure: each reusable capability lives under `skills/<name>/SKILL.md`, with optional local references/scripts/assets. Nolane adds a machine-readable sidecar (`skill.meta.json`) and pack manifests without polluting portable Agent Skills frontmatter.
 
-## What makes this different
+The project teaches agents **how to reason, route, collect evidence, reject false positives, and close regressions**. It is deliberately not a payload collection.
 
-- **Portable:** canonical skills use the open `SKILL.md` format instead of a vendor-specific prompt format.
-- **Composable:** a router selects focused skills instead of injecting a giant security prompt into every session.
-- **Evidence-first:** hypotheses, reproductions, root-cause evidence, impact evidence, and regression evidence are separate states.
-- **Authorization-aware:** intrusive workflows are scoped to local, owned, sandboxed, or explicitly authorized targets.
-- **Benign-by-default proofs:** marker files, assertions, sanitizer reports, controlled crashes, and regression tests are preferred over destructive or persistent payloads.
-- **Tool-independent:** workflows teach decisions and evidence contracts first; tool families are optional implementations.
-- **Validated:** dependency-free Python checks enforce the repository's skill contract and deterministic catalog.
+## Current Wave 2
 
-## Foundation skill graph
+- **43 canonical skills**
+- **12 validated skill packs**
+- deterministic build-on-demand catalog and graph indexes
+- source-controlled graph metadata and pack manifests
+- prerequisite cycle detection and unknown-node rejection
+- dependency-free Python validation
+- Linux/macOS/Windows CI on Python 3.11 and 3.13
 
-The first release deliberately starts with a compact set of high-leverage skills:
+The current graph spans:
 
-- `security-research-router`
-- `security-scope-and-authorization`
-- `attack-surface-mapping`
-- `vulnerability-hypothesis-generation`
-- `fuzzing-workflow`
-- `crash-triage-and-minimization`
-- `static-dataflow-analysis`
-- `symbolic-execution-workflow`
-- `binary-reconnaissance`
-- `evidence-driven-vulnerability-validation`
-- `patch-diff-variant-analysis`
-- `remediation-and-regression`
-- `secure-code-review`
-- `ai-agent-security-assessment`
+- research routing, scope, authorization, attack-surface mapping, hypothesis generation;
+- fuzz harness design, corpus engineering, coverage-guided, grammar-aware and stateful fuzzing;
+- crash minimization, sanitizer-guided analysis, exploitability triage, evidence validation;
+- static/dataflow, symbolic execution, binary reconnaissance, differential testing, variant hunting;
+- memory lifetime, bounds/integer, type confusion, concurrency/race analysis;
+- parser and protocol state machines, canonicalization/namespaces, deserialization trust;
+- authorization, confused deputy, cache identity, secret/token flow;
+- kernel, driver/IOCTL, sandbox, browser process and JIT invariant analysis;
+- container isolation, cloud IAM, supply-chain dependency review;
+- remediation, patch-diff analysis, regression matrices, secure code review and AI-agent security.
 
-See [CATALOG.md](CATALOG.md) for descriptions and categories.
+Generate the human and machine indexes on demand with `python scripts/build_catalog.py` and `python scripts/build_graph.py`. The generated files are intentionally ignored so `SKILL.md`, `skill.meta.json`, and pack manifests remain the only source of truth.
 
-## Install / use
+## Why the graph matters
 
-The canonical source is `skills/`. Current agents increasingly support this format directly.
+A security agent should not jump from “tool output” to “confirmed vulnerability.” The graph routes through explicit research states:
+
+```text
+hypothesis
+    ↓
+observed
+    ↓
+validated
+    ↓
+regression-verified
+```
+
+A typical memory-safety route may become:
+
+```text
+attack surface
+  → fuzz harness
+  → corpus/campaign
+  → crash minimization
+  → sanitizer evidence
+  → lifetime/bounds/type/race root cause
+  → evidence validation
+  → conservative exploitability triage
+  → variant hunt
+  → remediation
+  → regression matrix
+```
+
+Every hop has its own evidence contract and stop conditions.
+
+## Portability model
+
+`skills/` is the single canonical source. Do not fork the prose per vendor.
 
 A broadly interoperable project layout is:
 
 ```text
-<your-project>/
+<project>/
 └── .agents/
     └── skills/
         └── <skill-name>/
-            └── SKILL.md
+            ├── SKILL.md
+            └── ...optional local resources...
 ```
 
-Copy or install the desired skill directories into your agent's supported skills location. See [docs/compatibility.md](docs/compatibility.md) for current native paths and fallbacks for Gemini CLI, Cursor, GitHub Copilot, OpenCode, Kiro, Claude Code/Codex-style consumers, and generic agents.
+`skill.meta.json` is Nolane graph metadata. Hosts that only understand Agent Skills can ignore it. Agents without native skill discovery can use the repository-level `AGENTS.md` plus the same canonical skill files as explicit context. See [docs/compatibility.md](docs/compatibility.md).
+
+## Packs
+
+Packs are routing manifests under `packs/`; they reference canonical skills rather than copying them. Current deep packs include:
+
+- `fuzzing-research`
+- `memory-safety`
+- `parsers-and-protocols`
+- `trust-and-authorization`
+- `kernel-sandbox-browser`
+- `cloud-and-supply-chain`
+- `verification-engineering`
+- plus compact foundation/program-analysis/remediation/AI-agent packs.
+
+See [packs/README.md](packs/README.md).
 
 ## Validate
 
@@ -57,24 +101,29 @@ No third-party Python package is required:
 
 ```bash
 python scripts/validate_skills.py
+python scripts/validate_graph.py
+python scripts/build_catalog.py
+python scripts/build_graph.py
 python scripts/build_catalog.py --check
+python scripts/build_graph.py --check
 python -m unittest discover -s tests -v
 ```
 
-Generate the catalog after adding or changing a skill:
+After changing canonical skills or graph metadata:
 
 ```bash
 python scripts/build_catalog.py
+python scripts/build_graph.py
 ```
 
 ## Adding skills
 
-Read [CONTRIBUTING.md](CONTRIBUTING.md). New skills should encode a reusable research decision process, not a thin command wrapper. They must state when they apply, their preconditions, evidence contract, stop conditions, and output.
+Read [CONTRIBUTING.md](CONTRIBUTING.md). A new skill must encode a reusable decision process rather than a thin tool command. It needs explicit applicability, preconditions, workflow, evidence contract, stop conditions, output, and graph metadata.
 
 ## Research lineage
 
-The project is inspired by reproducible vulnerability-research archives and autonomous cyber-reasoning systems, but the skills are original distilled workflows rather than copied prompts or exploit code. See [docs/sources.md](docs/sources.md).
+The project distills original workflows from reproducible vulnerability research, autonomous Cyber Reasoning Systems, fuzzing infrastructure, program analysis, reverse engineering, and domain security ecosystems. It does not vendor third-party exploit code or copy third-party prompts. See [docs/sources.md](docs/sources.md) and [sources/research-systems.json](sources/research-systems.json).
 
 ## Security boundary
 
-This repository supports defensive security, secure development, education, and good-faith research. It is not a payload pack. See [SECURITY.md](SECURITY.md).
+Intrusive techniques are restricted to local, owned, sandboxed, benchmark/CTF, or explicitly authorized targets. Proofs prefer assertions, sanitizer evidence, controlled crashes, synthetic resources, marker files, policy simulation, and regression tests over destructive or persistent effects. See [SECURITY.md](SECURITY.md).

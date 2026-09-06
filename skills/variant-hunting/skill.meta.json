@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "maturity": "beta",
+  "domains": [
+    "variant-analysis",
+    "static-analysis",
+    "verification"
+  ],
+  "prerequisites": [
+    "evidence-driven-vulnerability-validation"
+  ],
+  "composes_with": [
+    "patch-diff-variant-analysis",
+    "static-dataflow-analysis",
+    "secure-code-review"
+  ],
+  "evidence_stage": "observed"
+}

@@ -2,53 +2,32 @@
   "schema_version": 1,
   "updated": "2026-09-06",
   "sources": [
-    {
-      "name": "Exploitarium",
-      "kind": "research-archive",
-      "url": "https://github.com/bikini/exploitarium",
-      "status": "seed"
-    },
-    {
-      "name": "Atlantis",
-      "kind": "autonomous-crs",
-      "url": "https://github.com/Team-Atlanta/aixcc-afc-atlantis",
-      "status": "seed"
-    },
-    {
-      "name": "Buttercup",
-      "kind": "autonomous-crs",
-      "url": "https://github.com/trailofbits/buttercup",
-      "status": "seed"
-    },
-    {
-      "name": "Shellphish OSS-CRS",
-      "kind": "autonomous-crs",
-      "url": "https://github.com/Team-Atlanta/shellphish-oss-crs",
-      "status": "seed"
-    },
-    {
-      "name": "FuzzingBrain",
-      "kind": "autonomous-crs",
-      "url": "https://github.com/fuzzingbrain/afc-crs-all-you-need-is-a-fuzzing-brain",
-      "status": "seed"
-    },
-    {
-      "name": "OSS-CRS",
-      "kind": "orchestration",
-      "url": "https://github.com/ossf/oss-crs",
-      "status": "seed"
-    },
-    {
-      "name": "Vulnhuntr",
-      "kind": "llm-vulnerability-analysis",
-      "url": "https://github.com/protectai/vulnhuntr",
-      "status": "seed"
-    },
-    {
-      "name": "Agent Skills",
-      "kind": "portability-standard",
-      "url": "https://agentskills.io/specification",
-      "status": "foundation"
-    }
+    {"name":"Exploitarium","kind":"research-archive","url":"https://github.com/bikini/exploitarium","status":"seed"},
+    {"name":"Atlantis","kind":"autonomous-crs","url":"https://github.com/Team-Atlanta/aixcc-afc-atlantis","status":"seed"},
+    {"name":"Buttercup","kind":"autonomous-crs","url":"https://github.com/trailofbits/buttercup","status":"seed"},
+    {"name":"Shellphish OSS-CRS","kind":"autonomous-crs","url":"https://github.com/Team-Atlanta/shellphish-oss-crs","status":"seed"},
+    {"name":"FuzzingBrain","kind":"autonomous-crs","url":"https://github.com/fuzzingbrain/afc-crs-all-you-need-is-a-fuzzing-brain","status":"seed"},
+    {"name":"OSS-CRS","kind":"orchestration","url":"https://github.com/ossf/oss-crs","status":"seed"},
+    {"name":"Vulnhuntr","kind":"llm-vulnerability-analysis","url":"https://github.com/protectai/vulnhuntr","status":"seed"},
+    {"name":"Agent Skills","kind":"portability-standard","url":"https://agentskills.io/specification","status":"foundation"},
+    {"name":"OSS-Fuzz","kind":"fuzzing-infrastructure","url":"https://google.github.io/oss-fuzz/","status":"wave2"},
+    {"name":"ClusterFuzz","kind":"fuzzing-infrastructure","url":"https://google.github.io/clusterfuzz/","status":"wave2"},
+    {"name":"FuzzBench","kind":"fuzzer-evaluation","url":"https://google.github.io/fuzzbench/","status":"wave2"},
+    {"name":"syzkaller","kind":"kernel-fuzzing","url":"https://github.com/google/syzkaller","status":"wave2"},
+    {"name":"Fuzzilli","kind":"runtime-fuzzing","url":"https://github.com/googleprojectzero/fuzzilli","status":"wave2"},
+    {"name":"Jazzer","kind":"jvm-fuzzing","url":"https://github.com/CodeIntelligenceTesting/jazzer","status":"wave2"},
+    {"name":"Nyx","kind":"vm-fuzzing","url":"https://github.com/nyx-fuzz/Nyx","status":"wave2"},
+    {"name":"CodeQL","kind":"static-dataflow","url":"https://codeql.github.com/docs/","status":"wave2"},
+    {"name":"Joern","kind":"code-property-graph","url":"https://docs.joern.io/","status":"wave2"},
+    {"name":"angr","kind":"symbolic-execution","url":"https://docs.angr.io/en/stable/","status":"wave2"},
+    {"name":"Ghidra","kind":"reverse-engineering","url":"https://github.com/NationalSecurityAgency/ghidra","status":"wave2"},
+    {"name":"Qiling","kind":"binary-emulation","url":"https://github.com/qilingframework/qiling","status":"wave2"},
+    {"name":"MobSF","kind":"mobile-security","url":"https://github.com/MobSF/Mobile-Security-Framework-MobSF","status":"wave2"},
+    {"name":"Prowler","kind":"cloud-security","url":"https://github.com/prowler-cloud/prowler","status":"wave2"},
+    {"name":"Trivy","kind":"supply-chain-container-security","url":"https://github.com/aquasecurity/trivy","status":"wave2"},
+    {"name":"Slither","kind":"smart-contract-static-analysis","url":"https://github.com/crytic/slither","status":"wave2"},
+    {"name":"garak","kind":"ai-security-evaluation","url":"https://github.com/NVIDIA/garak","status":"wave2"},
+    {"name":"PyRIT","kind":"ai-red-teaming","url":"https://github.com/microsoft/PyRIT","status":"wave2"},
+    {"name":"AgentDojo","kind":"agent-security-evaluation","url":"https://github.com/ethz-spylab/agentdojo","status":"wave2"}
   ]
 }

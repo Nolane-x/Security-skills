@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "name": "cloud-and-supply-chain",
+  "description": "Cloud/container identity, isolation, secret flow, dependency provenance, and build/release trust analysis.",
+  "entrypoint": "container-isolation-review",
+  "skills": [
+    "security-scope-and-authorization",
+    "container-isolation-review",
+    "cloud-iam-path-analysis",
+    "secrets-and-token-flow-analysis",
+    "supply-chain-dependency-review",
+    "authorization-boundary-analysis",
+    "confused-deputy-analysis",
+    "regression-matrix-testing"
+  ],
+  "default_flow": [
+    "security-scope-and-authorization",
+    "container-isolation-review",
+    "cloud-iam-path-analysis",
+    "secrets-and-token-flow-analysis"
+  ]
+}

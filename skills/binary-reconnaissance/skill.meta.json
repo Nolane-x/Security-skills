@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "maturity": "stable",
+  "domains": [
+    "binary-analysis",
+    "reverse-engineering"
+  ],
+  "prerequisites": [
+    "security-scope-and-authorization"
+  ],
+  "composes_with": [
+    "symbolic-execution-workflow",
+    "attack-surface-mapping"
+  ],
+  "evidence_stage": "hypothesis"
+}

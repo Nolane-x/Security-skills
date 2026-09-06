@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "maturity": "beta",
+  "domains": [
+    "fuzzing",
+    "testing",
+    "harness-engineering"
+  ],
+  "prerequisites": [
+    "security-scope-and-authorization"
+  ],
+  "composes_with": [
+    "fuzzing-workflow",
+    "grammar-aware-fuzzing",
+    "stateful-protocol-fuzzing",
+    "corpus-engineering"
+  ],
+  "evidence_stage": "hypothesis"
+}

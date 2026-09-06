@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "name": "fuzzing-core",
+  "description": "Core authorized fuzzing and crash triage workflow.",
+  "entrypoint": "fuzzing-workflow",
+  "skills": [
+    "security-scope-and-authorization",
+    "fuzzing-workflow",
+    "crash-triage-and-minimization",
+    "evidence-driven-vulnerability-validation"
+  ],
+  "default_flow": [
+    "security-scope-and-authorization",
+    "fuzzing-workflow",
+    "crash-triage-and-minimization",
+    "evidence-driven-vulnerability-validation"
+  ]
+}

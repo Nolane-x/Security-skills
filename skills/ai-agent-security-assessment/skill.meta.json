@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "maturity": "stable",
+  "domains": [
+    "ai-security",
+    "agent-security"
+  ],
+  "prerequisites": [
+    "security-scope-and-authorization"
+  ],
+  "composes_with": [
+    "attack-surface-mapping",
+    "evidence-driven-vulnerability-validation"
+  ],
+  "evidence_stage": "observed"
+}

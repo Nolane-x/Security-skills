@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "maturity": "beta",
+  "domains": [
+    "supply-chain",
+    "dependencies",
+    "build-security"
+  ],
+  "prerequisites": [
+    "security-scope-and-authorization"
+  ],
+  "composes_with": [
+    "secure-code-review",
+    "regression-matrix-testing",
+    "secrets-and-token-flow-analysis"
+  ],
+  "evidence_stage": "observed"
+}

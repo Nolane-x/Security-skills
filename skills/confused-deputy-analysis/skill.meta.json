@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "maturity": "beta",
+  "domains": [
+    "authorization",
+    "privilege-boundaries",
+    "confused-deputy"
+  ],
+  "prerequisites": [
+    "authorization-boundary-analysis"
+  ],
+  "composes_with": [
+    "canonicalization-and-namespace-analysis",
+    "exploitability-triage"
+  ],
+  "evidence_stage": "validated"
+}

@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "name": "trust-and-authorization",
+  "description": "Identity, namespace, authorization, delegation, cache identity, token, and confused-deputy analysis across trust boundaries.",
+  "entrypoint": "authorization-boundary-analysis",
+  "skills": [
+    "security-scope-and-authorization",
+    "authorization-boundary-analysis",
+    "confused-deputy-analysis",
+    "canonicalization-and-namespace-analysis",
+    "cache-key-identity-analysis",
+    "deserialization-trust-analysis",
+    "secrets-and-token-flow-analysis",
+    "cloud-iam-path-analysis",
+    "evidence-driven-vulnerability-validation"
+  ],
+  "default_flow": [
+    "security-scope-and-authorization",
+    "authorization-boundary-analysis",
+    "confused-deputy-analysis",
+    "evidence-driven-vulnerability-validation"
+  ]
+}

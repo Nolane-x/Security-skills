@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "maturity": "beta",
+  "domains": [
+    "deserialization",
+    "trust-boundaries",
+    "dataflow"
+  ],
+  "prerequisites": [
+    "security-scope-and-authorization"
+  ],
+  "composes_with": [
+    "static-dataflow-analysis",
+    "authorization-boundary-analysis",
+    "type-confusion-analysis"
+  ],
+  "evidence_stage": "observed"
+}

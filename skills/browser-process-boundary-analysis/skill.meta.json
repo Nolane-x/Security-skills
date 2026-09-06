@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "maturity": "beta",
+  "domains": [
+    "browser",
+    "sandbox",
+    "ipc"
+  ],
+  "prerequisites": [
+    "sandbox-boundary-analysis"
+  ],
+  "composes_with": [
+    "type-confusion-analysis",
+    "protocol-state-machine-analysis",
+    "exploitability-triage"
+  ],
+  "evidence_stage": "observed"
+}

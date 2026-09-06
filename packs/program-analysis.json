@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "name": "program-analysis",
+  "description": "Static, symbolic, and binary analysis workflows for source and compiled targets.",
+  "entrypoint": "attack-surface-mapping",
+  "skills": [
+    "security-scope-and-authorization",
+    "attack-surface-mapping",
+    "static-dataflow-analysis",
+    "binary-reconnaissance",
+    "symbolic-execution-workflow",
+    "evidence-driven-vulnerability-validation"
+  ],
+  "default_flow": [
+    "security-scope-and-authorization",
+    "attack-surface-mapping",
+    "static-dataflow-analysis",
+    "evidence-driven-vulnerability-validation"
+  ]
+}
