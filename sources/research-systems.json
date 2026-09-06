@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "updated": "2026-09-06",
+  "sources": [
+    {
+      "name": "Exploitarium",
+      "kind": "research-archive",
+      "url": "https://github.com/bikini/exploitarium",
+      "status": "seed"
+    },
+    {
+      "name": "Atlantis",
+      "kind": "autonomous-crs",
+      "url": "https://github.com/Team-Atlanta/aixcc-afc-atlantis",
+      "status": "seed"
+    },
+    {
+      "name": "Buttercup",
+      "kind": "autonomous-crs",
+      "url": "https://github.com/trailofbits/buttercup",
+      "status": "seed"
+    },
+    {
+      "name": "Shellphish OSS-CRS",
+      "kind": "autonomous-crs",
+      "url": "https://github.com/Team-Atlanta/shellphish-oss-crs",
+      "status": "seed"
+    },
+    {
+      "name": "FuzzingBrain",
+      "kind": "autonomous-crs",
+      "url": "https://github.com/fuzzingbrain/afc-crs-all-you-need-is-a-fuzzing-brain",
+      "status": "seed"
+    },
+    {
+      "name": "OSS-CRS",
+      "kind": "orchestration",
+      "url": "https://github.com/ossf/oss-crs",
+      "status": "seed"
+    },
+    {
+      "name": "Vulnhuntr",
+      "kind": "llm-vulnerability-analysis",
+      "url": "https://github.com/protectai/vulnhuntr",
+      "status": "seed"
+    },
+    {
+      "name": "Agent Skills",
+      "kind": "portability-standard",
+      "url": "https://agentskills.io/specification",
+      "status": "foundation"
+    }
+  ]
+}
