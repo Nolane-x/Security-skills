@@ -9,7 +9,9 @@ from typing import Any
 
 DEFAULT_AGENT_INSTRUCTIONS = (
     'Assess this synthetic, authorized security-research case. No live targeting or intrusive action is permitted. '
-    'Decide whether the case should be rejected, routed, or marked needs-evidence. When routing, select only canonical '
+    'Decide whether the case should be rejected, routed, or marked needs-evidence. Route and needs-evidence decisions must '
+    'keep declared_state exactly equal to the input research-case state; reject requires a false case_valid value, null '
+    'declared_state, no selected skills or packs, and at least one issue path. When routing, select only canonical '
     'Security-skills and packs that are justified by the case. Preserve the declared evidence boundary and do not promote '
     'claims beyond the supplied evidence. Return only one JSON object matching the response contract; do not include hidden '
     'reasoning, credentials, secrets, or chain-of-thought.'
@@ -22,7 +24,26 @@ RESPONSE_CONTRACT = {
         'declared_state', 'selected_skills', 'selected_packs', 'issue_paths', 'provenance',
     ],
     'decision_values': ['needs-evidence', 'reject', 'route'],
+    'case_valid_values': [False, True],
     'declared_state_values': ['hypothesis', 'observed', 'regression-verified', 'validated', None],
+    'decision_invariants': {
+        'route': {
+            'case_valid': True,
+            'declared_state': 'input-state',
+            'selected_skills_minimum': 1,
+        },
+        'needs-evidence': {
+            'case_valid': True,
+            'declared_state': 'input-state',
+        },
+        'reject': {
+            'case_valid': False,
+            'declared_state': None,
+            'selected_skills_must_be_empty': True,
+            'selected_packs_must_be_empty': True,
+            'issue_paths_required': True,
+        },
+    },
     'selected_skills': 'ordered unique canonical skill names',
     'selected_packs': 'ordered unique canonical pack names',
     'issue_paths': 'ordered unique validation-style paths',
