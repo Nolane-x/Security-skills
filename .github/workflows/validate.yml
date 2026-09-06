@@ -46,6 +46,15 @@ jobs:
       - name: Run portability benchmark
         run: python scripts/run_benchmarks.py benchmarks/suites/portability.json
 
+      - name: Validate agent evaluation contracts
+        run: |
+          python scripts/prepare_agent_tasks.py benchmarks/suites/portability.json --out agent-tasks
+          python scripts/prepare_replay_runs.py benchmarks/suites/portability.json --profile reference --out agent-runs-reference
+          python scripts/validate_agent_runs.py agent-runs-reference
+
+      - name: Run agent evaluation portability smoke
+        run: python scripts/evaluate_agent_runs.py benchmarks/suites/portability.json agent-runs-reference --json agent-smoke.json
+
       - name: Run tests
         run: python -m unittest discover -s tests -v
 
@@ -70,3 +79,98 @@ jobs:
 
       - name: Check byte-identical benchmark result
         run: python -c "from pathlib import Path; assert Path('core-a.json').read_bytes() == Path('core-b.json').read_bytes(), 'core benchmark result drifted between identical runs'; print('Core benchmark deterministic output check passed.')"
+
+  agent-eval-core:
+    needs: [validate, benchmark-core]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Prepare agent tasks twice
+        run: |
+          python scripts/prepare_agent_tasks.py benchmarks/suites/portability.json --out tasks-a
+          python scripts/prepare_agent_tasks.py benchmarks/suites/portability.json --out tasks-b
+
+      - name: Check byte-identical agent tasks
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          def snapshot(root):
+              return [(p.relative_to(root).as_posix(), p.read_bytes()) for p in sorted(root.rglob('*.json'))]
+          a, b = Path('tasks-a'), Path('tasks-b')
+          assert snapshot(a) == snapshot(b), 'prepared agent tasks drifted between identical runs'
+          print('Agent task deterministic output check passed.')
+          PY
+
+      - name: Prepare replay profiles
+        run: |
+          python scripts/prepare_replay_runs.py benchmarks/suites/portability.json --profile reference --out runs-reference
+          python scripts/prepare_replay_runs.py benchmarks/suites/portability.json --profile cautious --out runs-cautious
+          python scripts/prepare_replay_runs.py benchmarks/suites/portability.json --profile faulty --out runs-faulty
+          python scripts/validate_agent_runs.py runs-reference
+          python scripts/validate_agent_runs.py runs-cautious
+          python scripts/validate_agent_runs.py runs-faulty
+
+      - name: Evaluate reference replay twice
+        run: |
+          python scripts/evaluate_agent_runs.py benchmarks/suites/portability.json runs-reference --json reference-a.json --report reference-report.md
+          python scripts/evaluate_agent_runs.py benchmarks/suites/portability.json runs-reference --json reference-b.json
+          python - <<'PY'
+          import json
+          data = json.load(open('reference-a.json', encoding='utf-8'))
+          assert data['passed'] is True
+          assert len(data['agents']) == 1
+          agent = data['agents'][0]
+          assert agent['overall_score'] == 100.0, agent
+          assert agent['hard_gate_failure_count'] == 0, agent
+          assert agent['missing_fixture_ids'] == [], agent
+          print('Reference replay conformance check passed.')
+          PY
+
+      - name: Check byte-identical agent evaluation
+        run: python -c "from pathlib import Path; assert Path('reference-a.json').read_bytes() == Path('reference-b.json').read_bytes(), 'agent evaluation drifted between identical runs'; print('Agent evaluation deterministic output check passed.')"
+
+      - name: Exercise cautious and faulty replay profiles
+        shell: bash
+        run: |
+          set +e
+          python scripts/evaluate_agent_runs.py benchmarks/suites/portability.json runs-cautious --json cautious.json
+          cautious_rc=$?
+          python scripts/evaluate_agent_runs.py benchmarks/suites/portability.json runs-faulty --json faulty.json
+          faulty_rc=$?
+          set -e
+          test "$cautious_rc" -eq 1
+          test "$faulty_rc" -eq 1
+          python - <<'PY'
+          import json
+          cautious = json.load(open('cautious.json', encoding='utf-8'))
+          faulty = json.load(open('faulty.json', encoding='utf-8'))
+          assert cautious['passed'] is False
+          assert all(a['hard_gate_failure_count'] == 0 for a in cautious['agents']), cautious
+          assert all(a['overall_score'] < 100.0 for a in cautious['agents']), cautious
+          assert faulty['passed'] is False
+          assert any(a['hard_gate_failure_count'] > 0 or a['failed_fixture_count'] > 0 for a in faulty['agents']), faulty
+          print('Negative replay profile checks passed.')
+          PY
+
+      - name: Build cross-agent matrix twice
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from evaluate_agent_runs import evaluate_paths
+          from agent_matrix import normalize_matrix
+          paths = []
+          for name in ('runs-reference', 'runs-cautious', 'runs-faulty'):
+              paths.extend(sorted(Path(name).glob('*.json')))
+          for output in ('matrix-a.json', 'matrix-b.json'):
+              matrix, _ = evaluate_paths(Path('.'), Path('benchmarks/suites/portability.json'), paths)
+              Path(output).write_text(normalize_matrix(matrix), encoding='utf-8')
+          PY
+
+      - name: Check byte-identical cross-agent matrix
+        run: python -c "from pathlib import Path; assert Path('matrix-a.json').read_bytes() == Path('matrix-b.json').read_bytes(), 'cross-agent matrix drifted between identical builds'; print('Cross-agent matrix deterministic output check passed.')"

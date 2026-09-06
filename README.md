@@ -6,12 +6,14 @@ The canonical capability format is the open **Agent Skills** structure: each reu
 
 The project teaches agents **how to reason, route, collect evidence, reject false positives, and close regressions**. It is deliberately not a payload collection.
 
-## Current Wave 5
+## Current Wave 6
 
 - **83 canonical skills**
 - **20 validated skill packs**
 - **36 deterministic benchmark fixtures** across six conformance categories
 - **12-fixture portability smoke suite** for cross-platform CI
+- **vendor-neutral cross-agent evaluation harness** with oracle-free tasks and normalized agent-run artifacts
+- deterministic `reference`, `cautious`, and `faulty` offline replay profiles
 - deterministic build-on-demand catalog and graph indexes
 - source-controlled graph metadata and pack manifests
 - prerequisite cycle detection and unknown-node rejection
@@ -68,7 +70,6 @@ attack surface
 
 Every hop has its own evidence contract and stop conditions.
 
-
 ## Research-case engine
 
 Wave 4 adds a dependency-free machine-readable case contract so an agent can preserve evidence state across long investigations instead of re-deriving status from prose. The case validator enforces authorization and evidence gates; the router is advisory-only and closes skill prerequisites transitively before returning a deterministic route.
@@ -91,6 +92,19 @@ python scripts/run_benchmarks.py benchmarks/suites/core.json --json /tmp/securit
 ```
 
 The `core` suite contains 36 fixtures: six each for authorization, domain isolation, evidence-state conformance, false-positive control, remediation/regression routing, and representative domain routing. A passing suite requires zero enabled hard-gate failures and an aggregate score at or above its committed threshold. See [docs/benchmark-contract.md](docs/benchmark-contract.md).
+
+## Cross-agent evaluation
+
+Wave 6 converts the reviewed Wave 5 portability cases into **oracle-free agent tasks**. An external wrapper can feed those tasks to any agent host and return the same normalized `agent-run` JSON contract. The repository does not hard-code vendor APIs or proprietary CLI commands; the adapter is an untrusted transport boundary and deterministic repository code remains the scoring authority.
+
+```bash
+python scripts/prepare_agent_tasks.py benchmarks/suites/portability.json --out /tmp/agent-tasks
+python scripts/prepare_replay_runs.py benchmarks/suites/portability.json --profile reference --out /tmp/reference-runs
+python scripts/validate_agent_runs.py /tmp/reference-runs
+python scripts/evaluate_agent_runs.py benchmarks/suites/portability.json /tmp/reference-runs --json /tmp/agent-matrix.json --report /tmp/agent-matrix.md
+```
+
+Real adapters may use `scripts/run_agent_adapter.py` with an explicit argv vector. It uses `shell=False`, time/output limits, and a sanitized child environment; credentials are never forwarded unless explicitly allowlisted. CI uses offline replay profiles only. Comparative matrix scores measure conformance to the selected benchmark contract, not universal model intelligence. See [agent-eval/README.md](agent-eval/README.md).
 
 ## Portability model
 
@@ -148,6 +162,10 @@ python scripts/route_skills.py examples/research-case.example.json --limit 12
 python scripts/validate_benchmarks.py
 python scripts/run_benchmarks.py benchmarks/suites/portability.json
 python scripts/run_benchmarks.py benchmarks/suites/core.json
+python scripts/prepare_agent_tasks.py benchmarks/suites/portability.json --out /tmp/agent-tasks
+python scripts/prepare_replay_runs.py benchmarks/suites/portability.json --profile reference --out /tmp/agent-runs
+python scripts/validate_agent_runs.py /tmp/agent-runs
+python scripts/evaluate_agent_runs.py benchmarks/suites/portability.json /tmp/agent-runs
 python -m unittest discover -s tests -v
 ```
 
