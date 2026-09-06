@@ -82,6 +82,17 @@ class RunAgentAdapterTests(unittest.TestCase):
             with self.assertRaises(AdapterError):
                 run_adapter(TASK, [sys.executable, str(huge)], max_output_bytes=128)
 
+    def test_output_cap_terminates_streaming_adapter_before_timeout(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            script = write_script(Path(tmp), """
+                import sys, time
+                sys.stdin.read()
+                print('x' * 5000, flush=True)
+                time.sleep(2)
+            """)
+            with self.assertRaisesRegex(AdapterError, 'stdout exceeded configured size cap'):
+                run_adapter(TASK, [sys.executable, str(script)], timeout=0.5, max_output_bytes=128)
+
     def test_environment_is_sanitized_and_allowlist_is_explicit(self):
         old = os.environ.get('OPENAI_API_KEY')
         os.environ['OPENAI_API_KEY'] = 'synthetic-secret'
