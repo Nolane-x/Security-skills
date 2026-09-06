@@ -1,8 +1,10 @@
+import gc
 import os
 import sys
 import tempfile
 import textwrap
 import unittest
+import warnings
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -92,6 +94,20 @@ class RunAgentAdapterTests(unittest.TestCase):
             """)
             with self.assertRaisesRegex(AdapterError, 'stdout exceeded configured size cap'):
                 run_adapter(TASK, [sys.executable, str(script)], timeout=3.0, max_output_bytes=128)
+
+    def test_adapter_closes_all_subprocess_pipes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            script = write_script(Path(tmp), """
+                import json, sys
+                json.load(sys.stdin)
+                print(json.dumps({'ok': True}))
+            """)
+            with warnings.catch_warnings(record=True) as caught:
+                warnings.simplefilter('always', ResourceWarning)
+                self.assertEqual(run_adapter(TASK, [sys.executable, str(script)]), {'ok': True})
+                gc.collect()
+            resource_warnings = [warning for warning in caught if issubclass(warning.category, ResourceWarning)]
+            self.assertEqual(resource_warnings, [])
 
     def test_environment_is_sanitized_and_allowlist_is_explicit(self):
         old = os.environ.get('OPENAI_API_KEY')
