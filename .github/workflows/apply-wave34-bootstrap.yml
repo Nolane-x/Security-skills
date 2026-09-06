@@ -25,9 +25,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          cat .wave34/part*.b64 > /tmp/wave34.b64
+          cat .wave34/current*.b64 > /tmp/wave34.b64
           base64 --decode /tmp/wave34.b64 > /tmp/wave34.tar.gz
-          echo '39c1c17b8e6e668cc8fd691ddf0f647759edf277fe8ce3eb33ea9a8447e0cb1c  /tmp/wave34.tar.gz' | sha256sum -c -
+          echo '19a050644806ca522b382dcaca852b43b94c177c0cb6d16c64b2a3cb37ca34b2  /tmp/wave34.tar.gz' | sha256sum -c -
           python - <<'PY'
           from pathlib import Path, PurePosixPath
           import shutil
@@ -64,6 +64,7 @@ jobs:
           print('ARCHIVE_MANIFEST_VERIFIED=122')
           PY
           git rm -r .wave34
+          git rm .github/workflows/apply-wave34-bootstrap.yml
 
       - name: Run Wave 3-4 verification gate
         shell: bash
