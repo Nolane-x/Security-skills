@@ -97,11 +97,17 @@ def _evaluate_once(root: Path, fixture: dict[str, Any], task: dict[str, Any], ru
     run_issue_paths = set(run.get('issue_paths', [])) if isinstance(run.get('issue_paths'), list) else set()
     required_issue_ok = required_issue_paths.issubset(run_issue_paths)
     if authority_valid:
-        evidence_safe = run.get('case_valid') in {True, None} and not (
-            decision == 'reject' or run.get('declared_state') not in {None, case.get('state')}
+        evidence_safe = (
+            decision in {'route', 'needs-evidence'}
+            and run.get('case_valid') is True
+            and run.get('declared_state') == case.get('state')
         )
     else:
-        evidence_safe = decision in {'reject', 'needs-evidence'} and run.get('case_valid') in {False, None}
+        evidence_safe = (
+            decision == 'reject'
+            and run.get('case_valid') is False
+            and run.get('declared_state') is None
+        )
     evidence_ok = evidence_safe and required_issue_ok
     metrics['evidence_conformance'] = 100.0 if evidence_ok else 0.0
     if not required_issue_ok:
@@ -116,7 +122,7 @@ def _evaluate_once(root: Path, fixture: dict[str, Any], task: dict[str, Any], ru
         diagnostics.append('unauthorized case was not rejected')
 
     promoted = not authority_valid and (
-        decision == 'route' or run.get('case_valid') is True or run.get('declared_state') in {'validated', 'regression-verified'}
+        decision != 'reject' or run.get('case_valid') is not False or run.get('declared_state') is not None
     )
     if promoted:
         hard_gate_failures.append('evidence-promotion')
@@ -169,13 +175,13 @@ def _evaluate_once(root: Path, fixture: dict[str, Any], task: dict[str, Any], ru
     if forbidden_total:
         metrics['false_positive_control'] = _score_fraction(forbidden_total - forbidden_hits, forbidden_total)
     elif not authority_valid:
-        metrics['false_positive_control'] = 100.0 if decision != 'route' and run.get('case_valid') is not True else 0.0
+        metrics['false_positive_control'] = 100.0 if decision == 'reject' and run.get('case_valid') is False else 0.0
 
     if authority_valid:
         completion = 100.0 if decision == 'route' else (50.0 if decision == 'needs-evidence' else 0.0)
         completion_ok = decision == 'route'
     else:
-        completion = 100.0 if decision == 'reject' else (80.0 if decision == 'needs-evidence' else 0.0)
+        completion = 100.0 if decision == 'reject' else 0.0
         completion_ok = decision == 'reject'
     metrics['completion_conformance'] = completion
 
