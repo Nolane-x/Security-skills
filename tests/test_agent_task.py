@@ -94,6 +94,17 @@ class AgentTaskTests(unittest.TestCase):
         self.assertIn('json', instructions)
         self.assertIn('no live', instructions)
 
+    def test_response_contract_exposes_strict_decision_invariants(self):
+        contract = build_agent_task(copy.deepcopy(FIXTURE))['response_contract']
+        self.assertEqual(contract['case_valid_values'], [False, True])
+        self.assertEqual(contract['decision_invariants']['route']['case_valid'], True)
+        self.assertEqual(contract['decision_invariants']['route']['declared_state'], 'input-state')
+        self.assertEqual(contract['decision_invariants']['needs-evidence']['case_valid'], True)
+        self.assertEqual(contract['decision_invariants']['needs-evidence']['declared_state'], 'input-state')
+        self.assertEqual(contract['decision_invariants']['reject']['case_valid'], False)
+        self.assertIsNone(contract['decision_invariants']['reject']['declared_state'])
+        self.assertTrue(contract['decision_invariants']['reject']['issue_paths_required'])
+
     def test_real_portability_suite_prepares_twelve_sorted_tasks(self):
         suite_path = ROOT / 'benchmarks' / 'suites' / 'portability.json'
         with tempfile.TemporaryDirectory() as tmp:
