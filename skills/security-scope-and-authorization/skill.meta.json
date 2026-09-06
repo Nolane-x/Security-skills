@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "maturity": "stable",
+  "domains": [
+    "governance",
+    "research-safety"
+  ],
+  "prerequisites": [],
+  "composes_with": [
+    "security-research-router",
+    "attack-surface-mapping",
+    "fuzzing-workflow",
+    "secure-code-review"
+  ],
+  "evidence_stage": "hypothesis"
+}

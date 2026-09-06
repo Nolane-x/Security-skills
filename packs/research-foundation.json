@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "name": "research-foundation",
+  "description": "Core routing, authorization, attack-surface, hypothesis, and evidence workflow for security research.",
+  "entrypoint": "security-research-router",
+  "skills": [
+    "security-research-router",
+    "security-scope-and-authorization",
+    "attack-surface-mapping",
+    "vulnerability-hypothesis-generation",
+    "evidence-driven-vulnerability-validation"
+  ],
+  "default_flow": [
+    "security-research-router",
+    "security-scope-and-authorization",
+    "attack-surface-mapping",
+    "vulnerability-hypothesis-generation",
+    "evidence-driven-vulnerability-validation"
+  ]
+}

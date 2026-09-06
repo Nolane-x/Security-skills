@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "maturity": "beta",
+  "domains": [
+    "jit",
+    "compiler",
+    "runtime"
+  ],
+  "prerequisites": [
+    "security-scope-and-authorization"
+  ],
+  "composes_with": [
+    "differential-testing",
+    "type-confusion-analysis",
+    "bounds-and-integer-analysis",
+    "sanitizer-guided-memory-analysis"
+  ],
+  "evidence_stage": "observed"
+}

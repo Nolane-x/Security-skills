@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "maturity": "stable",
+  "domains": [
+    "variant-analysis",
+    "static-analysis"
+  ],
+  "prerequisites": [
+    "security-scope-and-authorization"
+  ],
+  "composes_with": [
+    "static-dataflow-analysis",
+    "remediation-and-regression"
+  ],
+  "evidence_stage": "observed"
+}

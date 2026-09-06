@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "maturity": "stable",
+  "domains": [
+    "static-analysis",
+    "dataflow"
+  ],
+  "prerequisites": [
+    "security-scope-and-authorization"
+  ],
+  "composes_with": [
+    "vulnerability-hypothesis-generation",
+    "evidence-driven-vulnerability-validation",
+    "patch-diff-variant-analysis"
+  ],
+  "evidence_stage": "observed"
+}

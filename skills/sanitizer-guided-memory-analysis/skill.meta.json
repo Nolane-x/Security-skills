@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "maturity": "beta",
+  "domains": [
+    "memory-safety",
+    "dynamic-analysis",
+    "verification"
+  ],
+  "prerequisites": [
+    "security-scope-and-authorization"
+  ],
+  "composes_with": [
+    "crash-triage-and-minimization",
+    "memory-lifetime-analysis",
+    "bounds-and-integer-analysis",
+    "evidence-driven-vulnerability-validation"
+  ],
+  "evidence_stage": "observed"
+}

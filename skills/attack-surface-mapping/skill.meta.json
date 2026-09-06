@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "maturity": "stable",
+  "domains": [
+    "reconnaissance",
+    "threat-modeling"
+  ],
+  "prerequisites": [
+    "security-scope-and-authorization"
+  ],
+  "composes_with": [
+    "vulnerability-hypothesis-generation",
+    "static-dataflow-analysis",
+    "binary-reconnaissance"
+  ],
+  "evidence_stage": "hypothesis"
+}

@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "maturity": "stable",
+  "domains": [
+    "remediation",
+    "verification"
+  ],
+  "prerequisites": [
+    "evidence-driven-vulnerability-validation"
+  ],
+  "composes_with": [
+    "patch-diff-variant-analysis",
+    "secure-code-review"
+  ],
+  "evidence_stage": "regression-verified"
+}

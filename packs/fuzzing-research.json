@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "name": "fuzzing-research",
+  "description": "Deep fuzzing workflow spanning harness design, corpus engineering, structured/stateful generation, triage, sanitizer interpretation, and validation.",
+  "entrypoint": "fuzz-harness-design",
+  "skills": [
+    "security-scope-and-authorization",
+    "fuzz-harness-design",
+    "corpus-engineering",
+    "fuzzing-workflow",
+    "grammar-aware-fuzzing",
+    "stateful-protocol-fuzzing",
+    "crash-triage-and-minimization",
+    "sanitizer-guided-memory-analysis",
+    "evidence-driven-vulnerability-validation"
+  ],
+  "default_flow": [
+    "security-scope-and-authorization",
+    "fuzz-harness-design",
+    "corpus-engineering",
+    "fuzzing-workflow",
+    "crash-triage-and-minimization",
+    "sanitizer-guided-memory-analysis",
+    "evidence-driven-vulnerability-validation"
+  ]
+}

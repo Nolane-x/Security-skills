@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "name": "ai-agent-security",
+  "description": "Assessment workflow for AI agents, tool boundaries, untrusted context, and action authorization.",
+  "entrypoint": "ai-agent-security-assessment",
+  "skills": [
+    "security-scope-and-authorization",
+    "attack-surface-mapping",
+    "ai-agent-security-assessment",
+    "evidence-driven-vulnerability-validation"
+  ],
+  "default_flow": [
+    "security-scope-and-authorization",
+    "attack-surface-mapping",
+    "ai-agent-security-assessment",
+    "evidence-driven-vulnerability-validation"
+  ]
+}

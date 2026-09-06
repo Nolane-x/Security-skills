@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "maturity": "beta",
+  "domains": [
+    "fuzzing",
+    "protocols",
+    "state-machines"
+  ],
+  "prerequisites": [
+    "fuzzing-workflow"
+  ],
+  "composes_with": [
+    "protocol-state-machine-analysis",
+    "corpus-engineering",
+    "evidence-driven-vulnerability-validation"
+  ],
+  "evidence_stage": "observed"
+}

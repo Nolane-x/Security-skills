@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "maturity": "beta",
+  "domains": [
+    "canonicalization",
+    "namespaces",
+    "trust-boundaries"
+  ],
+  "prerequisites": [
+    "security-scope-and-authorization"
+  ],
+  "composes_with": [
+    "authorization-boundary-analysis",
+    "parser-state-machine-analysis",
+    "concurrency-race-analysis"
+  ],
+  "evidence_stage": "observed"
+}

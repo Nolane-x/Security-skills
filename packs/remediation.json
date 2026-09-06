@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "name": "remediation",
+  "description": "Validated-finding remediation, variant analysis, and regression closure.",
+  "entrypoint": "evidence-driven-vulnerability-validation",
+  "skills": [
+    "evidence-driven-vulnerability-validation",
+    "patch-diff-variant-analysis",
+    "remediation-and-regression",
+    "secure-code-review"
+  ],
+  "default_flow": [
+    "evidence-driven-vulnerability-validation",
+    "patch-diff-variant-analysis",
+    "remediation-and-regression"
+  ]
+}

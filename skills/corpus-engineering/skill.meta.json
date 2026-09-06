@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "maturity": "beta",
+  "domains": [
+    "fuzzing",
+    "corpus",
+    "testing"
+  ],
+  "prerequisites": [
+    "fuzz-harness-design"
+  ],
+  "composes_with": [
+    "fuzzing-workflow",
+    "grammar-aware-fuzzing",
+    "stateful-protocol-fuzzing",
+    "regression-matrix-testing"
+  ],
+  "evidence_stage": "hypothesis"
+}

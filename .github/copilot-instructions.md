@@ -15,6 +15,9 @@ Before completion run:
 
 ```bash
 python scripts/validate_skills.py
+python scripts/build_catalog.py
+python scripts/build_graph.py
 python scripts/build_catalog.py --check
+python scripts/build_graph.py --check
 python -m unittest discover -s tests -v
 ```

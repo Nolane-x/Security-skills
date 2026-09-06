@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "maturity": "beta",
+  "domains": [
+    "kernel",
+    "drivers",
+    "ioctl"
+  ],
+  "prerequisites": [
+    "kernel-attack-surface-analysis"
+  ],
+  "composes_with": [
+    "bounds-and-integer-analysis",
+    "memory-lifetime-analysis",
+    "authorization-boundary-analysis"
+  ],
+  "evidence_stage": "observed"
+}

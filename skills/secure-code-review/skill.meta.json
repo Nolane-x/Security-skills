@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "maturity": "stable",
+  "domains": [
+    "code-review",
+    "static-analysis"
+  ],
+  "prerequisites": [
+    "security-scope-and-authorization"
+  ],
+  "composes_with": [
+    "static-dataflow-analysis",
+    "vulnerability-hypothesis-generation"
+  ],
+  "evidence_stage": "observed"
+}

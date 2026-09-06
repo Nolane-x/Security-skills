@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "name": "parsers-and-protocols",
+  "description": "Structured input and temporal-state research for parsers, file formats, decoders, RPC/IPC, and network protocols.",
+  "entrypoint": "parser-state-machine-analysis",
+  "skills": [
+    "security-scope-and-authorization",
+    "parser-state-machine-analysis",
+    "protocol-state-machine-analysis",
+    "grammar-aware-fuzzing",
+    "stateful-protocol-fuzzing",
+    "differential-testing",
+    "bounds-and-integer-analysis",
+    "canonicalization-and-namespace-analysis",
+    "deserialization-trust-analysis",
+    "evidence-driven-vulnerability-validation"
+  ],
+  "default_flow": [
+    "security-scope-and-authorization",
+    "parser-state-machine-analysis",
+    "grammar-aware-fuzzing",
+    "bounds-and-integer-analysis",
+    "evidence-driven-vulnerability-validation"
+  ]
+}

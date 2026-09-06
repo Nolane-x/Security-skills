@@ -55,6 +55,12 @@ class CatalogTests(unittest.TestCase):
 
             catalog = json.loads((root / "catalog.json").read_text(encoding="utf-8"))
             self.assertEqual(["alpha-skill"], [x["name"] for x in catalog["skills"]])
+            self.assertEqual(
+                {"name", "category", "authorization", "version", "path"},
+                set(catalog["skills"][0]),
+            )
+            self.assertNotIn("description", catalog["skills"][0])
+            self.assertLess((root / "catalog.json").stat().st_size, 1024)
 
             before = (root / "CATALOG.md").read_text(encoding="utf-8")
             second = subprocess.run(
