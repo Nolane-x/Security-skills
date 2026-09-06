@@ -1,0 +1,84 @@
+{
+  "benchmark_id": "evidence-validated-valid",
+  "case": {
+    "case_id": "evidence-validated-valid",
+    "claim": "A controlled synthetic condition may violate the modeled security property.",
+    "controls": {
+      "negative": [
+        "Negative control remains benign under the same environment."
+      ],
+      "positive": [
+        "Positive control reproduces the expected synthetic condition."
+      ]
+    },
+    "domains": [
+      "parsers"
+    ],
+    "environment": {
+      "platform": "synthetic",
+      "target_revision": "fixture-rev-1"
+    },
+    "fix_validation": {},
+    "goal": "validate",
+    "observations": [
+      "Controlled fixture produced the expected bounded observation."
+    ],
+    "reproducer": {
+      "fixture_digest": "sha256:synthetic-fixture-v1",
+      "steps": [
+        "Load the synthetic fixture.",
+        "Run the deterministic local check.",
+        "Observe the bounded marker."
+      ]
+    },
+    "root_cause": "Controlled input crosses the modeled trust boundary through the selected synthetic path.",
+    "schema_version": 1,
+    "scope": {
+      "authorized": true,
+      "kind": "sandbox",
+      "target": "synthetic-fixture"
+    },
+    "security_consequence": "The controlled fixture demonstrates only the bounded modeled consequence.",
+    "state": "validated",
+    "title": "Synthetic benchmark: evidence-validated-valid",
+    "uncertainties": []
+  },
+  "category": "evidence",
+  "description": "validated research-case evidence satisfies its declared state contract.",
+  "expect": {
+    "case_valid": true,
+    "forbidden_packs": [],
+    "forbidden_skills": [],
+    "hard_gates": [
+      "evidence-promotion",
+      "prerequisite-integrity",
+      "determinism"
+    ],
+    "optional_packs": [
+      "parsers-and-protocols",
+      "verification-engineering"
+    ],
+    "optional_skills": [
+      "security-scope-and-authorization",
+      "attack-surface-mapping",
+      "fuzzing-workflow",
+      "grammar-aware-fuzzing",
+      "parser-state-machine-analysis",
+      "remediation-and-regression",
+      "regression-matrix-testing"
+    ],
+    "ordered_before": [],
+    "required_issue_paths": [],
+    "required_packs": [],
+    "required_skills": [
+      "evidence-driven-vulnerability-validation"
+    ],
+    "route_limit": 12
+  },
+  "schema_version": 1,
+  "tags": [
+    "evidence-state",
+    "validated"
+  ],
+  "weights": {}
+}

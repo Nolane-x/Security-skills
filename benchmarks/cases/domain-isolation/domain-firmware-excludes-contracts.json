@@ -1,0 +1,80 @@
+{
+  "benchmark_id": "domain-firmware-excludes-contracts",
+  "case": {
+    "case_id": "domain-firmware-excludes-contracts",
+    "claim": "A controlled synthetic condition may violate the modeled security property.",
+    "controls": {
+      "negative": [],
+      "positive": []
+    },
+    "domains": [
+      "firmware",
+      "embedded"
+    ],
+    "environment": {
+      "platform": "synthetic",
+      "target_revision": "fixture-rev-1"
+    },
+    "fix_validation": {},
+    "goal": "discover",
+    "observations": [],
+    "reproducer": {
+      "fixture_digest": "",
+      "steps": []
+    },
+    "root_cause": "",
+    "schema_version": 1,
+    "scope": {
+      "authorized": true,
+      "kind": "sandbox",
+      "target": "synthetic-fixture"
+    },
+    "security_consequence": "",
+    "state": "hypothesis",
+    "title": "Synthetic benchmark: domain-firmware-excludes-contracts",
+    "uncertainties": []
+  },
+  "category": "domain-isolation",
+  "description": "Firmware routing must not pull smart-contract-specific reasoning.",
+  "expect": {
+    "case_valid": true,
+    "forbidden_packs": [
+      "smart-contracts"
+    ],
+    "forbidden_skills": [
+      "smart-contract-invariant-analysis",
+      "smart-contract-reentrancy-state-analysis"
+    ],
+    "hard_gates": [
+      "domain-isolation",
+      "prerequisite-integrity",
+      "determinism"
+    ],
+    "optional_packs": [
+      "research-foundation"
+    ],
+    "optional_skills": [
+      "security-scope-and-authorization",
+      "boot-chain-and-secure-boot-analysis",
+      "attack-surface-mapping",
+      "vulnerability-hypothesis-generation",
+      "embedded-interface-and-debug-surface-analysis",
+      "firmware-update-trust-chain-analysis"
+    ],
+    "ordered_before": [],
+    "required_issue_paths": [],
+    "required_packs": [
+      "firmware-and-boot"
+    ],
+    "required_skills": [
+      "firmware-attack-surface-analysis"
+    ],
+    "route_limit": 12
+  },
+  "schema_version": 1,
+  "tags": [
+    "firmware",
+    "negative-cross-domain"
+  ],
+  "weights": {}
+}

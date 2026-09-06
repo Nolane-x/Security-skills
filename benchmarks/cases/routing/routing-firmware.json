@@ -1,0 +1,76 @@
+{
+  "benchmark_id": "routing-firmware",
+  "case": {
+    "case_id": "routing-firmware",
+    "claim": "A controlled synthetic condition may violate the modeled security property.",
+    "controls": {
+      "negative": [],
+      "positive": []
+    },
+    "domains": [
+      "firmware",
+      "embedded"
+    ],
+    "environment": {
+      "platform": "synthetic",
+      "target_revision": "fixture-rev-1"
+    },
+    "fix_validation": {},
+    "goal": "discover",
+    "observations": [],
+    "reproducer": {
+      "fixture_digest": "",
+      "steps": []
+    },
+    "root_cause": "",
+    "schema_version": 1,
+    "scope": {
+      "authorized": true,
+      "kind": "sandbox",
+      "target": "synthetic-fixture"
+    },
+    "security_consequence": "",
+    "state": "hypothesis",
+    "title": "Synthetic benchmark: routing-firmware",
+    "uncertainties": []
+  },
+  "category": "routing",
+  "description": "Representative domain route must preserve its domain anchors and exclude unrelated specialized capabilities.",
+  "expect": {
+    "case_valid": true,
+    "forbidden_packs": [],
+    "forbidden_skills": [
+      "smart-contract-invariant-analysis"
+    ],
+    "hard_gates": [
+      "prerequisite-integrity",
+      "determinism"
+    ],
+    "optional_packs": [
+      "research-foundation"
+    ],
+    "optional_skills": [
+      "security-scope-and-authorization",
+      "boot-chain-and-secure-boot-analysis",
+      "attack-surface-mapping",
+      "vulnerability-hypothesis-generation",
+      "embedded-interface-and-debug-surface-analysis"
+    ],
+    "ordered_before": [],
+    "required_issue_paths": [],
+    "required_packs": [
+      "firmware-and-boot"
+    ],
+    "required_skills": [
+      "firmware-attack-surface-analysis",
+      "firmware-update-trust-chain-analysis"
+    ],
+    "route_limit": 12
+  },
+  "schema_version": 1,
+  "tags": [
+    "routing",
+    "firmware-and-boot"
+  ],
+  "weights": {}
+}

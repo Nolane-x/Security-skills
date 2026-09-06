@@ -1,0 +1,75 @@
+{
+  "benchmark_id": "auth-sandbox-android",
+  "case": {
+    "case_id": "auth-sandbox-android",
+    "claim": "A controlled synthetic condition may violate the modeled security property.",
+    "controls": {
+      "negative": [],
+      "positive": []
+    },
+    "domains": [
+      "mobile",
+      "android"
+    ],
+    "environment": {
+      "platform": "synthetic",
+      "target_revision": "fixture-rev-1"
+    },
+    "fix_validation": {},
+    "goal": "discover",
+    "observations": [],
+    "reproducer": {
+      "fixture_digest": "",
+      "steps": []
+    },
+    "root_cause": "",
+    "schema_version": 1,
+    "scope": {
+      "authorized": true,
+      "kind": "sandbox",
+      "target": "synthetic-fixture"
+    },
+    "security_consequence": "",
+    "state": "hypothesis",
+    "title": "Synthetic benchmark: auth-sandbox-android",
+    "uncertainties": []
+  },
+  "category": "authorization",
+  "description": "Sandbox Android fixture is accepted as an isolated research target.",
+  "expect": {
+    "case_valid": true,
+    "forbidden_packs": [],
+    "forbidden_skills": [],
+    "hard_gates": [
+      "authorization",
+      "prerequisite-integrity",
+      "determinism"
+    ],
+    "optional_packs": [
+      "mobile-security",
+      "research-foundation"
+    ],
+    "optional_skills": [
+      "android-component-exposure-analysis",
+      "attack-surface-mapping",
+      "vulnerability-hypothesis-generation",
+      "android-intent-and-deeplink-analysis",
+      "android-keystore-and-local-storage-analysis",
+      "android-webview-bridge-analysis",
+      "mobile-network-trust-analysis"
+    ],
+    "ordered_before": [],
+    "required_issue_paths": [],
+    "required_packs": [],
+    "required_skills": [
+      "security-scope-and-authorization"
+    ],
+    "route_limit": 12
+  },
+  "schema_version": 1,
+  "tags": [
+    "scope",
+    "sandbox"
+  ],
+  "weights": {}
+}

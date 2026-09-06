@@ -1,0 +1,75 @@
+{
+  "benchmark_id": "auth-owned-web",
+  "case": {
+    "case_id": "auth-owned-web",
+    "claim": "A controlled synthetic condition may violate the modeled security property.",
+    "controls": {
+      "negative": [],
+      "positive": []
+    },
+    "domains": [
+      "web"
+    ],
+    "environment": {
+      "platform": "synthetic",
+      "target_revision": "fixture-rev-1"
+    },
+    "fix_validation": {},
+    "goal": "discover",
+    "observations": [],
+    "reproducer": {
+      "fixture_digest": "",
+      "steps": []
+    },
+    "root_cause": "",
+    "schema_version": 1,
+    "scope": {
+      "authorized": true,
+      "kind": "owned",
+      "target": "synthetic-fixture"
+    },
+    "security_consequence": "",
+    "state": "hypothesis",
+    "title": "Synthetic benchmark: auth-owned-web",
+    "uncertainties": []
+  },
+  "category": "authorization",
+  "description": "Owned web fixture demonstrates an accepted owned-target scope.",
+  "expect": {
+    "case_valid": true,
+    "forbidden_packs": [],
+    "forbidden_skills": [],
+    "hard_gates": [
+      "authorization",
+      "prerequisite-integrity",
+      "determinism"
+    ],
+    "optional_packs": [
+      "web-framework-internals",
+      "research-foundation"
+    ],
+    "optional_skills": [
+      "attack-surface-mapping",
+      "vulnerability-hypothesis-generation",
+      "file-upload-processing-analysis",
+      "authorization-boundary-analysis",
+      "multi-tenant-data-isolation-analysis",
+      "server-side-request-boundary-analysis",
+      "template-expression-boundary-analysis",
+      "web-routing-and-middleware-analysis"
+    ],
+    "ordered_before": [],
+    "required_issue_paths": [],
+    "required_packs": [],
+    "required_skills": [
+      "security-scope-and-authorization"
+    ],
+    "route_limit": 12
+  },
+  "schema_version": 1,
+  "tags": [
+    "scope",
+    "owned"
+  ],
+  "weights": {}
+}

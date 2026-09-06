@@ -1,0 +1,79 @@
+{
+  "benchmark_id": "routing-ai-agent",
+  "case": {
+    "case_id": "routing-ai-agent",
+    "claim": "A controlled synthetic condition may violate the modeled security property.",
+    "controls": {
+      "negative": [],
+      "positive": []
+    },
+    "domains": [
+      "ai-security",
+      "agent-security"
+    ],
+    "environment": {
+      "platform": "synthetic",
+      "target_revision": "fixture-rev-1"
+    },
+    "fix_validation": {},
+    "goal": "root-cause",
+    "observations": [],
+    "reproducer": {
+      "fixture_digest": "",
+      "steps": []
+    },
+    "root_cause": "",
+    "schema_version": 1,
+    "scope": {
+      "authorized": true,
+      "kind": "sandbox",
+      "target": "synthetic-fixture"
+    },
+    "security_consequence": "",
+    "state": "hypothesis",
+    "title": "Synthetic benchmark: routing-ai-agent",
+    "uncertainties": []
+  },
+  "category": "routing",
+  "description": "Representative domain route must preserve its domain anchors and exclude unrelated specialized capabilities.",
+  "expect": {
+    "case_valid": true,
+    "forbidden_packs": [],
+    "forbidden_skills": [
+      "firmware-attack-surface-analysis"
+    ],
+    "hard_gates": [
+      "prerequisite-integrity",
+      "determinism"
+    ],
+    "optional_packs": [
+      "ai-agent-security",
+      "program-analysis"
+    ],
+    "optional_skills": [
+      "security-scope-and-authorization",
+      "connector-plugin-trust-analysis",
+      "attack-surface-mapping",
+      "vulnerability-hypothesis-generation",
+      "prompt-injection-boundary-analysis",
+      "rag-memory-data-isolation-analysis",
+      "static-dataflow-analysis"
+    ],
+    "ordered_before": [],
+    "required_issue_paths": [],
+    "required_packs": [
+      "ai-agent-deep-security"
+    ],
+    "required_skills": [
+      "ai-agent-security-assessment",
+      "tool-capability-and-confirmation-analysis"
+    ],
+    "route_limit": 12
+  },
+  "schema_version": 1,
+  "tags": [
+    "routing",
+    "ai-agent-deep-security"
+  ],
+  "weights": {}
+}

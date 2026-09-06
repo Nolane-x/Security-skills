@@ -1,0 +1,74 @@
+{
+  "benchmark_id": "routing-parser-protocol",
+  "case": {
+    "case_id": "routing-parser-protocol",
+    "claim": "A controlled synthetic condition may violate the modeled security property.",
+    "controls": {
+      "negative": [],
+      "positive": []
+    },
+    "domains": [
+      "parsers"
+    ],
+    "environment": {
+      "platform": "synthetic",
+      "target_revision": "fixture-rev-1"
+    },
+    "fix_validation": {},
+    "goal": "discover",
+    "observations": [],
+    "reproducer": {
+      "fixture_digest": "",
+      "steps": []
+    },
+    "root_cause": "",
+    "schema_version": 1,
+    "scope": {
+      "authorized": true,
+      "kind": "sandbox",
+      "target": "synthetic-fixture"
+    },
+    "security_consequence": "",
+    "state": "hypothesis",
+    "title": "Synthetic benchmark: routing-parser-protocol",
+    "uncertainties": []
+  },
+  "category": "routing",
+  "description": "Representative domain route must preserve its domain anchors and exclude unrelated specialized capabilities.",
+  "expect": {
+    "case_valid": true,
+    "forbidden_packs": [],
+    "forbidden_skills": [
+      "android-component-exposure-analysis"
+    ],
+    "hard_gates": [
+      "prerequisite-integrity",
+      "determinism"
+    ],
+    "optional_packs": [
+      "research-foundation"
+    ],
+    "optional_skills": [
+      "security-scope-and-authorization",
+      "attack-surface-mapping",
+      "vulnerability-hypothesis-generation",
+      "fuzzing-workflow",
+      "grammar-aware-fuzzing"
+    ],
+    "ordered_before": [],
+    "required_issue_paths": [],
+    "required_packs": [
+      "parsers-and-protocols"
+    ],
+    "required_skills": [
+      "parser-state-machine-analysis"
+    ],
+    "route_limit": 12
+  },
+  "schema_version": 1,
+  "tags": [
+    "routing",
+    "parsers-and-protocols"
+  ],
+  "weights": {}
+}

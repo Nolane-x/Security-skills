@@ -1,0 +1,78 @@
+{
+  "benchmark_id": "routing-web-framework",
+  "case": {
+    "case_id": "routing-web-framework",
+    "claim": "A controlled synthetic condition may violate the modeled security property.",
+    "controls": {
+      "negative": [],
+      "positive": []
+    },
+    "domains": [
+      "web"
+    ],
+    "environment": {
+      "platform": "synthetic",
+      "target_revision": "fixture-rev-1"
+    },
+    "fix_validation": {},
+    "goal": "root-cause",
+    "observations": [],
+    "reproducer": {
+      "fixture_digest": "",
+      "steps": []
+    },
+    "root_cause": "",
+    "schema_version": 1,
+    "scope": {
+      "authorized": true,
+      "kind": "sandbox",
+      "target": "synthetic-fixture"
+    },
+    "security_consequence": "",
+    "state": "hypothesis",
+    "title": "Synthetic benchmark: routing-web-framework",
+    "uncertainties": []
+  },
+  "category": "routing",
+  "description": "Representative domain route must preserve its domain anchors and exclude unrelated specialized capabilities.",
+  "expect": {
+    "case_valid": true,
+    "forbidden_packs": [],
+    "forbidden_skills": [
+      "firmware-attack-surface-analysis"
+    ],
+    "hard_gates": [
+      "prerequisite-integrity",
+      "determinism"
+    ],
+    "optional_packs": [
+      "program-analysis"
+    ],
+    "optional_skills": [
+      "security-scope-and-authorization",
+      "attack-surface-mapping",
+      "vulnerability-hypothesis-generation",
+      "file-upload-processing-analysis",
+      "multi-tenant-data-isolation-analysis",
+      "server-side-request-boundary-analysis",
+      "template-expression-boundary-analysis",
+      "static-dataflow-analysis"
+    ],
+    "ordered_before": [],
+    "required_issue_paths": [],
+    "required_packs": [
+      "web-framework-internals"
+    ],
+    "required_skills": [
+      "web-routing-and-middleware-analysis",
+      "authorization-boundary-analysis"
+    ],
+    "route_limit": 12
+  },
+  "schema_version": 1,
+  "tags": [
+    "routing",
+    "web-framework-internals"
+  ],
+  "weights": {}
+}

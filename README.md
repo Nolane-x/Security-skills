@@ -6,10 +6,12 @@ The canonical capability format is the open **Agent Skills** structure: each reu
 
 The project teaches agents **how to reason, route, collect evidence, reject false positives, and close regressions**. It is deliberately not a payload collection.
 
-## Current Wave 4
+## Current Wave 5
 
 - **83 canonical skills**
 - **20 validated skill packs**
+- **36 deterministic benchmark fixtures** across six conformance categories
+- **12-fixture portability smoke suite** for cross-platform CI
 - deterministic build-on-demand catalog and graph indexes
 - source-controlled graph metadata and pack manifests
 - prerequisite cycle detection and unknown-node rejection
@@ -78,6 +80,18 @@ python scripts/route_skills.py examples/research-case.example.json --limit 12
 
 A case cannot skip directly from `hypothesis` to `validated`. `validated` requires a pinned reproducer, causal root cause, bounded security consequence, and positive/negative controls. `regression-verified` additionally requires a fixed revision where the same evidence no longer reproduces while controls remain healthy. See [docs/research-case-contract.md](docs/research-case-contract.md).
 
+## Benchmark and evaluation layer
+
+Wave 5 adds a deterministic conformance benchmark above the production case validator and advisory router. Fixtures are synthetic or controlled JSON cases; they never execute exploits or target live external systems.
+
+```bash
+python scripts/validate_benchmarks.py
+python scripts/run_benchmarks.py benchmarks/suites/portability.json
+python scripts/run_benchmarks.py benchmarks/suites/core.json --json /tmp/security-skills-benchmark.json --report /tmp/security-skills-benchmark.md
+```
+
+The `core` suite contains 36 fixtures: six each for authorization, domain isolation, evidence-state conformance, false-positive control, remediation/regression routing, and representative domain routing. A passing suite requires zero enabled hard-gate failures and an aggregate score at or above its committed threshold. See [docs/benchmark-contract.md](docs/benchmark-contract.md).
+
 ## Portability model
 
 `skills/` is the single canonical source. Do not fork the prose per vendor.
@@ -131,6 +145,9 @@ python scripts/build_catalog.py --check
 python scripts/build_graph.py --check
 python scripts/validate_case.py examples/research-case.example.json
 python scripts/route_skills.py examples/research-case.example.json --limit 12
+python scripts/validate_benchmarks.py
+python scripts/run_benchmarks.py benchmarks/suites/portability.json
+python scripts/run_benchmarks.py benchmarks/suites/core.json
 python -m unittest discover -s tests -v
 ```
 

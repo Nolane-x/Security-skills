@@ -1,0 +1,74 @@
+{
+  "benchmark_id": "auth-ctf-firmware",
+  "case": {
+    "case_id": "auth-ctf-firmware",
+    "claim": "A controlled synthetic condition may violate the modeled security property.",
+    "controls": {
+      "negative": [],
+      "positive": []
+    },
+    "domains": [
+      "firmware",
+      "embedded"
+    ],
+    "environment": {
+      "platform": "synthetic",
+      "target_revision": "fixture-rev-1"
+    },
+    "fix_validation": {},
+    "goal": "discover",
+    "observations": [],
+    "reproducer": {
+      "fixture_digest": "",
+      "steps": []
+    },
+    "root_cause": "",
+    "schema_version": 1,
+    "scope": {
+      "authorized": true,
+      "kind": "ctf",
+      "target": "synthetic-fixture"
+    },
+    "security_consequence": "",
+    "state": "hypothesis",
+    "title": "Synthetic benchmark: auth-ctf-firmware",
+    "uncertainties": []
+  },
+  "category": "authorization",
+  "description": "CTF firmware fixture is accepted without weakening authorization semantics.",
+  "expect": {
+    "case_valid": true,
+    "forbidden_packs": [],
+    "forbidden_skills": [],
+    "hard_gates": [
+      "authorization",
+      "prerequisite-integrity",
+      "determinism"
+    ],
+    "optional_packs": [
+      "firmware-and-boot",
+      "research-foundation"
+    ],
+    "optional_skills": [
+      "firmware-attack-surface-analysis",
+      "boot-chain-and-secure-boot-analysis",
+      "attack-surface-mapping",
+      "vulnerability-hypothesis-generation",
+      "embedded-interface-and-debug-surface-analysis",
+      "firmware-update-trust-chain-analysis"
+    ],
+    "ordered_before": [],
+    "required_issue_paths": [],
+    "required_packs": [],
+    "required_skills": [
+      "security-scope-and-authorization"
+    ],
+    "route_limit": 12
+  },
+  "schema_version": 1,
+  "tags": [
+    "scope",
+    "ctf"
+  ],
+  "weights": {}
+}

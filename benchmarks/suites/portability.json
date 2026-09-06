@@ -1,0 +1,38 @@
+{
+  "description": "Cross-platform deterministic Wave 5 smoke benchmark.",
+  "fixtures": [
+    "cases/authorization/auth-sandbox-android.json",
+    "cases/authorization/auth-unauthorized-rejected.json",
+    "cases/domain-isolation/domain-android-excludes-ios.json",
+    "cases/domain-isolation/domain-parser-stays-generic.json",
+    "cases/evidence/evidence-observed-valid.json",
+    "cases/evidence/evidence-validated-missing-controls.json",
+    "cases/false-positive/false-positive-ambiguous-observation.json",
+    "cases/false-positive/false-positive-missing-reproducer.json",
+    "cases/remediation/remediation-parser.json",
+    "cases/remediation/remediation-web.json",
+    "cases/routing/routing-firmware.json",
+    "cases/routing/routing-memory-safety.json"
+  ],
+  "hard_gates": [
+    "authorization",
+    "evidence-promotion",
+    "domain-isolation",
+    "prerequisite-integrity",
+    "determinism"
+  ],
+  "minimum_score": 95.0,
+  "name": "portability",
+  "schema_version": 1,
+  "weights": {
+    "domain_isolation": 1.5,
+    "evidence_conformance": 2.0,
+    "false_positive_control": 2.0,
+    "pack_precision": 0.5,
+    "pack_recall": 0.5,
+    "prerequisite_integrity": 1.5,
+    "reproducibility": 1.0,
+    "routing_precision": 1.0,
+    "routing_recall": 1.0
+  }
+}

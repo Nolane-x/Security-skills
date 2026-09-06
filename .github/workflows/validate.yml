@@ -40,5 +40,33 @@ jobs:
           python scripts/build_catalog.py --check
           python scripts/build_graph.py --check
 
+      - name: Validate benchmarks
+        run: python scripts/validate_benchmarks.py
+
+      - name: Run portability benchmark
+        run: python scripts/run_benchmarks.py benchmarks/suites/portability.json
+
       - name: Run tests
         run: python -m unittest discover -s tests -v
+
+  benchmark-core:
+    needs: validate
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Validate benchmark corpus
+        run: python scripts/validate_benchmarks.py
+
+      - name: Run core benchmark twice
+        run: |
+          python scripts/run_benchmarks.py benchmarks/suites/core.json --json core-a.json --report core-report.md
+          python scripts/run_benchmarks.py benchmarks/suites/core.json --json core-b.json
+
+      - name: Check byte-identical benchmark result
+        run: python -c "from pathlib import Path; assert Path('core-a.json').read_bytes() == Path('core-b.json').read_bytes(), 'core benchmark result drifted between identical runs'; print('Core benchmark deterministic output check passed.')"

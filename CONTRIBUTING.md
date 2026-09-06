@@ -81,3 +81,21 @@ python -m unittest discover -s tests -v
 ```
 
 CI repeats the stale checks and tests on Linux, macOS, and Windows. Research-case and router changes must also keep `examples/research-case.example.json` valid and routeable.
+
+## Benchmark fixtures
+
+Benchmark changes live under `benchmarks/` and measure the production validator/router rather than duplicating their logic. A fixture must use a synthetic, owned, sandboxed, CTF, benchmark, or explicitly authorized case and must not encode a live external target or deployable exploit payload.
+
+Each fixture declares required, optional, and forbidden skills/packs plus any ordering, issue-path, and hard-gate expectations. Required entries should capture durable invariants; optional entries describe currently acceptable route space; forbidden entries should target meaningful false positives or cross-domain leaks. Do not snapshot every route output as “required.”
+
+The initial Wave 5 corpus is intentionally fixed at six fixtures per category and 36 total. New fixtures after Wave 5 may increase the corpus, but removing coverage or lowering `core.minimum_score` requires an explicit reviewed contract change.
+
+Validate and run both suites before submitting benchmark changes:
+
+```bash
+python scripts/validate_benchmarks.py
+python scripts/run_benchmarks.py benchmarks/suites/portability.json
+python scripts/run_benchmarks.py benchmarks/suites/core.json
+```
+
+See `docs/benchmark-contract.md` for schema semantics, hard gates, scoring, determinism requirements, and future extension boundaries.

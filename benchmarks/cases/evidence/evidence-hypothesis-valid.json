@@ -1,0 +1,72 @@
+{
+  "benchmark_id": "evidence-hypothesis-valid",
+  "case": {
+    "case_id": "evidence-hypothesis-valid",
+    "claim": "A controlled synthetic condition may violate the modeled security property.",
+    "controls": {
+      "negative": [],
+      "positive": []
+    },
+    "domains": [
+      "parsers"
+    ],
+    "environment": {
+      "platform": "synthetic",
+      "target_revision": "fixture-rev-1"
+    },
+    "fix_validation": {},
+    "goal": "discover",
+    "observations": [],
+    "reproducer": {
+      "fixture_digest": "",
+      "steps": []
+    },
+    "root_cause": "",
+    "schema_version": 1,
+    "scope": {
+      "authorized": true,
+      "kind": "sandbox",
+      "target": "synthetic-fixture"
+    },
+    "security_consequence": "",
+    "state": "hypothesis",
+    "title": "Synthetic benchmark: evidence-hypothesis-valid",
+    "uncertainties": []
+  },
+  "category": "evidence",
+  "description": "hypothesis research-case evidence satisfies its declared state contract.",
+  "expect": {
+    "case_valid": true,
+    "forbidden_packs": [],
+    "forbidden_skills": [],
+    "hard_gates": [
+      "evidence-promotion",
+      "prerequisite-integrity",
+      "determinism"
+    ],
+    "optional_packs": [
+      "parsers-and-protocols",
+      "research-foundation"
+    ],
+    "optional_skills": [
+      "security-scope-and-authorization",
+      "vulnerability-hypothesis-generation",
+      "fuzzing-workflow",
+      "grammar-aware-fuzzing",
+      "parser-state-machine-analysis"
+    ],
+    "ordered_before": [],
+    "required_issue_paths": [],
+    "required_packs": [],
+    "required_skills": [
+      "attack-surface-mapping"
+    ],
+    "route_limit": 12
+  },
+  "schema_version": 1,
+  "tags": [
+    "evidence-state",
+    "hypothesis"
+  ],
+  "weights": {}
+}
