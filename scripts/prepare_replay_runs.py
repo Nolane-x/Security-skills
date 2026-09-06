@@ -58,8 +58,8 @@ def build_replay_run(root: Path, fixture: dict[str, Any], task: dict[str, Any], 
     if profile == 'cautious' and valid and fixture.get('category') in {'evidence', 'false-positive'}:
         base.update({
             'decision': 'needs-evidence',
-            'case_valid': None,
-            'declared_state': None,
+            'case_valid': True,
+            'declared_state': case.get('state'),
             'selected_skills': [],
             'selected_packs': [],
             'issue_paths': [],
