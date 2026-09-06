@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "name": "firmware-and-boot",
+  "description": "Firmware and embedded research across attack surfaces, update authenticity, secure boot trust chains, and explicitly authorized physical/debug interfaces.",
+  "domains": ["firmware", "embedded", "secure-boot"],
+  "entrypoint": "firmware-attack-surface-analysis",
+  "skills": ["security-scope-and-authorization", "firmware-attack-surface-analysis", "firmware-update-trust-chain-analysis", "boot-chain-and-secure-boot-analysis", "embedded-interface-and-debug-surface-analysis", "parser-state-machine-analysis", "canonicalization-and-namespace-analysis", "bounds-and-integer-analysis", "memory-lifetime-analysis", "evidence-driven-vulnerability-validation", "regression-matrix-testing"],
+  "default_flow": ["security-scope-and-authorization", "firmware-attack-surface-analysis", "firmware-update-trust-chain-analysis", "evidence-driven-vulnerability-validation", "regression-matrix-testing"]
+}

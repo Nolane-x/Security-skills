@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "name": "cryptographic-assurance",
+  "description": "Application cryptographic assurance focused on protocol composition, nonce/randomness lifecycle, and certificate/hostname validation using synthetic vectors.",
+  "domains": ["cryptography", "tls", "pki"],
+  "entrypoint": "cryptographic-protocol-misuse-analysis",
+  "skills": ["security-scope-and-authorization", "secure-code-review", "cryptographic-protocol-misuse-analysis", "nonce-and-randomness-lifecycle-analysis", "certificate-and-hostname-validation-analysis", "secrets-and-token-flow-analysis", "differential-testing", "evidence-driven-vulnerability-validation", "regression-matrix-testing"],
+  "default_flow": ["security-scope-and-authorization", "secure-code-review", "cryptographic-protocol-misuse-analysis", "evidence-driven-vulnerability-validation", "regression-matrix-testing"]
+}
