@@ -1,0 +1,95 @@
+name: apply-wave5-bootstrap
+
+on:
+  push:
+    branches: [wave5/evaluation-benchmark-engine]
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Verify transfer and extract exact source set
+        shell: bash
+        run: |
+          cat .wave5/part*.bin > /tmp/wave5.tgz
+          python - <<'PY'
+          from pathlib import Path, PurePosixPath
+          import hashlib, tarfile
+
+          root = Path('.')
+          archive = Path('/tmp/wave5.tgz')
+          expected_sha = (root / '.wave5/SHA256').read_text(encoding='utf-8').strip()
+          actual_sha = hashlib.sha256(archive.read_bytes()).hexdigest()
+          if actual_sha != expected_sha:
+              raise SystemExit(f'archive SHA mismatch: {actual_sha} != {expected_sha}')
+
+          manifest = [x for x in (root / '.wave5/FILES.txt').read_text(encoding='utf-8').splitlines() if x]
+          if len(manifest) != len(set(manifest)):
+              raise SystemExit('duplicate path in manifest')
+          expected = sorted(manifest)
+
+          with tarfile.open(archive, 'r:gz') as tf:
+              members = tf.getmembers()
+              names = []
+              for member in members:
+                  p = PurePosixPath(member.name)
+                  if p.is_absolute() or '..' in p.parts or not member.isfile():
+                      raise SystemExit(f'unsafe archive member: {member.name}')
+                  names.append(member.name)
+              if sorted(names) != expected:
+                  raise SystemExit('archive member list does not match exact manifest')
+              for member in members:
+                  target = root / member.name
+                  target.parent.mkdir(parents=True, exist_ok=True)
+                  src = tf.extractfile(member)
+                  if src is None:
+                      raise SystemExit(f'cannot read archive member: {member.name}')
+                  target.write_bytes(src.read())
+
+          print(f'VERIFIED_TRANSFER files={len(expected)} sha256={actual_sha}')
+          PY
+          rm -rf .wave5
+          rm -f .github/workflows/apply-wave5-bootstrap.yml
+      - name: Run Wave 5 verification gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/validate_skills.py
+          python scripts/validate_graph.py
+          python scripts/build_catalog.py
+          python scripts/build_graph.py
+          python scripts/build_catalog.py --check
+          python scripts/build_graph.py --check
+          python scripts/validate_benchmarks.py
+          python scripts/run_benchmarks.py benchmarks/suites/portability.json --json /tmp/portability.json
+          python scripts/run_benchmarks.py benchmarks/suites/core.json --json /tmp/core-a.json --report /tmp/core.md
+          python scripts/run_benchmarks.py benchmarks/suites/core.json --json /tmp/core-b.json
+          cmp /tmp/core-a.json /tmp/core-b.json
+          python -m unittest discover -s tests -v
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          files = sorted(Path('.').rglob('*.json'))
+          for path in files:
+              json.loads(path.read_text(encoding='utf-8'))
+          print(f'JSON_PARSE_PASS files={len(files)}')
+          PY
+          git diff --check
+      - name: Commit verified Wave 5 source tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "feat: add wave5 security benchmark engine"
+          git push origin HEAD:wave5/evaluation-benchmark-engine
