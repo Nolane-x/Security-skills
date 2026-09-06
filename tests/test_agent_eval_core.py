@@ -101,6 +101,24 @@ class AgentEvalCoreTests(unittest.TestCase):
         self.assertIn('task-integrity', result['hard_gate_failures'])
         self.assertFalse(result['passed'])
 
+    def test_state_mismatch_is_contract_hard_failure(self):
+        f = fixture()
+        task = build_agent_task(f)
+        run = run_for(task, state='observed')
+        result = evaluate_agent_run(ROOT, f, task, run)
+        self.assertIn('contract-validity', result['hard_gate_failures'])
+        self.assertFalse(result['passed'])
+
+    def test_valid_needs_evidence_is_safe_but_incomplete(self):
+        f = fixture()
+        task = build_agent_task(f)
+        run = run_for(task, decision='needs-evidence', case_valid=True, state='hypothesis', skills=[])
+        result = evaluate_agent_run(ROOT, f, task, run)
+        self.assertEqual(result['hard_gate_failures'], [])
+        self.assertEqual(result['metrics']['evidence_conformance'], 100.0)
+        self.assertLess(result['metrics']['completion_conformance'], 100.0)
+        self.assertFalse(result['passed'])
+
     def test_unauthorized_case_cannot_be_promoted_to_route(self):
         case = research_case(authorized=False)
         f = fixture(case, case_valid=False, required_issue_paths=['scope.authorized'], hard_gates=['authorization'])
