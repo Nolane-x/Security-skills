@@ -1,0 +1,73 @@
+{
+  "benchmark_id": "auth-explicit-virtualization",
+  "case": {
+    "case_id": "auth-explicit-virtualization",
+    "claim": "A controlled synthetic condition may violate the modeled security property.",
+    "controls": {
+      "negative": [],
+      "positive": []
+    },
+    "domains": [
+      "virtualization",
+      "hypervisor"
+    ],
+    "environment": {
+      "platform": "synthetic",
+      "target_revision": "fixture-rev-1"
+    },
+    "fix_validation": {},
+    "goal": "discover",
+    "observations": [],
+    "reproducer": {
+      "fixture_digest": "",
+      "steps": []
+    },
+    "root_cause": "",
+    "schema_version": 1,
+    "scope": {
+      "authorized": true,
+      "kind": "explicit",
+      "target": "synthetic-fixture"
+    },
+    "security_consequence": "",
+    "state": "hypothesis",
+    "title": "Synthetic benchmark: auth-explicit-virtualization",
+    "uncertainties": []
+  },
+  "category": "authorization",
+  "description": "Explicit authorization fixture is accepted for a synthetic virtualization target.",
+  "expect": {
+    "case_valid": true,
+    "forbidden_packs": [],
+    "forbidden_skills": [],
+    "hard_gates": [
+      "authorization",
+      "prerequisite-integrity",
+      "determinism"
+    ],
+    "optional_packs": [
+      "virtualization-boundaries",
+      "research-foundation"
+    ],
+    "optional_skills": [
+      "guest-host-boundary-analysis",
+      "attack-surface-mapping",
+      "vulnerability-hypothesis-generation",
+      "hypervisor-shared-memory-analysis",
+      "virtual-device-model-analysis"
+    ],
+    "ordered_before": [],
+    "required_issue_paths": [],
+    "required_packs": [],
+    "required_skills": [
+      "security-scope-and-authorization"
+    ],
+    "route_limit": 12
+  },
+  "schema_version": 1,
+  "tags": [
+    "scope",
+    "explicit"
+  ],
+  "weights": {}
+}

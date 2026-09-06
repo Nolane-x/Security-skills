@@ -1,0 +1,80 @@
+{
+  "benchmark_id": "domain-android-excludes-ios",
+  "case": {
+    "case_id": "domain-android-excludes-ios",
+    "claim": "A controlled synthetic condition may violate the modeled security property.",
+    "controls": {
+      "negative": [],
+      "positive": []
+    },
+    "domains": [
+      "mobile",
+      "android"
+    ],
+    "environment": {
+      "platform": "synthetic",
+      "target_revision": "fixture-rev-1"
+    },
+    "fix_validation": {},
+    "goal": "root-cause",
+    "observations": [],
+    "reproducer": {
+      "fixture_digest": "",
+      "steps": []
+    },
+    "root_cause": "",
+    "schema_version": 1,
+    "scope": {
+      "authorized": true,
+      "kind": "sandbox",
+      "target": "synthetic-fixture"
+    },
+    "security_consequence": "",
+    "state": "hypothesis",
+    "title": "Synthetic benchmark: domain-android-excludes-ios",
+    "uncertainties": []
+  },
+  "category": "domain-isolation",
+  "description": "Android routing must not leak iOS-exclusive capabilities.",
+  "expect": {
+    "case_valid": true,
+    "forbidden_packs": [],
+    "forbidden_skills": [
+      "ios-entitlement-and-sandbox-analysis",
+      "ios-url-scheme-and-universal-link-analysis"
+    ],
+    "hard_gates": [
+      "domain-isolation",
+      "prerequisite-integrity",
+      "determinism"
+    ],
+    "optional_packs": [
+      "program-analysis"
+    ],
+    "optional_skills": [
+      "security-scope-and-authorization",
+      "attack-surface-mapping",
+      "vulnerability-hypothesis-generation",
+      "android-intent-and-deeplink-analysis",
+      "android-keystore-and-local-storage-analysis",
+      "android-webview-bridge-analysis",
+      "mobile-network-trust-analysis",
+      "static-dataflow-analysis"
+    ],
+    "ordered_before": [],
+    "required_issue_paths": [],
+    "required_packs": [
+      "mobile-security"
+    ],
+    "required_skills": [
+      "android-component-exposure-analysis"
+    ],
+    "route_limit": 12
+  },
+  "schema_version": 1,
+  "tags": [
+    "android",
+    "exclusive"
+  ],
+  "weights": {}
+}

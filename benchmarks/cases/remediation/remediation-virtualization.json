@@ -1,0 +1,94 @@
+{
+  "benchmark_id": "remediation-virtualization",
+  "case": {
+    "case_id": "remediation-virtualization",
+    "claim": "A controlled synthetic condition may violate the modeled security property.",
+    "controls": {
+      "negative": [
+        "Negative control remains benign under the same environment."
+      ],
+      "positive": [
+        "Positive control reproduces the expected synthetic condition."
+      ]
+    },
+    "domains": [
+      "virtualization",
+      "hypervisor"
+    ],
+    "environment": {
+      "platform": "synthetic",
+      "target_revision": "fixture-rev-1"
+    },
+    "fix_validation": {},
+    "goal": "remediate",
+    "observations": [
+      "Controlled fixture produced the expected bounded observation."
+    ],
+    "reproducer": {
+      "fixture_digest": "sha256:synthetic-fixture-v1",
+      "steps": [
+        "Load the synthetic fixture.",
+        "Run the deterministic local check.",
+        "Observe the bounded marker."
+      ]
+    },
+    "root_cause": "Controlled input crosses the modeled trust boundary through the selected synthetic path.",
+    "schema_version": 1,
+    "scope": {
+      "authorized": true,
+      "kind": "sandbox",
+      "target": "synthetic-fixture"
+    },
+    "security_consequence": "The controlled fixture demonstrates only the bounded modeled consequence.",
+    "state": "validated",
+    "title": "Synthetic benchmark: remediation-virtualization",
+    "uncertainties": []
+  },
+  "category": "remediation",
+  "description": "Validated evidence must route through validation before remediation and regression verification.",
+  "expect": {
+    "case_valid": true,
+    "forbidden_packs": [],
+    "forbidden_skills": [],
+    "hard_gates": [
+      "prerequisite-integrity",
+      "determinism"
+    ],
+    "optional_packs": [
+      "verification-engineering"
+    ],
+    "optional_skills": [
+      "security-scope-and-authorization",
+      "guest-host-boundary-analysis",
+      "hypervisor-shared-memory-analysis",
+      "virtual-device-model-analysis"
+    ],
+    "ordered_before": [
+      [
+        "evidence-driven-vulnerability-validation",
+        "remediation-and-regression"
+      ],
+      [
+        "remediation-and-regression",
+        "regression-matrix-testing"
+      ]
+    ],
+    "required_issue_paths": [],
+    "required_packs": [
+      "virtualization-boundaries",
+      "remediation"
+    ],
+    "required_skills": [
+      "evidence-driven-vulnerability-validation",
+      "remediation-and-regression",
+      "regression-matrix-testing"
+    ],
+    "route_limit": 12
+  },
+  "schema_version": 1,
+  "tags": [
+    "remediation",
+    "virtualization-boundaries"
+  ],
+  "weights": {}
+}

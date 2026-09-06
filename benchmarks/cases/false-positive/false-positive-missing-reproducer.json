@@ -1,0 +1,68 @@
+{
+  "benchmark_id": "false-positive-missing-reproducer",
+  "case": {
+    "case_id": "false-positive-missing-reproducer",
+    "claim": "A controlled synthetic condition may violate the modeled security property.",
+    "controls": {
+      "negative": [
+        "Negative control remains benign under the same environment."
+      ],
+      "positive": [
+        "Positive control reproduces the expected synthetic condition."
+      ]
+    },
+    "domains": [
+      "parsers"
+    ],
+    "environment": {
+      "platform": "synthetic",
+      "target_revision": "fixture-rev-1"
+    },
+    "fix_validation": {},
+    "goal": "validate",
+    "observations": [
+      "Controlled fixture produced the expected bounded observation."
+    ],
+    "reproducer": {
+      "fixture_digest": "",
+      "steps": []
+    },
+    "root_cause": "Controlled input crosses the modeled trust boundary through the selected synthetic path.",
+    "schema_version": 1,
+    "scope": {
+      "authorized": true,
+      "kind": "sandbox",
+      "target": "synthetic-fixture"
+    },
+    "security_consequence": "The controlled fixture demonstrates only the bounded modeled consequence.",
+    "state": "validated",
+    "title": "Synthetic benchmark: false-positive-missing-reproducer",
+    "uncertainties": []
+  },
+  "category": "false-positive",
+  "description": "A validated claim without a pinned deterministic reproducer must be rejected.",
+  "expect": {
+    "case_valid": false,
+    "forbidden_packs": [],
+    "forbidden_skills": [],
+    "hard_gates": [
+      "evidence-promotion",
+      "determinism"
+    ],
+    "optional_packs": [],
+    "optional_skills": [],
+    "ordered_before": [],
+    "required_issue_paths": [
+      "reproducer"
+    ],
+    "required_packs": [],
+    "required_skills": [],
+    "route_limit": 12
+  },
+  "schema_version": 1,
+  "tags": [
+    "false-positive",
+    "reproducer"
+  ],
+  "weights": {}
+}

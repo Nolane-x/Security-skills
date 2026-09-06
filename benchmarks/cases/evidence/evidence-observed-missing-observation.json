@@ -1,0 +1,62 @@
+{
+  "benchmark_id": "evidence-observed-missing-observation",
+  "case": {
+    "case_id": "evidence-observed-missing-observation",
+    "claim": "A controlled synthetic condition may violate the modeled security property.",
+    "controls": {
+      "negative": [],
+      "positive": []
+    },
+    "domains": [
+      "parsers"
+    ],
+    "environment": {
+      "platform": "synthetic",
+      "target_revision": "fixture-rev-1"
+    },
+    "fix_validation": {},
+    "goal": "validate",
+    "observations": [],
+    "reproducer": {
+      "fixture_digest": "",
+      "steps": []
+    },
+    "root_cause": "",
+    "schema_version": 1,
+    "scope": {
+      "authorized": true,
+      "kind": "sandbox",
+      "target": "synthetic-fixture"
+    },
+    "security_consequence": "",
+    "state": "observed",
+    "title": "Synthetic benchmark: evidence-observed-missing-observation",
+    "uncertainties": []
+  },
+  "category": "evidence",
+  "description": "Observed state without an observation must be rejected.",
+  "expect": {
+    "case_valid": false,
+    "forbidden_packs": [],
+    "forbidden_skills": [],
+    "hard_gates": [
+      "evidence-promotion",
+      "determinism"
+    ],
+    "optional_packs": [],
+    "optional_skills": [],
+    "ordered_before": [],
+    "required_issue_paths": [
+      "observations"
+    ],
+    "required_packs": [],
+    "required_skills": [],
+    "route_limit": 12
+  },
+  "schema_version": 1,
+  "tags": [
+    "evidence-state",
+    "negative"
+  ],
+  "weights": {}
+}

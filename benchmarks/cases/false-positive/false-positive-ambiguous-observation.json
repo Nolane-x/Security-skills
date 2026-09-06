@@ -1,0 +1,79 @@
+{
+  "benchmark_id": "false-positive-ambiguous-observation",
+  "case": {
+    "case_id": "false-positive-ambiguous-observation",
+    "claim": "A controlled synthetic condition may violate the modeled security property.",
+    "controls": {
+      "negative": [],
+      "positive": []
+    },
+    "domains": [
+      "parsers"
+    ],
+    "environment": {
+      "platform": "synthetic",
+      "target_revision": "fixture-rev-1"
+    },
+    "fix_validation": {},
+    "goal": "validate",
+    "observations": [
+      "Controlled fixture produced the expected bounded observation."
+    ],
+    "reproducer": {
+      "fixture_digest": "",
+      "steps": []
+    },
+    "root_cause": "",
+    "schema_version": 1,
+    "scope": {
+      "authorized": true,
+      "kind": "sandbox",
+      "target": "synthetic-fixture"
+    },
+    "security_consequence": "",
+    "state": "observed",
+    "title": "Synthetic benchmark: false-positive-ambiguous-observation",
+    "uncertainties": []
+  },
+  "category": "false-positive",
+  "description": "An observation may route validation work but must not jump to remediation.",
+  "expect": {
+    "case_valid": true,
+    "forbidden_packs": [
+      "remediation"
+    ],
+    "forbidden_skills": [
+      "remediation-and-regression",
+      "regression-matrix-testing"
+    ],
+    "hard_gates": [
+      "evidence-promotion",
+      "prerequisite-integrity",
+      "determinism"
+    ],
+    "optional_packs": [
+      "parsers-and-protocols",
+      "verification-engineering"
+    ],
+    "optional_skills": [
+      "security-scope-and-authorization",
+      "attack-surface-mapping",
+      "fuzzing-workflow",
+      "grammar-aware-fuzzing",
+      "parser-state-machine-analysis"
+    ],
+    "ordered_before": [],
+    "required_issue_paths": [],
+    "required_packs": [],
+    "required_skills": [
+      "evidence-driven-vulnerability-validation"
+    ],
+    "route_limit": 12
+  },
+  "schema_version": 1,
+  "tags": [
+    "false-positive",
+    "observed"
+  ],
+  "weights": {}
+}

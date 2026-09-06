@@ -1,0 +1,79 @@
+{
+  "benchmark_id": "routing-memory-safety",
+  "case": {
+    "case_id": "routing-memory-safety",
+    "claim": "A controlled synthetic condition may violate the modeled security property.",
+    "controls": {
+      "negative": [],
+      "positive": []
+    },
+    "domains": [
+      "memory-safety"
+    ],
+    "environment": {
+      "platform": "synthetic",
+      "target_revision": "fixture-rev-1"
+    },
+    "fix_validation": {},
+    "goal": "root-cause",
+    "observations": [],
+    "reproducer": {
+      "fixture_digest": "",
+      "steps": []
+    },
+    "root_cause": "",
+    "schema_version": 1,
+    "scope": {
+      "authorized": true,
+      "kind": "sandbox",
+      "target": "synthetic-fixture"
+    },
+    "security_consequence": "",
+    "state": "hypothesis",
+    "title": "Synthetic benchmark: routing-memory-safety",
+    "uncertainties": []
+  },
+  "category": "routing",
+  "description": "Representative domain route must preserve its domain anchors and exclude unrelated specialized capabilities.",
+  "expect": {
+    "case_valid": true,
+    "forbidden_packs": [],
+    "forbidden_skills": [
+      "web-routing-and-middleware-analysis"
+    ],
+    "hard_gates": [
+      "prerequisite-integrity",
+      "determinism"
+    ],
+    "optional_packs": [
+      "program-analysis"
+    ],
+    "optional_skills": [
+      "security-scope-and-authorization",
+      "attack-surface-mapping",
+      "vulnerability-hypothesis-generation",
+      "bounds-and-integer-analysis",
+      "concurrency-race-analysis",
+      "sanitizer-guided-memory-analysis",
+      "type-confusion-analysis",
+      "evidence-driven-vulnerability-validation",
+      "exploitability-triage"
+    ],
+    "ordered_before": [],
+    "required_issue_paths": [],
+    "required_packs": [
+      "memory-safety"
+    ],
+    "required_skills": [
+      "memory-lifetime-analysis",
+      "static-dataflow-analysis"
+    ],
+    "route_limit": 12
+  },
+  "schema_version": 1,
+  "tags": [
+    "routing",
+    "memory-safety"
+  ],
+  "weights": {}
+}

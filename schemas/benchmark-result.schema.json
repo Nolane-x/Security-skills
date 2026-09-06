@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nolane.example/schemas/benchmark-result.schema.json",
+  "title": "Security Skills Benchmark Result",
+  "type": "object",
+  "required": ["schema_version", "suite", "fixture_count", "passed_fixture_count", "failed_fixture_count", "overall_score", "minimum_score", "hard_gate_failures", "metrics", "fixtures", "passed"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "suite": {"type": "string"},
+    "fixture_count": {"type": "integer", "minimum": 0},
+    "passed_fixture_count": {"type": "integer", "minimum": 0},
+    "failed_fixture_count": {"type": "integer", "minimum": 0},
+    "overall_score": {"type": "number", "minimum": 0, "maximum": 100},
+    "minimum_score": {"type": "number", "minimum": 0, "maximum": 100},
+    "hard_gate_failures": {"type": "integer", "minimum": 0},
+    "metrics": {"type": "object", "additionalProperties": {"type": "number", "minimum": 0, "maximum": 100}},
+    "fixtures": {"type": "array", "items": {"type": "object"}},
+    "passed": {"type": "boolean"}
+  },
+  "additionalProperties": false
+}

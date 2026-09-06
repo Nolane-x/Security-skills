@@ -1,0 +1,70 @@
+{
+  "benchmark_id": "false-positive-missing-negative-control",
+  "case": {
+    "case_id": "false-positive-missing-negative-control",
+    "claim": "A controlled synthetic condition may violate the modeled security property.",
+    "controls": {
+      "negative": [],
+      "positive": [
+        "Positive control reproduces the expected synthetic condition."
+      ]
+    },
+    "domains": [
+      "parsers"
+    ],
+    "environment": {
+      "platform": "synthetic",
+      "target_revision": "fixture-rev-1"
+    },
+    "fix_validation": {},
+    "goal": "validate",
+    "observations": [
+      "Controlled fixture produced the expected bounded observation."
+    ],
+    "reproducer": {
+      "fixture_digest": "sha256:synthetic-fixture-v1",
+      "steps": [
+        "Load the synthetic fixture.",
+        "Run the deterministic local check.",
+        "Observe the bounded marker."
+      ]
+    },
+    "root_cause": "Controlled input crosses the modeled trust boundary through the selected synthetic path.",
+    "schema_version": 1,
+    "scope": {
+      "authorized": true,
+      "kind": "sandbox",
+      "target": "synthetic-fixture"
+    },
+    "security_consequence": "The controlled fixture demonstrates only the bounded modeled consequence.",
+    "state": "validated",
+    "title": "Synthetic benchmark: false-positive-missing-negative-control",
+    "uncertainties": []
+  },
+  "category": "false-positive",
+  "description": "Positive evidence alone cannot replace a negative control.",
+  "expect": {
+    "case_valid": false,
+    "forbidden_packs": [],
+    "forbidden_skills": [],
+    "hard_gates": [
+      "evidence-promotion",
+      "determinism"
+    ],
+    "optional_packs": [],
+    "optional_skills": [],
+    "ordered_before": [],
+    "required_issue_paths": [
+      "controls.negative"
+    ],
+    "required_packs": [],
+    "required_skills": [],
+    "route_limit": 12
+  },
+  "schema_version": 1,
+  "tags": [
+    "false-positive",
+    "controls"
+  ],
+  "weights": {}
+}

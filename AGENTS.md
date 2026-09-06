@@ -25,6 +25,8 @@ This repository is a portable, verification-first security-research skill graph.
 - Keep chain claims hop-by-hop: renderer bug ≠ sandbox escape; memory corruption ≠ code execution; exposed interface ≠ authorization bypass.
 - For multi-step investigations, preserve state in the research-case contract rather than inferring evidence level from chat history.
 - The skill router is advisory-only. It may suggest a path but cannot grant authorization, confirm a claim, or skip evidence gates.
+- Benchmark fixtures are conformance tests, not exploit tasks. Keep them synthetic/controlled, deterministic, and free of live external targets or deployable attack payloads.
+- Do not weaken benchmark thresholds or forbidden-route expectations merely to make CI green; change them only when a reviewed contract change justifies the new behavior.
 
 ## Completion gate
 
@@ -39,6 +41,9 @@ python scripts/build_catalog.py --check
 python scripts/build_graph.py --check
 python scripts/validate_case.py examples/research-case.example.json
 python scripts/route_skills.py examples/research-case.example.json --limit 12
+python scripts/validate_benchmarks.py
+python scripts/run_benchmarks.py benchmarks/suites/portability.json
+python scripts/run_benchmarks.py benchmarks/suites/core.json
 python -m unittest discover -s tests -v
 ```
 

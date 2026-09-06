@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nolane.example/schemas/benchmark-case.schema.json",
+  "title": "Security Skills Benchmark Fixture",
+  "type": "object",
+  "required": ["schema_version", "benchmark_id", "category", "description", "case", "expect", "tags"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "benchmark_id": {"type": "string", "minLength": 1},
+    "category": {"enum": ["authorization", "domain-isolation", "evidence", "false-positive", "remediation", "routing"]},
+    "description": {"type": "string", "minLength": 1},
+    "case": {"type": "object"},
+    "expect": {
+      "type": "object",
+      "required": ["case_valid", "required_skills", "optional_skills", "forbidden_skills", "required_packs", "optional_packs", "forbidden_packs", "ordered_before", "route_limit", "required_issue_paths", "hard_gates"],
+      "properties": {
+        "case_valid": {"type": "boolean"},
+        "required_skills": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+        "optional_skills": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+        "forbidden_skills": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+        "required_packs": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+        "optional_packs": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+        "forbidden_packs": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+        "ordered_before": {"type": "array", "items": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "string", "minLength": 1}}},
+        "route_limit": {"type": "integer", "minimum": 1},
+        "required_issue_paths": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+        "hard_gates": {"type": "array", "items": {"enum": ["authorization", "evidence-promotion", "domain-isolation", "prerequisite-integrity", "determinism"]}, "uniqueItems": true}
+      },
+      "additionalProperties": false
+    },
+    "weights": {"type": "object", "additionalProperties": {"type": "number", "minimum": 0}},
+    "tags": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true}
+  },
+  "additionalProperties": false
+}

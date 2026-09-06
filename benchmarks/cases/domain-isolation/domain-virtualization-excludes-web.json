@@ -1,0 +1,80 @@
+{
+  "benchmark_id": "domain-virtualization-excludes-web",
+  "case": {
+    "case_id": "domain-virtualization-excludes-web",
+    "claim": "A controlled synthetic condition may violate the modeled security property.",
+    "controls": {
+      "negative": [],
+      "positive": []
+    },
+    "domains": [
+      "virtualization",
+      "hypervisor"
+    ],
+    "environment": {
+      "platform": "synthetic",
+      "target_revision": "fixture-rev-1"
+    },
+    "fix_validation": {},
+    "goal": "root-cause",
+    "observations": [],
+    "reproducer": {
+      "fixture_digest": "",
+      "steps": []
+    },
+    "root_cause": "",
+    "schema_version": 1,
+    "scope": {
+      "authorized": true,
+      "kind": "sandbox",
+      "target": "synthetic-fixture"
+    },
+    "security_consequence": "",
+    "state": "hypothesis",
+    "title": "Synthetic benchmark: domain-virtualization-excludes-web",
+    "uncertainties": []
+  },
+  "category": "domain-isolation",
+  "description": "Virtualization analysis must not select web-framework-specific internals.",
+  "expect": {
+    "case_valid": true,
+    "forbidden_packs": [
+      "web-framework-internals"
+    ],
+    "forbidden_skills": [
+      "web-routing-and-middleware-analysis",
+      "file-upload-processing-analysis"
+    ],
+    "hard_gates": [
+      "domain-isolation",
+      "prerequisite-integrity",
+      "determinism"
+    ],
+    "optional_packs": [
+      "program-analysis"
+    ],
+    "optional_skills": [
+      "security-scope-and-authorization",
+      "attack-surface-mapping",
+      "vulnerability-hypothesis-generation",
+      "hypervisor-shared-memory-analysis",
+      "virtual-device-model-analysis",
+      "static-dataflow-analysis"
+    ],
+    "ordered_before": [],
+    "required_issue_paths": [],
+    "required_packs": [
+      "virtualization-boundaries"
+    ],
+    "required_skills": [
+      "guest-host-boundary-analysis"
+    ],
+    "route_limit": 12
+  },
+  "schema_version": 1,
+  "tags": [
+    "virtualization",
+    "negative-cross-domain"
+  ],
+  "weights": {}
+}

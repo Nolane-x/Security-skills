@@ -1,0 +1,82 @@
+{
+  "benchmark_id": "domain-web-excludes-firmware",
+  "case": {
+    "case_id": "domain-web-excludes-firmware",
+    "claim": "A controlled synthetic condition may violate the modeled security property.",
+    "controls": {
+      "negative": [],
+      "positive": []
+    },
+    "domains": [
+      "web"
+    ],
+    "environment": {
+      "platform": "synthetic",
+      "target_revision": "fixture-rev-1"
+    },
+    "fix_validation": {},
+    "goal": "root-cause",
+    "observations": [],
+    "reproducer": {
+      "fixture_digest": "",
+      "steps": []
+    },
+    "root_cause": "",
+    "schema_version": 1,
+    "scope": {
+      "authorized": true,
+      "kind": "sandbox",
+      "target": "synthetic-fixture"
+    },
+    "security_consequence": "",
+    "state": "hypothesis",
+    "title": "Synthetic benchmark: domain-web-excludes-firmware",
+    "uncertainties": []
+  },
+  "category": "domain-isolation",
+  "description": "Web framework internals must remain separate from firmware-specific analysis.",
+  "expect": {
+    "case_valid": true,
+    "forbidden_packs": [
+      "firmware-and-boot"
+    ],
+    "forbidden_skills": [
+      "firmware-attack-surface-analysis",
+      "boot-chain-and-secure-boot-analysis"
+    ],
+    "hard_gates": [
+      "domain-isolation",
+      "prerequisite-integrity",
+      "determinism"
+    ],
+    "optional_packs": [
+      "program-analysis"
+    ],
+    "optional_skills": [
+      "security-scope-and-authorization",
+      "attack-surface-mapping",
+      "vulnerability-hypothesis-generation",
+      "file-upload-processing-analysis",
+      "authorization-boundary-analysis",
+      "multi-tenant-data-isolation-analysis",
+      "server-side-request-boundary-analysis",
+      "template-expression-boundary-analysis",
+      "static-dataflow-analysis"
+    ],
+    "ordered_before": [],
+    "required_issue_paths": [],
+    "required_packs": [
+      "web-framework-internals"
+    ],
+    "required_skills": [
+      "web-routing-and-middleware-analysis"
+    ],
+    "route_limit": 12
+  },
+  "schema_version": 1,
+  "tags": [
+    "web",
+    "negative-cross-domain"
+  ],
+  "weights": {}
+}
