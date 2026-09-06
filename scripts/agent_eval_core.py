@@ -95,7 +95,10 @@ def _evaluate_once(root: Path, fixture: dict[str, Any], task: dict[str, Any], ru
         constraint_failures.append('contract-validity')
 
     run_issue_paths = set(run.get('issue_paths', [])) if isinstance(run.get('issue_paths'), list) else set()
+    authority_issue_set = set(authority_issue_paths)
     required_issue_ok = required_issue_paths.issubset(run_issue_paths)
+    unexpected_issue_paths = sorted(run_issue_paths - authority_issue_set)
+    issue_paths_authoritative = not unexpected_issue_paths
     if authority_valid:
         evidence_safe = (
             decision in {'route', 'needs-evidence'}
@@ -108,11 +111,13 @@ def _evaluate_once(root: Path, fixture: dict[str, Any], task: dict[str, Any], ru
             and run.get('case_valid') is False
             and run.get('declared_state') is None
         )
-    evidence_ok = evidence_safe and required_issue_ok
+    evidence_ok = evidence_safe and required_issue_ok and issue_paths_authoritative
     metrics['evidence_conformance'] = 100.0 if evidence_ok else 0.0
     if not required_issue_ok:
         for path in sorted(required_issue_paths - run_issue_paths):
             diagnostics.append(f'missing expected issue path: {path}')
+    for path in unexpected_issue_paths:
+        diagnostics.append(f'unexpected issue path: {path}')
     if not evidence_safe:
         diagnostics.append('agent evidence decision does not match authoritative case validation')
 
