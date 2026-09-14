@@ -13,7 +13,7 @@ The repository intentionally does **not** use line count, byte count, payload co
 
 ## Registry authority
 
-`operator-depth/profiles.json` is the binding source of truth for operator-depth artifacts. Wave 8 uses manifest version `2`.
+`operator-depth/profiles.json` is the binding source of truth for operator-depth artifacts. The manifest remains at version `2`; Wave 10 expands the set of registered profiles without changing the registry schema.
 
 Each profile declares:
 
@@ -109,7 +109,7 @@ A `validated` case requires direct bounded evidence plus suitable controls. `reg
 
 ## Wave 8 profiles
 
-Wave 8 registers eight CI-enforced profiles:
+Wave 8 established eight CI-enforced profiles:
 
 - `ai-agent-security-assessment`
 - `authorization-boundary-analysis`
@@ -121,6 +121,16 @@ Wave 8 registers eight CI-enforced profiles:
 - `web-routing-and-middleware-analysis`
 
 The first four-profile Wave 7 baseline is preserved and migrated to scenario matrices; Wave 8 deepens four additional high-value domains without duplicating canonical skills.
+
+## Wave 10 depth expansion
+
+Wave 10 extends operator depth without adding duplicate canonical capabilities. The first second-ring promotion is:
+
+- `prompt-injection-boundary-analysis`
+
+This raises the current registry from eight to **nine CI-enforced profiles** while keeping the Wave 8 history intact. The new profile applies the same common operator-depth contract plus domain-specific instruction-lineage, transformation-provenance, authority-conflict, decision/effect, counterfactual, and evidence-ceiling reasoning.
+
+Future Wave 10 promotions must follow the same rule: depth is added only when a dedicated test can freeze meaningful reasoning semantics and the scenario matrix remains deterministic, benign, evidence-first, and portable.
 
 ## Adding a future profile
 
