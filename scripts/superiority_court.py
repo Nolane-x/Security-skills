@@ -5,6 +5,7 @@ from __future__ import annotations
 import copy
 import hashlib
 import json
+from collections import defaultdict
 from typing import Any
 
 
@@ -63,4 +64,35 @@ def score_run(
         'metrics': metrics,
         'rule_failures': rule_failures,
         'passed': score >= minimum and not rule_failures,
+    }
+
+
+def build_court(
+    suite_id: str, fixture_ids: list[str], results: list[dict[str, Any]]
+) -> dict[str, Any]:
+    expected = sorted(set(fixture_ids))
+    if len(expected) != len(fixture_ids):
+        raise ValueError('duplicate fixture id in suite')
+
+    seen_pairs: set[tuple[str, str]] = set()
+    digests: dict[str, set[str]] = defaultdict(set)
+    for result in results:
+        fixture_id = result['fixture_id']
+        if fixture_id not in expected:
+            raise ValueError(f'unknown fixture id: {fixture_id}')
+        pair = (result['contestant_id'], fixture_id)
+        if pair in seen_pairs:
+            raise ValueError('duplicate contestant fixture result')
+        seen_pairs.add(pair)
+        digests[fixture_id].add(result['task_digest'])
+
+    for fixture_id in expected:
+        if len(digests[fixture_id]) > 1:
+            raise ValueError(f'task digest mismatch for fixture: {fixture_id}')
+
+    return {
+        'schema_version': 1,
+        'suite_id': suite_id,
+        'fixture_ids': expected,
+        'result_count': len(results),
     }
