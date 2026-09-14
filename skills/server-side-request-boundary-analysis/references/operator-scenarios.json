@@ -8,7 +8,12 @@
       "positive_control": "An approved synthetic public-style destination reaches the expected mock service.",
       "negative_control": "A synthetic destination classified as protected is denied before the mocked request is sent.",
       "stop_condition": "Stop before any request leaves the isolated test network or targets a real internal service.",
-      "remediation_oracle": "Policy is evaluated on the final normalized destination and the approved mock destination still succeeds."
+      "remediation_oracle": "Policy is evaluated on the final normalized destination and the approved mock destination still succeeds.",
+      "request_state_trace": "Trace request provenance through validation input, canonical destination, controlled resolution result, egress route, connection target, and correlated final peer so the policy decision is tied to the representation actually executed.",
+      "policy_checkpoints": "Record the checkpoint that evaluates the canonical destination and any later checkpoint required before the selected controlled address or connection target is used; do not credit a raw-input decision with protecting later state it never saw.",
+      "false_positive_guard": "Reject or downgrade the case if the apparent destination change is explained by the mock proxy, resolver cache, container host mapping, test fixture canonicalization, or an owner-approved destination exception rather than an application policy mismatch.",
+      "evidence_upgrade": "Promote to validated only when the explicit destination policy, state trace, checkpoint coverage, connection target, and controlled final-peer marker agree on the same causal mismatch and both intended-positive and neighboring-denied controls behave as predicted.",
+      "neighbor_regression": "After remediation, replay an equivalent approved representation plus a neighboring representation that canonicalizes into the denied synthetic class; the first must still reach its controlled peer and the second must stop at the intended checkpoint."
     },
     {
       "id": "redirect-policy-recheck",
@@ -17,7 +22,12 @@
       "positive_control": "A redirect chain that remains inside the approved synthetic class completes in the mock environment.",
       "negative_control": "A redirect toward a protected synthetic class is stopped before the next request.",
       "stop_condition": "Stop if the redirect chain would leave the owned mock environment.",
-      "remediation_oracle": "Every redirect hop is revalidated against the same destination policy while approved synthetic redirects continue to work."
+      "remediation_oracle": "Every redirect hop is revalidated against the same destination policy while approved synthetic redirects continue to work.",
+      "request_state_trace": "Trace the initial approved canonical destination, each controlled redirect target, its canonicalized and resolved state, the per-hop route, the next connection target, and the final peer so each destination transition is explicit rather than collapsed into one final URL.",
+      "policy_checkpoints": "Require a recorded destination-policy checkpoint for every redirect transition that changes scheme, host/origin, effective port, address class, route, or authority-forwarding eligibility before the next controlled connection is created.",
+      "false_positive_guard": "Downgrade the hypothesis if the redirect fixture itself is misconfigured, the client is documented not to follow that hop, a proxy rewrites the route by design, cached state explains the observation, or the changed destination remains inside the owner-approved class.",
+      "evidence_upgrade": "Promote only when an in-class redirect chain succeeds, a neighboring chain differing at one policy-relevant hop is blocked or crosses the controlled boundary as predicted, and receiver evidence correlates the tested request with the actual final peer.",
+      "neighbor_regression": "After remediation, preserve an approved same-class redirect chain while proving a single changed hop into the denied synthetic class is stopped before its next controlled peer; also replay an equivalent normalized form to prevent a textual-only fix."
     },
     {
       "id": "outbound-header-boundary",
@@ -26,7 +36,12 @@
       "positive_control": "The approved synthetic destination receives only the explicitly permitted test header set.",
       "negative_control": "A neighboring synthetic destination class receives no protected test marker.",
       "stop_condition": "Stop before using real secrets, real internal destinations, or third-party endpoints.",
-      "remediation_oracle": "Header forwarding is bound to normalized destination policy and the approved mock flow remains functional."
+      "remediation_oracle": "Header forwarding is bound to normalized destination policy and the approved mock flow remains functional.",
+      "request_state_trace": "Trace request provenance and canonical destination independently from authority attachment, then record redirect or route changes, connection target, controlled final peer, and exactly which fake authority markers that peer receives so reachability and authority transfer are not conflated.",
+      "policy_checkpoints": "Record both the destination checkpoint and the authority-attachment decision, including any re-evaluation required after redirect, origin change, proxy routing, or worker execution before a fake protected marker can be attached to the next request.",
+      "false_positive_guard": "Reject the finding if the marker came from fixture defaults, an unrelated request, receiver log reuse, an explicitly approved origin relationship, or a test proxy that injects headers independently of the application path under review.",
+      "evidence_upgrade": "Promote to validated only when reachability remains comparable across controls, the denied neighboring destination receives the synthetic protected marker only in the failing state, the marker is correlated to the tested request, and alternative injection paths are excluded.",
+      "neighbor_regression": "After remediation, the approved synthetic destination must still receive its permitted marker set, while a neighboring destination or redirected origin with the same reachable topology receives no protected marker; replay both direct and changed-origin paths."
     }
   ]
 }
