@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -12,6 +13,8 @@ if str(SCRIPT_DIR) not in sys.path:
 from prepare_superiority_tasks import ROOT, load_suite_fixtures, stable_json_text
 from superiority_court import build_court
 
+SHA256_RE = re.compile(r'^[0-9a-f]{64}$')
+
 
 def load_score_artifact(path: Path) -> dict:
     data = json.loads(Path(path).read_text(encoding='utf-8'))
@@ -19,6 +22,9 @@ def load_score_artifact(path: Path) -> dict:
         raise ValueError(f'unsupported score artifact schema: {path}')
     if not isinstance(data.get('contestant_id'), str) or not data['contestant_id'].strip():
         raise ValueError(f'invalid contestant_id: {path}')
+    surface_digest = data.get('contestant_surface_digest')
+    if not isinstance(surface_digest, str) or not SHA256_RE.fullmatch(surface_digest):
+        raise ValueError(f'invalid contestant_surface_digest: {path}')
     if not isinstance(data.get('results'), list):
         raise ValueError(f'invalid results list: {path}')
     if data.get('result_count') != len(data['results']):
@@ -33,6 +39,7 @@ def build_court_artifact(root: Path, suite_path: Path, score_paths: list[Path]) 
 
     expected_ids = sorted(fixture['fixture_id'] for fixture in fixtures)
     seen_contestants: set[str] = set()
+    surface_digests: dict[str, str] = {}
     all_results: list[dict] = []
 
     for path in score_paths:
@@ -43,6 +50,7 @@ def build_court_artifact(root: Path, suite_path: Path, score_paths: list[Path]) 
         if contestant_id in seen_contestants:
             raise ValueError(f'duplicate contestant score artifact: {contestant_id}')
         seen_contestants.add(contestant_id)
+        surface_digests[contestant_id] = artifact['contestant_surface_digest']
         if artifact['result_count'] != len(expected_ids):
             raise ValueError(f'incomplete score artifact: {contestant_id}')
         for result in artifact['results']:
@@ -50,7 +58,10 @@ def build_court_artifact(root: Path, suite_path: Path, score_paths: list[Path]) 
                 raise ValueError(f'contestant identity mismatch inside score artifact: {path}')
         all_results.extend(artifact['results'])
 
-    return build_court(suite['suite_id'], expected_ids, all_results)
+    court = build_court(suite['suite_id'], expected_ids, all_results)
+    for contestant in court['contestants']:
+        contestant['contestant_surface_digest'] = surface_digests[contestant['contestant_id']]
+    return court
 
 
 def main(argv: list[str] | None = None) -> int:
