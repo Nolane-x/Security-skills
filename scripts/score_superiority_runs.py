@@ -11,7 +11,7 @@ if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
 from prepare_superiority_tasks import ROOT, load_suite_fixtures, stable_json_text
-from superiority_court import build_task, score_run
+from superiority_court import build_authority_commitment, build_task, score_run
 
 SHA256_RE = re.compile(r'^[0-9a-f]{64}$')
 
@@ -26,8 +26,48 @@ def load_runs(runs_dir: Path) -> list[dict]:
     return [json.loads(path.read_text(encoding='utf-8')) for path in paths]
 
 
-def score_suite_runs(root: Path, suite_path: Path, runs_dir: Path) -> dict:
+def validate_public_manifest(
+    manifest_path: Path, suite: dict, fixtures: list[dict]
+) -> dict:
+    manifest = json.loads(Path(manifest_path).read_text(encoding='utf-8'))
+    if manifest.get('schema_version') != 1:
+        raise ValueError('unsupported public manifest schema')
+    if manifest.get('kind') != 'superiority-public-suite-manifest':
+        raise ValueError('invalid public manifest kind')
+    if manifest.get('suite_id') != suite['suite_id']:
+        raise ValueError('public manifest suite mismatch')
+
+    expected_tasks = [
+        {
+            'fixture_id': task['fixture_id'],
+            'task_digest': task['task_digest'],
+        }
+        for task in sorted(
+            (build_task(fixture) for fixture in fixtures),
+            key=lambda item: item['fixture_id'],
+        )
+    ]
+    if manifest.get('task_count') != len(expected_tasks):
+        raise ValueError('public manifest task_count mismatch')
+    if manifest.get('tasks') != expected_tasks:
+        raise ValueError('public manifest task digest mismatch')
+
+    expected_commitment = build_authority_commitment(suite['suite_id'], fixtures)
+    authority_commitment = manifest.get('authority_commitment')
+    if not isinstance(authority_commitment, str) or not SHA256_RE.fullmatch(
+        authority_commitment
+    ):
+        raise ValueError('public manifest authority_commitment is invalid')
+    if authority_commitment != expected_commitment:
+        raise ValueError('public manifest authority commitment drift')
+    return manifest
+
+
+def score_suite_runs(
+    root: Path, suite_path: Path, runs_dir: Path, manifest_path: Path
+) -> dict:
     suite, fixtures = load_suite_fixtures(root, suite_path)
+    manifest = validate_public_manifest(manifest_path, suite, fixtures)
     fixture_map = {fixture['fixture_id']: fixture for fixture in fixtures}
     expected_ids = sorted(fixture_map)
     runs = load_runs(runs_dir)
@@ -71,6 +111,7 @@ def score_suite_runs(root: Path, suite_path: Path, runs_dir: Path) -> dict:
     return {
         'schema_version': 1,
         'suite_id': suite['suite_id'],
+        'authority_commitment': manifest['authority_commitment'],
         'contestant_id': contestant_id,
         'contestant_surface_digest': contestant_surface_digest,
         'result_count': len(results),
@@ -84,10 +125,16 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument('suite')
     parser.add_argument('runs')
+    parser.add_argument('--manifest', required=True)
     parser.add_argument('--json', required=True)
     args = parser.parse_args(argv)
     try:
-        result = score_suite_runs(ROOT, Path(args.suite), Path(args.runs))
+        result = score_suite_runs(
+            ROOT,
+            Path(args.suite),
+            Path(args.runs),
+            Path(args.manifest),
+        )
         Path(args.json).write_text(stable_json_text(result), encoding='utf-8')
     except (OSError, ValueError, KeyError, TypeError, json.JSONDecodeError) as exc:
         print(f'ERROR: {exc}', file=sys.stderr)
