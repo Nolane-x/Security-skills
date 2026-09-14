@@ -72,11 +72,12 @@ class SuperiorityCliTests(unittest.TestCase):
             out = Path(tmp) / 'tasks'
             out.mkdir()
             stale = out / 'stale.json'
-            stale.write_text('{"stale": true}\n', encoding='utf-8')
+            sentinel = b'{"stale": true}\n'
+            stale.write_bytes(sentinel)
             with self.assertRaises(ValueError):
                 module.prepare_suite_tasks(ROOT, SUITE, out)
-            self.assertEqual(stale.read_text(encoding='utf-8'), '{"stale": true}\n')
-            self.assertEqual(snapshot(out), [('stale.json', b'{"stale": true}\n')])
+            self.assertEqual(stale.read_bytes(), sentinel)
+            self.assertEqual(snapshot(out), [('stale.json', sentinel)])
 
 
 if __name__ == '__main__':
