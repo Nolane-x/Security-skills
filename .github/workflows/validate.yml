@@ -179,3 +179,68 @@ jobs:
 
       - name: Check byte-identical cross-agent matrix
         run: python -c "from pathlib import Path; assert Path('matrix-a.json').read_bytes() == Path('matrix-b.json').read_bytes(), 'cross-agent matrix drifted between identical builds'; print('Cross-agent matrix deterministic output check passed.')"
+
+  superiority-court-core:
+    needs: [validate, benchmark-core, agent-eval-core]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Prepare superiority tasks twice
+        run: |
+          python scripts/prepare_superiority_tasks.py superiority/suites/core.json --out superiority-tasks-a
+          python scripts/prepare_superiority_tasks.py superiority/suites/core.json --out superiority-tasks-b
+
+      - name: Check byte-identical superiority tasks
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          def snapshot(root):
+              return [(p.relative_to(root).as_posix(), p.read_bytes()) for p in sorted(root.rglob('*.json'))]
+          assert snapshot(Path('superiority-tasks-a')) == snapshot(Path('superiority-tasks-b')), 'byte-identical superiority tasks check failed'
+          print('byte-identical superiority tasks check passed.')
+          PY
+
+      - name: Prepare superiority replay profiles
+        run: |
+          python scripts/prepare_superiority_replays.py superiority/suites/core.json --profile reference --contestant-id opaque-a --out superiority-runs-reference
+          python scripts/prepare_superiority_replays.py superiority/suites/core.json --profile degraded --contestant-id opaque-b --out superiority-runs-degraded
+
+      - name: Score superiority profiles twice
+        run: |
+          python scripts/score_superiority_runs.py superiority/suites/core.json superiority-runs-reference --json superiority-reference-a.json
+          python scripts/score_superiority_runs.py superiority/suites/core.json superiority-runs-reference --json superiority-reference-b.json
+          python scripts/score_superiority_runs.py superiority/suites/core.json superiority-runs-degraded --json superiority-degraded-a.json
+          python scripts/score_superiority_runs.py superiority/suites/core.json superiority-runs-degraded --json superiority-degraded-b.json
+
+      - name: Check byte-identical superiority scores
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          assert Path('superiority-reference-a.json').read_bytes() == Path('superiority-reference-b.json').read_bytes(), 'byte-identical superiority scores check failed for reference'
+          assert Path('superiority-degraded-a.json').read_bytes() == Path('superiority-degraded-b.json').read_bytes(), 'byte-identical superiority scores check failed for degraded'
+          print('byte-identical superiority scores check passed.')
+          PY
+
+      - name: Build superiority court twice
+        run: |
+          python scripts/build_superiority_court.py superiority/suites/core.json superiority-reference-a.json superiority-degraded-a.json --json superiority-court-a.json
+          python scripts/build_superiority_court.py superiority/suites/core.json superiority-reference-b.json superiority-degraded-b.json --json superiority-court-b.json
+
+      - name: Check byte-identical superiority court
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          assert Path('superiority-court-a.json').read_bytes() == Path('superiority-court-b.json').read_bytes(), 'byte-identical superiority court check failed'
+          data = json.load(open('superiority-court-a.json', encoding='utf-8'))
+          assert data['absolute_winner'] == 'opaque-a', data
+          assert len(data['pairwise']) == 1, data
+          assert data['pairwise'][0]['verdict'] == 'left-absolute-superiority', data
+          print('byte-identical superiority court check passed.')
+          PY
