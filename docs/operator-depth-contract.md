@@ -124,11 +124,12 @@ The first four-profile Wave 7 baseline is preserved and migrated to scenario mat
 
 ## Wave 10 depth expansion
 
-Wave 10 extends operator depth without adding duplicate canonical capabilities. The first second-ring promotion is:
+Wave 10 extends operator depth without adding duplicate canonical capabilities. The second-depth ring currently promotes:
 
-- `prompt-injection-boundary-analysis`
+- `prompt-injection-boundary-analysis` — the ninth profile, adding instruction-lineage, transformation-provenance, authority-conflict, decision/effect, counterfactual, and evidence-ceiling reasoning;
+- `rag-memory-data-isolation-analysis` — the tenth profile, adding end-to-end principal binding, derived-state lineage, retrieval-policy traces, cache/memory coherence, lifecycle/revocation generations, bounded convergence, and R0–R5 evidence ceilings.
 
-This raises the current registry from eight to **nine CI-enforced profiles** while keeping the Wave 8 history intact. The new profile applies the same common operator-depth contract plus domain-specific instruction-lineage, transformation-provenance, authority-conflict, decision/effect, counterfactual, and evidence-ceiling reasoning.
+This raises the current registry from eight Wave 8 profiles to **ten CI-enforced profiles** while keeping the Wave 8 history intact. Both Wave 10 profiles apply the same common operator-depth contract and add domain-specific causal reasoning rather than payload volume or checklist length.
 
 Future Wave 10 promotions must follow the same rule: depth is added only when a dedicated test can freeze meaningful reasoning semantics and the scenario matrix remains deterministic, benign, evidence-first, and portable.
 
