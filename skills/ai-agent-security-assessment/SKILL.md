@@ -44,6 +44,10 @@ Use for LLM applications that can read untrusted content, retrieve private data,
 
 Tool/benchmark families may include purpose-built agent security evaluations, prompt-injection test suites, and model red-team frameworks, but the assessment remains vendor-neutral.
 
+## Operator depth
+
+For a full authorized assessment, load the [operator runbook](references/operator-runbook.md). It expands this skill into a system-level hypothesis matrix covering RAG, memory, tools, connectors/MCP, delegation, confirmation, tenant identity, controlled synthetic validation, false-positive controls, evidence lineage, and regression checks without relying on real secrets or destructive actions.
+
 ## Evidence contract
 
 A validated agent-security finding needs:
