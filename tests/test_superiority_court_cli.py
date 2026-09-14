@@ -37,7 +37,10 @@ class SuperiorityCourtCliTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             base = Path(tmp)
             score_paths = []
-            for contestant_id, degraded in [('opaque-a', False), ('opaque-b', True)]:
+            for contestant_id, surface_digest, degraded in [
+                ('opaque-a', '1' * 64, False),
+                ('opaque-b', '2' * 64, True),
+            ]:
                 runs = base / f'runs-{contestant_id}'
                 runs.mkdir()
                 for fixture_id, fixture in fixtures.items():
@@ -50,6 +53,7 @@ class SuperiorityCourtCliTests(unittest.TestCase):
                         'schema_version': 1,
                         'fixture_id': fixture_id,
                         'contestant_id': contestant_id,
+                        'contestant_surface_digest': surface_digest,
                         'task_digest': task['task_digest'],
                         'answers': answers,
                     }
