@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "scenarios": [
+    {
+      "id": "normalized-destination-policy",
+      "hypothesis": "Destination policy may be evaluated before normalization while the final controlled request uses a different normalized destination class.",
+      "safe_oracle": "A mocked HTTP service records the synthetic normalized destination selected inside the isolated test network.",
+      "positive_control": "An approved synthetic public-style destination reaches the expected mock service.",
+      "negative_control": "A synthetic destination classified as protected is denied before the mocked request is sent.",
+      "stop_condition": "Stop before any request leaves the isolated test network or targets a real internal service.",
+      "remediation_oracle": "Policy is evaluated on the final normalized destination and the approved mock destination still succeeds."
+    },
+    {
+      "id": "redirect-policy-recheck",
+      "hypothesis": "A redirect may change the destination class without repeating the same outbound policy decision.",
+      "safe_oracle": "A controlled redirect fixture records each synthetic hop and the final mock destination.",
+      "positive_control": "A redirect chain that remains inside the approved synthetic class completes in the mock environment.",
+      "negative_control": "A redirect toward a protected synthetic class is stopped before the next request.",
+      "stop_condition": "Stop if the redirect chain would leave the owned mock environment.",
+      "remediation_oracle": "Every redirect hop is revalidated against the same destination policy while approved synthetic redirects continue to work."
+    },
+    {
+      "id": "outbound-header-boundary",
+      "hypothesis": "Sensitive request context may be forwarded to a destination class that should not receive it.",
+      "safe_oracle": "A mocked destination records only synthetic header markers in the controlled fixture.",
+      "positive_control": "The approved synthetic destination receives only the explicitly permitted test header set.",
+      "negative_control": "A neighboring synthetic destination class receives no protected test marker.",
+      "stop_condition": "Stop before using real secrets, real internal destinations, or third-party endpoints.",
+      "remediation_oracle": "Header forwarding is bound to normalized destination policy and the approved mock flow remains functional."
+    }
+  ]
+}

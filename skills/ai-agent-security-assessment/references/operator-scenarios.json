@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "scenarios": [
+    {
+      "id": "instruction-source-policy",
+      "hypothesis": "Policy decisions may differ incorrectly when equivalent requests originate from sources with different trust labels.",
+      "safe_oracle": "A mocked test sink records a synthetic marker and the normalized policy decision.",
+      "positive_control": "An explicitly approved synthetic request reaches the inert test sink.",
+      "negative_control": "A non-approved synthetic source cannot cause the same test action.",
+      "stop_condition": "Stop before any production or third-party action and keep all effects inside the controlled fixture.",
+      "remediation_oracle": "Source-aware policy blocks the non-approved path while preserving the approved synthetic control."
+    },
+    {
+      "id": "identity-isolation-canary",
+      "hypothesis": "A test identity may observe state that belongs only to a neighboring test identity when isolation is incomplete.",
+      "safe_oracle": "A unique synthetic canary is observed only inside the controlled test environment.",
+      "positive_control": "The owning test identity can read its own synthetic canary.",
+      "negative_control": "A neighboring test identity cannot read that canary under the same controlled query.",
+      "stop_condition": "Stop if validation would leave the dedicated sandbox or use non-test data.",
+      "remediation_oracle": "Identity binding blocks the neighboring path while the owning identity still succeeds."
+    },
+    {
+      "id": "confirmation-tuple-binding",
+      "hypothesis": "A confirmation decision may remain valid after the normalized action tuple changes.",
+      "safe_oracle": "A controlled test sink compares the confirmed synthetic tuple with the executed tuple.",
+      "positive_control": "The exact confirmed synthetic tuple is accepted by the inert sink.",
+      "negative_control": "Changing one bounded tuple field causes the inert sink to reject the request.",
+      "stop_condition": "Stop before any action outside the inert test sink.",
+      "remediation_oracle": "Confirmation is bound to the complete normalized synthetic tuple and neighboring intended behavior remains available."
+    }
+  ]
+}

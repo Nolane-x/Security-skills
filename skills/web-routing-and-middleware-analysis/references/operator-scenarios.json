@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "scenarios": [
+    {
+      "id": "equivalent-representation-policy",
+      "hypothesis": "Two test requests intended to be semantically equivalent may receive different policy treatment after normalization or routing.",
+      "safe_oracle": "An inert controlled handler records the synthetic route and policy result for each test request.",
+      "positive_control": "The canonical synthetic representation reaches the expected inert handler under the reviewed policy.",
+      "negative_control": "An intentionally different synthetic policy class remains distinct and receives its expected result.",
+      "stop_condition": "Stop before any state-changing endpoint or non-test deployment is involved.",
+      "remediation_oracle": "Equivalent synthetic representations receive the same policy while intentionally distinct controls remain distinct."
+    },
+    {
+      "id": "middleware-coverage-consistency",
+      "hypothesis": "A route selected through a neighboring test path may receive a different middleware sequence than the reviewed route class.",
+      "safe_oracle": "A controlled trace records the middleware sequence and synthetic identity context without business side effects.",
+      "positive_control": "The reviewed synthetic route receives the expected middleware sequence.",
+      "negative_control": "A route outside that reviewed policy class retains its intentionally different test sequence.",
+      "stop_condition": "Stop if the middleware sequence cannot be observed safely in the authorized test deployment.",
+      "remediation_oracle": "All routes in the reviewed class receive the same required middleware while the distinct control class remains unchanged."
+    },
+    {
+      "id": "identity-context-timing",
+      "hypothesis": "Identity or tenant context may be attached after a routing decision that depends on that context.",
+      "safe_oracle": "A controlled test trace records the synthetic identity context at route and policy decision points.",
+      "positive_control": "The intended synthetic identity is bound before the reviewed policy decision.",
+      "negative_control": "A neighboring synthetic identity cannot reuse a decision made for the first identity.",
+      "stop_condition": "Stop before using any real user or tenant data.",
+      "remediation_oracle": "Identity context is bound before the relevant policy decision and both synthetic controls retain their expected results."
+    }
+  ]
+}

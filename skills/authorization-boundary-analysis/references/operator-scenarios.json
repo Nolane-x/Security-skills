@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "scenarios": [
+    {
+      "id": "subject-resource-binding",
+      "hypothesis": "A policy decision may use the correct action but the wrong subject-to-resource binding.",
+      "safe_oracle": "A controlled policy simulator records the synthetic subject, resource, action, and decision tuple.",
+      "positive_control": "The owning synthetic subject is allowed to access the intended test resource.",
+      "negative_control": "A neighboring synthetic subject is denied for the same test resource and action.",
+      "stop_condition": "Stop before any non-test identity or resource is used.",
+      "remediation_oracle": "The corrected policy binds subject and resource identity while preserving the owning subject's intended access."
+    },
+    {
+      "id": "delegation-context-preservation",
+      "hypothesis": "A delegated request may lose the initiating identity or purpose context before the final authorization decision.",
+      "safe_oracle": "A mocked privileged boundary records a synthetic delegation chain and the final policy decision.",
+      "positive_control": "An approved synthetic delegation with matching initiator and purpose reaches the inert boundary.",
+      "negative_control": "A mismatched synthetic initiator or purpose is denied at the same boundary.",
+      "stop_condition": "Stop if the test cannot remain inside the authorized sandbox and mocked boundary.",
+      "remediation_oracle": "Delegation context is preserved and re-authorized at the final boundary while the intended approved flow still succeeds."
+    },
+    {
+      "id": "authorization-cache-identity",
+      "hypothesis": "A cached authorization result may be reused across principals, resources, or policy revisions when the cache key is incomplete.",
+      "safe_oracle": "A controlled test cache exposes a synthetic hit/miss record together with the normalized authorization tuple.",
+      "positive_control": "Repeated evaluation of the exact same synthetic tuple may reuse the valid cached decision.",
+      "negative_control": "Changing principal, resource, or policy revision forces a new decision and preserves the expected denial.",
+      "stop_condition": "Stop before introducing production cache state or non-test principals.",
+      "remediation_oracle": "The cache key includes every policy-relevant identity component and neighboring valid cache reuse remains intact."
+    }
+  ]
+}

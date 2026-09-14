@@ -8,7 +8,7 @@ A **verification-first security skill graph and deterministic cross-agent evalua
 
 Security Skills gives coding agents, research agents, and autonomous security systems a portable set of reusable security reasoning skills — plus the evidence gates, routing logic, benchmarks, cross-agent conformance tooling, and selectively deep operator runbooks needed to verify that those skills are being used correctly.
 
-> **Stable baseline: Wave 7** — 83 canonical skills, 20 packs, 4 CI-enforced operator-depth profiles, 36 deterministic benchmark fixtures, and a vendor-neutral cross-agent evaluation harness.
+> **Stable baseline: Wave 8** — 83 canonical skills, 20 packs, 8 CI-enforced operator-depth profiles with machine-readable scenario matrices, 36 deterministic benchmark fixtures, and a vendor-neutral cross-agent evaluation harness.
 
 ## Why this project exists
 
@@ -22,7 +22,7 @@ security knowledge
       ▼
 83 canonical Agent Skills
       │
-      ├──► 4 selective operator-depth runbooks (Wave 7)
+      ├──► 8 scenario-enforced operator-depth profiles (Wave 8)
       │
       ▼
 deterministic research router
@@ -45,7 +45,7 @@ The result is not just a collection of prompts. It is a **security intelligence 
 
 - a portable security reasoning graph for AI agents;
 - a set of reusable Agent Skills with explicit applicability and evidence contracts;
-- selectively deep operator runbooks for complex high-value domains;
+- selectively deep operator runbooks and machine-readable safe scenario contracts for complex high-value domains;
 - a deterministic prerequisite-aware router;
 - a machine-readable research-case and evidence-state model;
 - a benchmark suite for routing, authorization, evidence, false-positive control, and remediation;
@@ -66,7 +66,7 @@ The result is not just a collection of prompts. It is a **security intelligence 
 | --- | ---: |
 | Canonical skills | **83** |
 | Validated packs | **20** |
-| Operator-depth profiles | **4** |
+| Operator-depth profiles | **8** |
 | Benchmark fixtures | **36** |
 | Benchmark categories | **6** |
 | Cross-agent portability fixtures | **12** |
@@ -94,9 +94,9 @@ Packs under `packs/` reference canonical skills instead of duplicating them.
 
 ### 2. Selective operator depth
 
-Wave 7 adds CI-enforced deep runbooks to selected high-value canonical skills without increasing the skill count or duplicating canonical prose. Each registered runbook must cover attack surface, falsifiable hypotheses, controlled validation, false-positive controls, evidence capture, and remediation regression.
+Wave 8 combines reviewed domain runbooks with CI-enforced scenario matrices. Each registered profile must cover attack surface, falsifiable hypotheses, controlled validation, false-positive controls, evidence capture, and remediation regression. Each scenario must additionally provide a benign oracle, positive and negative controls, an explicit stop condition, and a remediation oracle.
 
-The first four profiles deepen AI-agent security, authorization boundaries, cloud IAM paths, and server-side request boundaries. They remain lab/owned/sandbox/authorized-only and prefer synthetic canaries, mock services, fake identities, policy simulation, and inert action sinks over risky real-world proof.
+The eight profiles cover AI-agent security, authorization boundaries, cloud IAM paths, container isolation, driver interfaces, exploitability/evidence triage, server-side request boundaries, and web routing/middleware. They remain lab/owned/sandbox/authorized-only and prefer synthetic canaries, mock services, fake identities, policy simulation, inert action sinks, and read-only evidence over risky real-world proof.
 
 See [docs/operator-depth-contract.md](docs/operator-depth-contract.md).
 
@@ -183,7 +183,7 @@ python scripts/build_catalog.py
 python scripts/build_graph.py
 ```
 
-Generated catalog/graph artifacts are intentionally ignored. Canonical truth remains in `SKILL.md`, `skill.meta.json`, pack manifests, and the selective operator-depth registry/runbooks.
+Generated catalog/graph artifacts are intentionally ignored. Canonical truth remains in `SKILL.md`, `skill.meta.json`, pack manifests, and the selective operator-depth registry/runbooks/scenario matrices.
 
 ## Research-case engine
 
@@ -214,12 +214,16 @@ scope + authorization
 
 ## Operator depth
 
-Wave 7 registers deep runbooks for:
+Wave 8 registers scenario-enforced operator depth for:
 
 - `ai-agent-security-assessment`
 - `authorization-boundary-analysis`
 - `cloud-iam-path-analysis`
+- `container-isolation-review`
+- `driver-ioctl-surface-analysis`
+- `exploitability-triage`
 - `server-side-request-boundary-analysis`
+- `web-routing-and-middleware-analysis`
 
 Validate them with:
 
@@ -227,7 +231,7 @@ Validate them with:
 python scripts/validate_operator_depth.py
 ```
 
-The validator rejects missing/escaping runbooks, duplicate profiles, disabled lab-only policy, missing canonical links, missing required methodology sections, and missing authorization/evidence/control discipline. It intentionally does not reward file length or payload volume.
+The validator rejects unsafe paths, missing artifacts, duplicate profiles or scenario IDs, malformed or incomplete scenario matrices, disabled lab-only policy, missing required methodology sections, insufficient authorization/evidence/control discipline, unspecified benign oracles, and missing explicit stop conditions. It intentionally does not reward file length or payload volume.
 
 See [docs/operator-depth-contract.md](docs/operator-depth-contract.md).
 
@@ -356,8 +360,8 @@ See [packs/README.md](packs/README.md) for the full set.
 
 ```text
 Security-skills/
-├── skills/              # canonical Agent Skills and selective runbook references
-├── operator-depth/      # Wave 7 CI-enforced deep-profile registry
+├── skills/              # canonical Agent Skills and selective depth resources
+├── operator-depth/      # Wave 8 CI-enforced profile registry
 ├── packs/               # curated skill routing manifests
 ├── benchmarks/          # Wave 5 deterministic fixtures and suites
 ├── agent-eval/          # Wave 6 cross-agent contracts and suites

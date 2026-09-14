@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "scenarios": [
+    {
+      "id": "delegated-role-path",
+      "hypothesis": "A sequence of individually permitted delegation edges may produce an effective test capability outside the intended privilege boundary.",
+      "safe_oracle": "A policy simulator reports the synthetic path and final allowed or denied test capability without changing cloud state.",
+      "positive_control": "The documented synthetic delegation path reaches only its intended test capability.",
+      "negative_control": "A neighboring test identity lacking one required edge cannot reach the same simulated capability.",
+      "stop_condition": "Stop before any state-changing operation or any account outside the dedicated sandbox.",
+      "remediation_oracle": "The unsafe simulated path is broken while the documented synthetic delegation path remains valid."
+    },
+    {
+      "id": "policy-layer-intersection",
+      "hypothesis": "Identity, resource, boundary, condition, and deny layers may combine differently from the reviewed intended policy.",
+      "safe_oracle": "A controlled policy simulator returns the effective decision and contributing synthetic policy layers.",
+      "positive_control": "An intended synthetic resource/action tuple is allowed under the complete policy set.",
+      "negative_control": "A nearby synthetic tuple that violates one required condition is denied.",
+      "stop_condition": "Stop if a result cannot be established through read-only inventory or policy simulation.",
+      "remediation_oracle": "The corrected policy set denies the unintended tuple and preserves the intended simulated access."
+    },
+    {
+      "id": "workload-identity-binding",
+      "hypothesis": "A workload identity binding may accept a broader synthetic workload selector than the owner intended.",
+      "safe_oracle": "A simulated identity exchange records the controlled workload attributes and resulting test principal.",
+      "positive_control": "The intended synthetic workload attributes map to the expected test principal.",
+      "negative_control": "A neighboring synthetic workload with one mismatched bound attribute is rejected.",
+      "stop_condition": "Stop before using production workload identities or non-sandbox resources.",
+      "remediation_oracle": "The binding requires the complete intended workload identity tuple while the approved synthetic workload still succeeds."
+    }
+  ]
+}

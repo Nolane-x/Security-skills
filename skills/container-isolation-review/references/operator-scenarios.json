@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "scenarios": [
+    {
+      "id": "declared-effective-config",
+      "hypothesis": "The effective workload configuration may differ from the reviewed declared configuration in a policy-relevant field.",
+      "safe_oracle": "A read-only controlled inspection records the synthetic workload's effective configuration.",
+      "positive_control": "A neighboring approved synthetic workload preserves the expected effective configuration.",
+      "negative_control": "A synthetic workload with a denied configuration difference is rejected or normalized as policy requires.",
+      "stop_condition": "Stop before modifying unrelated workloads or leaving the disposable test namespace.",
+      "remediation_oracle": "The effective configuration matches the reviewed policy while the approved synthetic workload remains functional."
+    },
+    {
+      "id": "workload-identity-scope",
+      "hypothesis": "A workload identity may receive a broader simulated resource scope than the reviewed policy intends.",
+      "safe_oracle": "A controlled policy simulation reports the synthetic identity and allowed test resource class.",
+      "positive_control": "The synthetic identity can access its intended test resource class.",
+      "negative_control": "The same identity is denied for the neighboring protected test resource class.",
+      "stop_condition": "Stop if validation cannot remain inside the sandbox identity and synthetic resources.",
+      "remediation_oracle": "Identity scope is narrowed to the intended test resource class while the approved control still succeeds."
+    },
+    {
+      "id": "controller-policy-consistency",
+      "hypothesis": "A controller-generated workload may not preserve the same reviewed boundary as an equivalent direct synthetic workload.",
+      "safe_oracle": "A controlled comparison records the effective configuration of two disposable test workloads.",
+      "positive_control": "The direct synthetic workload receives the reviewed expected configuration.",
+      "negative_control": "The controller-generated equivalent does not gain a policy-relevant configuration difference.",
+      "stop_condition": "Stop before testing non-disposable controllers or production workloads.",
+      "remediation_oracle": "Controller templates and admission policy produce equivalent reviewed boundaries for the paired synthetic workloads."
+    }
+  ]
+}
