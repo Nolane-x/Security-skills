@@ -32,10 +32,20 @@ def load_suite_fixtures(root: Path, suite_path: Path) -> tuple[dict, list[dict]]
     return suite, [fixtures[fixture_id] for fixture_id in sorted(fixture_ids)]
 
 
+def _ensure_empty_destination(out_dir: Path) -> None:
+    if out_dir.exists():
+        if not out_dir.is_dir():
+            raise ValueError(f'task destination is not a directory: {out_dir}')
+        if any(out_dir.iterdir()):
+            raise ValueError(f'task destination must be empty: {out_dir}')
+    else:
+        out_dir.mkdir(parents=True)
+
+
 def prepare_suite_tasks(root: Path, suite_path: Path, out_dir: Path) -> list[dict]:
     suite, fixtures = load_suite_fixtures(root, suite_path)
     out_dir = Path(out_dir)
-    out_dir.mkdir(parents=True, exist_ok=True)
+    _ensure_empty_destination(out_dir)
     tasks = [build_task(fixture) for fixture in fixtures]
     tasks.sort(key=lambda item: item['fixture_id'])
     for task in tasks:
