@@ -9,7 +9,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
-from superiority_court import build_task
+from superiority_court import build_authority_commitment, build_task
 
 ROOT = SCRIPT_DIR.parent
 CORPUS_PATH = ROOT / 'superiority' / 'corpus.json'
@@ -33,7 +33,7 @@ def load_suite_fixtures(root: Path, suite_path: Path) -> tuple[dict, list[dict]]
 
 
 def prepare_suite_tasks(root: Path, suite_path: Path, out_dir: Path) -> list[dict]:
-    _, fixtures = load_suite_fixtures(root, suite_path)
+    suite, fixtures = load_suite_fixtures(root, suite_path)
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     tasks = [build_task(fixture) for fixture in fixtures]
@@ -42,6 +42,21 @@ def prepare_suite_tasks(root: Path, suite_path: Path, out_dir: Path) -> list[dic
         (out_dir / f"{task['fixture_id']}.json").write_text(
             stable_json_text(task), encoding='utf-8'
         )
+
+    manifest = {
+        'schema_version': 1,
+        'kind': 'superiority-public-suite-manifest',
+        'suite_id': suite['suite_id'],
+        'task_count': len(tasks),
+        'tasks': [
+            {'fixture_id': task['fixture_id'], 'task_digest': task['task_digest']}
+            for task in tasks
+        ],
+        'authority_commitment': build_authority_commitment(suite['suite_id'], fixtures),
+    }
+    (out_dir / 'SUITE_MANIFEST.json').write_text(
+        stable_json_text(manifest), encoding='utf-8'
+    )
     return tasks
 
 
