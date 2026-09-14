@@ -7,9 +7,9 @@ Wave 8 makes operator depth a deterministic two-artifact contract: reviewed meth
 Canonical `SKILL.md` files remain the portable reasoning entry points. Selected high-value skills may additionally expose:
 
 - `references/operator-runbook.md` — deeper domain methodology for authorized investigations;
-- `references/operator-scenarios.json` — deterministic safe scenarios that freeze evidence, control, stop, and remediation requirements.
+- a machine-readable JSON matrix — deterministic safe cases that freeze evidence, control, stop, and remediation requirements.
 
-The repository intentionally does **not** use line count, byte count, payload count, or tool-name count as a quality metric. Depth is defined by reviewable methodology plus falsifiable scenario contracts.
+The repository intentionally does **not** use line count, byte count, payload count, or tool-name count as a quality metric. Depth is defined by reviewable methodology plus falsifiable machine-readable contracts.
 
 ## Registry authority
 
@@ -34,7 +34,7 @@ Each profile declares:
 }
 ```
 
-Both artifact paths are relative to `skills/<skill>/`. Absolute paths, path traversal, missing canonical skills, duplicate profiles, and missing artifacts fail validation.
+The `scenario_matrix` field is the stable registry interface; a profile may bind another deterministic JSON filename when its reviewed semantics are audit cases rather than action-oriented scenarios. Both artifact paths are relative to `skills/<skill>/`. Absolute paths, path traversal, missing canonical skills, duplicate profiles, and missing artifacts fail validation.
 
 The registry is the authoritative binding so a canonical skill does not need duplicated vendor-specific or profile-specific metadata in its portable frontmatter.
 
@@ -53,7 +53,7 @@ Every runbook also needs explicit authorization/lab language and evidence/contro
 
 ## Scenario-matrix contract
 
-Each registered scenario matrix has version `1` and at least three scenarios. Scenario IDs are unique lowercase slugs.
+Each registered machine-readable matrix has version `1` and at least three scenarios. Scenario IDs are unique lowercase slugs.
 
 Every scenario must contain non-empty values for:
 
@@ -71,7 +71,7 @@ Every scenario must contain non-empty values for:
 
 The validator requires the safe oracle to explicitly name a benign test mechanism such as a synthetic marker, mock, inert sink, simulation, read-only observation, controlled fixture, or canary. The stop condition must explicitly say to stop, abort, or not proceed beyond the stated boundary.
 
-Scenario matrices are intentionally not exploit recipes. They encode what must be demonstrated, what controls must exist, where testing must stop, and what a successful remediation must preserve.
+Machine-readable matrices are intentionally not exploit recipes. They encode what must be demonstrated, what controls must exist, where testing must stop, and what a successful remediation must preserve.
 
 ## Validation
 
@@ -127,17 +127,18 @@ The first four-profile Wave 7 baseline is preserved and migrated to scenario mat
 Wave 10 extends operator depth without adding duplicate canonical capabilities. The second-depth ring currently promotes:
 
 - `prompt-injection-boundary-analysis` — the ninth profile, adding instruction-lineage, transformation-provenance, authority-conflict, decision/effect, counterfactual, and evidence-ceiling reasoning;
-- `rag-memory-data-isolation-analysis` — the tenth profile, adding end-to-end principal binding, derived-state lineage, retrieval-policy traces, cache/memory coherence, lifecycle/revocation generations, bounded convergence, and R0–R5 evidence ceilings.
+- `rag-memory-data-isolation-analysis` — the tenth profile, adding end-to-end principal binding, derived-state lineage, retrieval-policy traces, cache/memory coherence, lifecycle/revocation generations, bounded convergence, and R0–R5 evidence ceilings;
+- `connector-plugin-trust-analysis` — the eleventh profile, adding integration provenance, effective-permission traces, schema/argument state, response binding, composition boundaries, lifecycle generations, C0–C5 evidence ceilings, and deterministic audit-only review cases.
 
-This raises the current registry from eight Wave 8 profiles to **ten CI-enforced profiles** while keeping the Wave 8 history intact. Both Wave 10 profiles apply the same common operator-depth contract and add domain-specific causal reasoning rather than payload volume or checklist length.
+This raises the current registry from eight Wave 8 profiles to **eleven CI-enforced profiles** while keeping the Wave 8 history intact. Wave 10 profiles apply the same common operator-depth contract and add domain-specific causal reasoning rather than payload volume or checklist length.
 
-Future Wave 10 promotions must follow the same rule: depth is added only when a dedicated test can freeze meaningful reasoning semantics and the scenario matrix remains deterministic, benign, evidence-first, and portable.
+Future Wave 10 promotions must follow the same rule: depth is added only when a dedicated test can freeze meaningful reasoning semantics and the machine-readable matrix remains deterministic, benign, evidence-first, and portable.
 
 ## Adding a future profile
 
 1. Deepen an existing canonical skill rather than creating a near-duplicate capability.
 2. Add a domain-specific `references/operator-runbook.md`.
-3. Add at least three distinct `references/operator-scenarios.json` scenarios.
+3. Add at least three distinct deterministic JSON review cases under the skill's `references/` directory.
 4. Register both artifacts in `operator-depth/profiles.json` with `lab_only: true`.
 5. Include all required runbook sections and scenario fields.
 6. Run the operator-depth validator and the complete repository test/benchmark stack.
