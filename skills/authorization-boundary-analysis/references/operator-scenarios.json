@@ -3,30 +3,42 @@
   "scenarios": [
     {
       "id": "subject-resource-binding",
-      "hypothesis": "A policy decision may use the correct action but the wrong subject-to-resource binding.",
-      "safe_oracle": "A controlled policy simulator records the synthetic subject, resource, action, and decision tuple.",
-      "positive_control": "The owning synthetic subject is allowed to access the intended test resource.",
-      "negative_control": "A neighboring synthetic subject is denied for the same test resource and action.",
-      "stop_condition": "Stop before any non-test identity or resource is used.",
-      "remediation_oracle": "The corrected policy binds subject and resource identity while preserving the owning subject's intended access."
+      "hypothesis": "A policy decision may evaluate the intended operation but omit or misbind the authoritative subject-to-resource relation.",
+      "safe_oracle": "A controlled policy simulator and local synthetic fixture record the principal, authoritative resource, decision input, and inert final marker without touching non-test data.",
+      "positive_control": "The owning synthetic principal is allowed for the same semantic operation, resource shape, policy revision, and local code path.",
+      "negative_control": "A neighboring synthetic principal with the same role and tenant but without ownership is denied for the same operation and resource class.",
+      "stop_condition": "Stop before any non-test identity or resource is introduced, and stop if the policy source cannot establish whether ownership is decision-relevant.",
+      "remediation_oracle": "The corrected decision input includes the authoritative ownership/resource relation, the non-owner fixture is denied for that reason, and the owner fixture remains allowed.",
+      "decision_trace": "Record authenticated principal -> normalized principal -> requested identifier -> authoritative object resolution -> ownership relation -> decision input -> policy function -> inert final sink, and verify that the resource authorized is the resource represented by the sink.",
+      "false_positive_guard": "Rule out accidental fixture ownership, implicit administrator/support roles, alias resolution to a different synthetic object, and generic lookup failure before attributing the result to authorization binding.",
+      "evidence_upgrade": "Promote from observed to validated only when the policy source says the neighboring principal is prohibited, the local fixture reproduces the incorrect allow, and the decision trace identifies the missing or wrong ownership/resource input with a healthy positive control.",
+      "neighbor_regression": "After remediation, re-run owner and non-owner fixtures plus same-tenant and different-tenant neighbors so the fix proves the ownership invariant without over-blocking intended access or depending on one test identifier."
     },
     {
       "id": "delegation-context-preservation",
-      "hypothesis": "A delegated request may lose the initiating identity or purpose context before the final authorization decision.",
-      "safe_oracle": "A mocked privileged boundary records a synthetic delegation chain and the final policy decision.",
-      "positive_control": "An approved synthetic delegation with matching initiator and purpose reaches the inert boundary.",
-      "negative_control": "A mismatched synthetic initiator or purpose is denied at the same boundary.",
-      "stop_condition": "Stop if the test cannot remain inside the authorized sandbox and mocked boundary.",
-      "remediation_oracle": "Delegation context is preserved and re-authorized at the final boundary while the intended approved flow still succeeds."
+      "hypothesis": "A delegated operation may preserve the executor service identity while losing the initiating principal or approved purpose that is supposed to constrain the decision.",
+      "safe_oracle": "A mocked privileged boundary records a synthetic initiator, executor identity, purpose, resource, policy decision, and inert effect entirely inside the local test harness.",
+      "positive_control": "An approved synthetic delegation with the expected initiator, purpose, resource, and service identity reaches the inert local boundary.",
+      "negative_control": "The same synthetic service and resource are used with a neighboring initiator or purpose that the policy source explicitly denies.",
+      "stop_condition": "Stop if the delegation policy is undocumented, if the executor is intentionally authorized to act independently of the initiator, or if testing would leave the mocked/local environment.",
+      "remediation_oracle": "The final policy decision remains bound to the initiating principal and approved purpose while the service still performs intended delegated work for the positive control.",
+      "decision_trace": "Record initiating principal -> delegation grant/purpose -> executor service identity -> propagated caller context -> decision input at the privileged boundary -> inert sink, keeping initiator authority distinct from the identity that executes the code.",
+      "false_positive_guard": "Rule out an approved service-autonomy model, support impersonation semantics, fixture role inheritance, and mismatched delegation-purpose setup before concluding that initiator context was incorrectly lost.",
+      "evidence_upgrade": "Promote only when the policy source requires caller-bound delegation, the denied neighboring initiator or purpose still produces the protected local effect, and the trace shows that the relevant initiator/purpose field is absent or replaced at the enforcement point.",
+      "neighbor_regression": "After remediation, compare approved and denied initiators and purposes through the same mocked service boundary, confirming intended delegation still works while disallowed caller-purpose combinations remain denied."
     },
     {
       "id": "authorization-cache-identity",
-      "hypothesis": "A cached authorization result may be reused across principals, resources, or policy revisions when the cache key is incomplete.",
-      "safe_oracle": "A controlled test cache exposes a synthetic hit/miss record together with the normalized authorization tuple.",
-      "positive_control": "Repeated evaluation of the exact same synthetic tuple may reuse the valid cached decision.",
-      "negative_control": "Changing principal, resource, or policy revision forces a new decision and preserves the expected denial.",
-      "stop_condition": "Stop before introducing production cache state or non-test principals.",
-      "remediation_oracle": "The cache key includes every policy-relevant identity component and neighboring valid cache reuse remains intact."
+      "hypothesis": "A cached authorization result may be reused across principals, resources, contexts, or policy revisions because the cache identity does not represent every decision-relevant dimension.",
+      "safe_oracle": "A controlled local cache fixture records canonical authorization tuples, cache keys, hit/miss state, policy revision, and synthetic decisions without using production cache contents.",
+      "positive_control": "Repeating the exact same synthetic principal-operation-resource-context-policy tuple may reuse the previously computed decision when the policy contract permits caching.",
+      "negative_control": "Changing exactly one policy-relevant dimension such as principal, resource, tenant, or policy revision causes a fresh decision and preserves the expected denial.",
+      "stop_condition": "Stop before introducing production cache state or real principals, and stop if the policy contract does not define which dimensions or revision changes must invalidate a cached decision.",
+      "remediation_oracle": "The repaired cache identity or invalidation rule distinguishes every decision-relevant tuple used by the test while preserving legitimate reuse of the exact same authorized tuple.",
+      "decision_trace": "Record normalized principal/resource/context/policy revision -> cache-key construction -> cache lookup -> reused or recomputed decision -> local policy result -> inert sink, and compare the semantic decision input with the fields represented in the cache identity.",
+      "false_positive_guard": "Rule out stale test setup, intentionally revision-insensitive caching, documented propagation windows, non-authoritative cache layers, and resource aliases that normalize to the same protected object before assigning causality to the cache key.",
+      "evidence_upgrade": "Promote only when the policy source says the changed dimension must alter or invalidate the decision, a neighboring synthetic tuple incorrectly reuses the old result, and the trace shows that the relevant dimension is absent from cache identity or invalidation logic.",
+      "neighbor_regression": "After remediation, verify exact-tuple cache reuse still works while one-at-a-time changes to principal, resource, tenant/context, and policy revision produce the policy-required recomputation or invalidation."
     }
   ]
 }
