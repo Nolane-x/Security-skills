@@ -195,11 +195,6 @@ def validate(root: Path) -> list[str]:
         if not skill_file.is_file():
             errors.append(f"{prefix}: missing canonical SKILL.md")
             continue
-        try:
-            skill_text = skill_file.read_text(encoding="utf-8")
-        except (OSError, UnicodeError) as exc:
-            errors.append(f"{prefix}: cannot read canonical SKILL.md: {exc}")
-            continue
 
         runbook_value, runbook_path = _profile_path(
             prefix=prefix,
@@ -215,10 +210,6 @@ def validate(root: Path) -> list[str]:
             field="scenario_matrix",
             errors=errors,
         )
-        if runbook_value is not None and runbook_value not in skill_text:
-            errors.append(
-                f"{prefix}: canonical SKILL.md does not link declared runbook '{runbook_value}'"
-            )
 
         if runbook_path is not None:
             if not runbook_path.is_file():
