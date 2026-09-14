@@ -8,7 +8,7 @@ A **verification-first security skill graph and deterministic cross-agent evalua
 
 Security Skills gives coding agents, research agents, and autonomous security systems a portable set of reusable security reasoning skills — plus the evidence gates, routing logic, benchmarks, cross-agent conformance tooling, and selectively deep operator runbooks needed to verify that those skills are being used correctly.
 
-> **Stable baseline: Wave 8; Wave 10 depth expansion active** — 83 canonical skills, 20 packs, 10 CI-enforced operator-depth profiles with machine-readable scenario matrices, 36 deterministic benchmark fixtures, and a vendor-neutral cross-agent evaluation harness.
+> **Stable baseline: Wave 8; Wave 10 depth expansion active** — 83 canonical skills, 20 packs, 11 CI-enforced operator-depth profiles with machine-readable matrices, 36 deterministic benchmark fixtures, and a vendor-neutral cross-agent evaluation harness.
 
 ## Why this project exists
 
@@ -22,7 +22,7 @@ security knowledge
       ▼
 83 canonical Agent Skills
       │
-      ├──► 10 scenario-enforced operator-depth profiles (Wave 8 + Wave 10 expansion)
+      ├──► 11 matrix-enforced operator-depth profiles (Wave 8 + Wave 10 expansion)
       │
       ▼
 deterministic research router
@@ -45,7 +45,7 @@ The result is not just a collection of prompts. It is a **security intelligence 
 
 - a portable security reasoning graph for AI agents;
 - a set of reusable Agent Skills with explicit applicability and evidence contracts;
-- selectively deep operator runbooks and machine-readable safe scenario contracts for complex high-value domains;
+- selectively deep operator runbooks and machine-readable safe review contracts for complex high-value domains;
 - a deterministic prerequisite-aware router;
 - a machine-readable research-case and evidence-state model;
 - a benchmark suite for routing, authorization, evidence, false-positive control, and remediation;
@@ -54,7 +54,7 @@ The result is not just a collection of prompts. It is a **security intelligence 
 
 **Security Skills is not:**
 
-- a payload or exploit collection;
+- an offensive code collection;
 - a replacement for authorization or human security judgment;
 - a mechanism for declaring vulnerabilities from tool output alone;
 - a vendor-specific prompt pack;
@@ -66,7 +66,7 @@ The result is not just a collection of prompts. It is a **security intelligence 
 | --- | ---: |
 | Canonical skills | **83** |
 | Validated packs | **20** |
-| Operator-depth profiles | **10** |
+| Operator-depth profiles | **11** |
 | Benchmark fixtures | **36** |
 | Benchmark categories | **6** |
 | Cross-agent portability fixtures | **12** |
@@ -94,9 +94,9 @@ Packs under `packs/` reference canonical skills instead of duplicating them.
 
 ### 2. Selective operator depth
 
-Wave 8 established the reviewed domain-runbook + CI-enforced scenario-matrix contract. Each registered profile must cover attack surface, falsifiable hypotheses, controlled validation, false-positive controls, evidence capture, and remediation regression. Each scenario must additionally provide a benign oracle, positive and negative controls, an explicit stop condition, and a remediation oracle.
+Wave 8 established the reviewed domain-runbook + CI-enforced machine-readable matrix contract. Each registered profile must cover attack surface, falsifiable hypotheses, controlled validation, false-positive controls, evidence capture, and remediation regression. Each case must additionally provide a benign oracle, positive and negative controls, an explicit stop condition, and a remediation oracle.
 
-Wave 8 established eight profiles covering AI-agent security, authorization boundaries, cloud IAM paths, container isolation, driver interfaces, exploitability/evidence triage, server-side request boundaries, and web routing/middleware. Wave 10 begins a second depth ring by promoting `prompt-injection-boundary-analysis` as the ninth profile and `rag-memory-data-isolation-analysis` as the tenth. Prompt-injection depth adds instruction-lineage, provenance, authority-conflict, decision/effect, counterfactual, and evidence-ceiling contracts; RAG/memory depth adds end-to-end principal binding, derived-state lineage, retrieval-policy traces, lifecycle/revocation generations, bounded convergence, cache/memory coherence, and R0–R5 evidence ceilings. All profiles remain lab/owned/sandbox/authorized-only and prefer synthetic canaries, mock services, fake identities, policy simulation, inert action sinks, and read-only evidence over risky real-world proof.
+Wave 8 established eight profiles covering AI-agent security, authorization boundaries, cloud IAM paths, container isolation, driver interfaces, exploitability/evidence triage, server-side request boundaries, and web routing/middleware. Wave 10 adds `prompt-injection-boundary-analysis` as the ninth profile, `rag-memory-data-isolation-analysis` as the tenth, and `connector-plugin-trust-analysis` as the eleventh. Prompt-injection depth adds instruction-lineage, provenance, authority-conflict, decision/effect, counterfactual, and evidence-ceiling contracts. RAG/memory depth adds end-to-end principal binding, derived-state lineage, retrieval-policy traces, lifecycle/revocation generations, bounded convergence, cache/memory coherence, and R0–R5 evidence ceilings. Connector/plugin trust depth adds integration provenance, effective-permission traces, schema/argument state, response binding, composition boundaries, lifecycle generations, C0–C5 evidence ceilings, and deterministic audit-only review cases. All profiles remain lab/owned/sandbox/authorized-only and prefer synthetic canaries, mock services, fake identities, policy simulation, inert action sinks, and read-only evidence over risky real-world proof.
 
 See [docs/operator-depth-contract.md](docs/operator-depth-contract.md).
 
@@ -155,7 +155,7 @@ The graph currently includes deep workflows across:
 - Android/iOS security, mobile trust boundaries, and local storage/keystore analysis;
 - firmware, update trust chains, secure boot, and embedded debug surfaces;
 - virtualization guest-host boundaries, virtual devices, and shared memory;
-- web routing, SSRF boundaries, uploads, templates, and multi-tenant internals;
+- web routing, server-side request boundaries, uploads, templates, and multi-tenant internals;
 - cryptographic protocol misuse, randomness lifecycle, certificates, and hostname validation;
 - smart-contract invariants, reentrancy, upgradeability, and oracle trust;
 - prompt-injection boundaries, tool confirmation, RAG/memory isolation, connector/plugin trust;
@@ -183,7 +183,7 @@ python scripts/build_catalog.py
 python scripts/build_graph.py
 ```
 
-Generated catalog/graph artifacts are intentionally ignored. Canonical truth remains in `SKILL.md`, `skill.meta.json`, pack manifests, and the selective operator-depth registry/runbooks/scenario matrices.
+Generated catalog/graph artifacts are intentionally ignored. Canonical truth remains in `SKILL.md`, `skill.meta.json`, pack manifests, and the selective operator-depth registry/runbooks/machine-readable matrices.
 
 ## Research-case engine
 
@@ -214,11 +214,12 @@ scope + authorization
 
 ## Operator depth
 
-Wave 8 established scenario-enforced operator depth for eight profiles. Wave 10 expands the current registry to ten with `prompt-injection-boundary-analysis` as the ninth profile and `rag-memory-data-isolation-analysis` as the tenth:
+Wave 8 established scenario-enforced operator depth for eight profiles. Wave 10 expands the current registry to eleven with `prompt-injection-boundary-analysis` as the ninth profile, `rag-memory-data-isolation-analysis` as the tenth, and `connector-plugin-trust-analysis` as the eleventh:
 
 - `ai-agent-security-assessment`
 - `authorization-boundary-analysis`
 - `cloud-iam-path-analysis`
+- `connector-plugin-trust-analysis`
 - `container-isolation-review`
 - `driver-ioctl-surface-analysis`
 - `exploitability-triage`
@@ -233,7 +234,7 @@ Validate them with:
 python scripts/validate_operator_depth.py
 ```
 
-The validator rejects unsafe paths, missing artifacts, duplicate profiles or scenario IDs, malformed or incomplete scenario matrices, disabled lab-only policy, missing required methodology sections, insufficient authorization/evidence/control discipline, unspecified benign oracles, and missing explicit stop conditions. It intentionally does not reward file length or payload volume.
+The validator rejects unsafe paths, missing artifacts, duplicate profiles or scenario IDs, malformed or incomplete matrices, disabled lab-only policy, missing required methodology sections, insufficient authorization/evidence/control discipline, unspecified benign oracles, and missing explicit stop conditions. It intentionally does not reward file length or payload volume.
 
 See [docs/operator-depth-contract.md](docs/operator-depth-contract.md).
 
@@ -424,7 +425,7 @@ For selective deep methodology on an existing high-value skill, follow [the oper
 
 Intrusive techniques are restricted to local, owned, sandboxed, benchmark/CTF, or explicitly authorized targets.
 
-Proofs should prefer controlled and non-destructive evidence such as assertions, sanitizer reports, minimized crashes, synthetic resources, marker files, policy simulation, mock services, synthetic canaries, and regression tests over persistence, stealth, destructive impact, credential theft, or indiscriminate exploitation.
+Proofs should prefer controlled and non-destructive evidence such as assertions, sanitizer reports, minimized crashes, synthetic resources, marker files, policy simulation, mock services, synthetic canaries, and regression tests rather than uncontrolled or destructive proof.
 
 See [SECURITY.md](SECURITY.md).
 
@@ -432,7 +433,7 @@ See [SECURITY.md](SECURITY.md).
 
 Security Skills distills original workflows from reproducible vulnerability research, autonomous Cyber Reasoning Systems, fuzzing infrastructure, program analysis, reverse engineering, web/mobile/firmware/cloud security, smart-contract analysis, and modern AI-agent security research.
 
-The repository does **not** vendor third-party exploit code or copy third-party prompts.
+The repository does **not** vendor third-party offensive code or copy third-party prompts.
 
 See [docs/sources.md](docs/sources.md) and [sources/research-systems.json](sources/research-systems.json).
 
