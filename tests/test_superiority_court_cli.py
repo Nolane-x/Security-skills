@@ -41,6 +41,7 @@ class SuperiorityCourtCliTests(unittest.TestCase):
             tasks = base / 'tasks'
             prepare.prepare_suite_tasks(ROOT, SUITE, tasks)
             manifest = tasks / 'SUITE_MANIFEST.json'
+            manifest_data = json.loads(manifest.read_text(encoding='utf-8'))
             score_paths = []
             for contestant_id, surface_digest, degraded in [
                 ('opaque-a', '1' * 64, False),
@@ -77,11 +78,19 @@ class SuperiorityCourtCliTests(unittest.TestCase):
             self.assertEqual(court_cli.main([*argv, '--json', str(out_b)]), 0)
             self.assertEqual(out_a.read_bytes(), out_b.read_bytes())
             result = json.loads(out_a.read_text(encoding='utf-8'))
+            self.assertEqual(result['authority_commitment'], manifest_data['authority_commitment'])
             self.assertEqual(result['absolute_winner'], 'opaque-a')
             self.assertEqual(result['pairwise'][0]['verdict'], 'left-absolute-superiority')
             contestants = {item['contestant_id']: item for item in result['contestants']}
             self.assertEqual(contestants['opaque-a']['contestant_surface_digest'], '1' * 64)
             self.assertEqual(contestants['opaque-b']['contestant_surface_digest'], '2' * 64)
+
+            tampered = base / 'opaque-b-tampered.json'
+            tampered_data = json.loads(score_paths[1].read_text(encoding='utf-8'))
+            tampered_data['authority_commitment'] = 'f' * 64
+            tampered.write_text(json.dumps(tampered_data, sort_keys=True), encoding='utf-8')
+            with self.assertRaises(ValueError):
+                court_cli.build_court_artifact(ROOT, SUITE, [score_paths[0], tampered])
 
 
 if __name__ == '__main__':
