@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "scenarios": [
+    {
+      "id": "cross-tenant-retrieval-binding",
+      "hypothesis": "A neighboring synthetic tenant may receive another tenant's unique canary when the requesting identity is not preserved as the effective retrieval principal through candidate filtering and context construction.",
+      "safe_oracle": "A dedicated controlled index containing synthetic canaries records candidate IDs, filter decisions, citations, and final context without reading any real-user data or external production source.",
+      "positive_control": "The owning synthetic principal retrieves its own unique canary with matching source lineage and citation under the expected tenant and authorization snapshot.",
+      "negative_control": "A neighboring synthetic principal issues the same semantically adjacent query but must not receive the other tenant's canary in model-visible or user-visible context.",
+      "stop_condition": "Stop immediately if validation would require searching real-user indexes, crossing the dedicated synthetic tenant boundary, or querying any uncontrolled production data source.",
+      "remediation_oracle": "After remediation, the non-owner path cannot reach the canary while the owning principal still retrieves the same synthetic source with correct lineage and citation.",
+      "principal_binding": "Record authenticated principal, tenant, session, source owner, source ACL generation, and the effective retrieval principal actually consumed by namespace and filter policy.",
+      "source_lineage": "Trace the canary from the owning synthetic source object through chunk, embedding, candidate, citation, context, and any memory representation used by the tested request.",
+      "derived_state_trace": "Record derived IDs, namespace, index generation, cache generation, policy-generation binding, and downstream consumer so the returned canary can be tied to one controlled source.",
+      "retrieval_policy_trace": "Capture namespace selection, cache lookup, candidate set, ACL/filter input and output, reranker result, context builder result, and source/citation identifiers for both principals.",
+      "lifecycle_state": "Keep authorization, lifecycle, index, cache, and memory generations fixed during this baseline isolation scenario so identity binding is the only causal variable under test.",
+      "cache_memory_state": "Use a fresh cache and cleared synthetic memory for both principals to exclude stale cache reuse or prior memory contamination as the explanation for any observed canary.",
+      "counterfactual_control": "Hold the query, source object, index generation, and model configuration constant while switching only the synthetic requesting principal and effective retrieval identity.",
+      "alternative_explanation": "Exclude model prior knowledge, duplicate synthetic fixtures, query-semantic drift, stale cache content, old session memory, citation rendering bugs, and test-cleanup contamination.",
+      "leakage_level": "A wrong-tenant candidate blocked before context is at most R1; wrong-principal context or citation is R2, and model/user-visible canary disclosure with lineage is at most R3.",
+      "evidence_ceiling": "Do not promote beyond the highest directly observed R-level or beyond observed evidence until identity binding, source lineage, controls, and the causal principal switch are demonstrated."
+    },
+    {
+      "id": "revocation-deletion-convergence",
+      "hypothesis": "A revoked or deleted synthetic object may remain policy-reachable after its owner-approved bounded convergence window because derived index, cache, citation, summary, or memory state was not invalidated consistently.",
+      "safe_oracle": "A controlled test index and synthetic canary are queried only before, during, and after the documented convergence window while generation identifiers and no-op retrieval traces are recorded.",
+      "positive_control": "Before revocation or deletion, the authorized synthetic owner can retrieve the canary and matching source lineage, proving that the fixture and retrieval path are functioning normally.",
+      "negative_control": "After the bounded convergence window expires, the same now-revoked or deleted source must not be policy-reachable through retrieval, cache, summary, citation, or memory surfaces.",
+      "stop_condition": "Stop if the experiment would alter real retention state, delete production data, query uncontrolled indexes, or continue beyond the dedicated synthetic lifecycle fixture.",
+      "remediation_oracle": "The repaired lifecycle invalidation path removes policy-reachable stale representations within the documented window while unrelated authorized synthetic sources remain retrievable.",
+      "principal_binding": "Keep the synthetic requesting principal and tenant constant across the lifecycle transition so any post-transition accessibility is not confused with an identity or tenant switch.",
+      "source_lineage": "Bind every pre- and post-transition chunk, embedding, cache entry, citation, summary, and memory record to the deleted or revoked synthetic source object and its authorization snapshot.",
+      "derived_state_trace": "Track authorization generation, revocation generation, lifecycle generation, index generation, cache generation, and memory generation before and after the transition.",
+      "retrieval_policy_trace": "Record candidate creation, current ACL/filter decision, cache-hit behavior, context construction, citation resolution, and whether stale derived state bypasses current authorization checks.",
+      "lifecycle_state": "Record transition timestamp, owner-approved bounded convergence window, intermediate propagation states, and the first post-window query so expected asynchronous lag is separated from persistent policy reachability.",
+      "cache_memory_state": "Compare stale and fresh cache generations plus existing and cleared synthetic memory to identify which derived store, if any, preserves the canary after source revocation or deletion.",
+      "counterfactual_control": "Repeat after rotating to a fresh cache and fresh memory while keeping the source lifecycle state unchanged; stale-derived-state hypotheses should track the affected generation.",
+      "alternative_explanation": "Exclude expected asynchronous propagation within the documented window, stale test cleanup, duplicate source objects, unresolved citation metadata, clock skew, and model prior knowledge.",
+      "leakage_level": "Pre-window stale state does not by itself establish R4; R4 requires policy-reachable canary evidence after the bounded convergence window, while R5 additionally requires causal defect isolation.",
+      "evidence_ceiling": "Cap the finding below validated R4 until post-window timing, current authorization state, source lineage, fresh-state controls, and the policy-reachable stale representation are all demonstrated."
+    },
+    {
+      "id": "stale-cache-memory-coherence",
+      "hypothesis": "A correctly filtered primary index may still yield a neighboring principal's synthetic canary when a stale cache entry or compacted memory record omits principal, tenant, policy-generation, or lifecycle-generation binding.",
+      "safe_oracle": "Mock cache and controlled synthetic memory stores expose generation, owner, and source-lineage metadata while an inert retrieval harness records whether a canary reaches model-visible context.",
+      "positive_control": "The synthetic owner can retrieve the canary through the correctly scoped cache or memory path, showing that identity-aware reuse remains functional for the intended principal.",
+      "negative_control": "A neighboring synthetic principal using the same semantic query must not receive the owner's canary from cache, compacted memory, or summary-derived state after current policy is applied.",
+      "stop_condition": "Stop before replacing mock cache or synthetic memory fixtures with real account state, production conversation memory, broad cache inspection, or uncontrolled user data.",
+      "remediation_oracle": "After remediation, cache and memory reuse are keyed and authorized by the required identity and lifecycle fields, while the owner positive control continues to reuse its own valid derived state.",
+      "principal_binding": "Record both requesting and effective retrieval principals together with cache owner, memory owner, tenant, source owner, and current authorization generation for every reuse attempt.",
+      "source_lineage": "Trace cached result, compacted summary, or memory record back to the original synthetic source object and canary, including the source ACL and derivation generation that created it.",
+      "derived_state_trace": "Capture cache key components, cache generation, memory generation, compaction revision, policy-generation binding, TTL or expiry, and the downstream context consumer.",
+      "retrieval_policy_trace": "Compare the primary index path with cache-hit and memory-hit paths to determine whether current ACL/filter checks are evaluated or bypassed when stale derived state is reused.",
+      "lifecycle_state": "Keep the source object stable while changing only identity or policy generation first, then test an explicit revocation transition separately to avoid mixing cache-key and lifecycle hypotheses.",
+      "cache_memory_state": "Run stale-cache, fresh-cache, existing-memory, and cleared-memory variants so the canary's persistence can be localized to one derived store instead of attributed to retrieval generally.",
+      "counterfactual_control": "Rotate only cache generation or clear only the synthetic memory record while preserving query, source, principal pair, index generation, and model configuration; the result should track the defective store.",
+      "alternative_explanation": "Exclude primary-index leakage, duplicate canaries, model memorization, test-session reuse, citation-only staleness, TTL timing, query differences, and malformed mock cache semantics.",
+      "leakage_level": "A stale internal cache candidate blocked before context remains R1; wrong-principal context may reach R2 or R3, while R5 requires a repeatable causal cache or memory binding defect with controls.",
+      "evidence_ceiling": "Do not report a general RAG isolation failure when the evidence localizes only to cache or memory coherence; cap the claim to the directly observed store, R-level, lifecycle state, and causal control."
+    }
+  ]
+}
