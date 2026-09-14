@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import argparse
 import copy
-import hashlib
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -20,9 +20,7 @@ DEGRADED_OVERRIDES = {
     'checks-contradictory-control': ('next_step', 'check'),
     'resolution-fix-unverified': ('claim_level', 'provisional'),
 }
-SELF_TEST_SURFACE_DIGEST = hashlib.sha256(
-    b'wave9-superiority-court-self-test-surface-v1'
-).hexdigest()
+SHA256_RE = re.compile(r'^[0-9a-f]{64}$')
 
 
 def prepare_replays(
@@ -31,12 +29,15 @@ def prepare_replays(
     *,
     profile: str,
     contestant_id: str,
+    surface_digest: str,
     out_dir: Path,
 ) -> list[dict]:
     if profile not in {'reference', 'degraded'}:
         raise ValueError(f'unknown replay profile: {profile}')
     if not contestant_id.strip():
         raise ValueError('contestant_id must be non-empty')
+    if not isinstance(surface_digest, str) or not SHA256_RE.fullmatch(surface_digest):
+        raise ValueError('surface_digest must be a lowercase SHA-256 digest')
 
     _, fixtures = load_suite_fixtures(root, suite_path)
     out_dir = Path(out_dir)
@@ -54,7 +55,7 @@ def prepare_replays(
             'schema_version': 1,
             'fixture_id': fixture['fixture_id'],
             'contestant_id': contestant_id,
-            'contestant_surface_digest': SELF_TEST_SURFACE_DIGEST,
+            'contestant_surface_digest': surface_digest,
             'task_digest': task['task_digest'],
             'answers': answers,
         }
@@ -72,6 +73,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument('suite')
     parser.add_argument('--profile', choices=('reference', 'degraded'), required=True)
     parser.add_argument('--contestant-id', required=True)
+    parser.add_argument('--surface-digest', required=True)
     parser.add_argument('--out', required=True)
     args = parser.parse_args(argv)
     try:
@@ -80,6 +82,7 @@ def main(argv: list[str] | None = None) -> int:
             Path(args.suite),
             profile=args.profile,
             contestant_id=args.contestant_id,
+            surface_digest=args.surface_digest,
             out_dir=Path(args.out),
         )
     except (OSError, ValueError, KeyError, TypeError, json.JSONDecodeError) as exc:
