@@ -15,13 +15,33 @@ The core corpus contains 12 synthetic fixtures balanced across four categories:
 
 The tasks are intentionally framework-neutral. They do not ask for Security Skills skill names, pack names, router outputs, Claude-specific concepts, or vendor-specific behavior.
 
+## Evaluation firewall
+
+A blind comparison is invalid if a contestant can read the private judge authority.
+
+`superiority/corpus.json`, the superiority scorer, court builders, benchmark authority, tests, and CI files belong to the **judge side**. They must not be exposed to the contestant process.
+
+For the Security Skills arm, build a deterministic contestant-only surface outside the source repository:
+
+```bash
+python scripts/build_contestant_view.py --out /tmp/security-skills-contestant
+```
+
+The builder uses an explicit allowlist and emits `CONTESTANT_VIEW.json` with per-file hashes plus a deterministic `surface_digest`. It excludes the superiority authority, benchmark/evaluation roots, tests, CI configuration, and court/scoring scripts. The destination must be outside the source repository and empty, so stale or judge-side files cannot be inherited accidentally.
+
+A real comparison must preserve that manifest and record its `surface_digest` in every run artifact. The contestant runtime must not have another path, mount, connector, network route, or tool that can retrieve the judge repository or private authority. If such access exists, the blind run is invalid and must be discarded rather than scored.
+
+Other frameworks should be packaged under the same principle: expose only the framework surface intended to help the model, record an immutable digest of that surface, and keep judge material inaccessible.
+
 ## Public task / private authority split
 
 `superiority/corpus.json` is the private scoring authority. Each fixture contains a public task plus private expected decisions, hard rules, and a minimum score.
 
-`python scripts/prepare_superiority_tasks.py superiority/suites/core.json --out tasks`
+```bash
+python scripts/prepare_superiority_tasks.py superiority/suites/core.json --out tasks
+```
 
-produces oracle-free task artifacts. Each public task contains only:
+produces 12 oracle-free task artifacts plus `SUITE_MANIFEST.json`. Each public task contains only:
 
 - schema version;
 - fixture ID;
@@ -29,7 +49,11 @@ produces oracle-free task artifacts. Each public task contains only:
 - task content;
 - SHA-256 task digest.
 
-Private expected answers, hard rules, and thresholds are never copied into contestant tasks.
+The suite manifest contains the exact ordered fixture/task-digest set and a SHA-256 `authority_commitment`. That commitment binds the semantic private expected answers, hard rules, thresholds, categories, and suite identity without revealing them.
+
+Private expected answers, hard rules, and thresholds are never copied into contestant tasks or the public manifest.
+
+The task output directory must be empty. Reusing a directory that contains stale artifacts fails closed.
 
 ## Contestant run contract
 
@@ -40,6 +64,7 @@ A contestant returns one JSON artifact per fixture:
   "schema_version": 1,
   "fixture_id": "evidence-single-signal",
   "contestant_id": "opaque-a",
+  "contestant_surface_digest": "<64 lowercase hex characters>",
   "task_digest": "<64 lowercase hex characters>",
   "answers": {
     "scope_choice": "allow",
@@ -51,25 +76,50 @@ A contestant returns one JSON artifact per fixture:
 }
 ```
 
-Contestant IDs should remain opaque until the court artifact is frozen. Hidden reasoning or chain-of-thought is neither requested nor stored.
+All runs for one contestant must carry the same contestant-surface digest. Contestant IDs should remain opaque until the court artifact is frozen. Hidden reasoning or chain-of-thought is neither requested nor stored.
 
 ## Deterministic scoring
 
-`python scripts/score_superiority_runs.py superiority/suites/core.json <runs-dir> --json scores.json`
+Scoring requires the same frozen public manifest that was published before contestant execution:
 
-recomputes each task from the private corpus, verifies fixture identity and task digest, then scores the structured decisions. List-valued answers are normalized for order so equivalent check sets do not receive an arbitrary ordering penalty.
+```bash
+python scripts/score_superiority_runs.py \
+  superiority/suites/core.json \
+  <runs-dir> \
+  --manifest tasks/SUITE_MANIFEST.json \
+  --json scores.json
+```
 
-A hard-rule mismatch makes that fixture fail even when the arithmetic score would otherwise exceed the fixture threshold.
+The scorer recomputes each task from the private corpus and verifies:
 
-Malformed input, mixed contestant identities, missing fixtures, duplicate fixtures, unknown fixtures, and task-digest drift fail closed as structural errors.
+- suite identity;
+- the exact public fixture/task-digest set;
+- the exact semantic private `authority_commitment`;
+- fixture identity and task digest on every run;
+- one non-empty contestant ID;
+- one valid contestant-surface digest across the entire contestant run set;
+- complete, non-duplicate fixture coverage.
+
+If the judge answers, hard rules, thresholds, categories, or task definitions drift after the public manifest was frozen, scoring fails closed instead of silently accepting the new authority.
+
+List-valued answers are normalized for order so equivalent check sets do not receive an arbitrary ordering penalty. A hard-rule mismatch makes that fixture fail even when the arithmetic score would otherwise exceed the fixture threshold.
+
+The score artifact preserves both `authority_commitment` and `contestant_surface_digest` for downstream audit.
 
 ## Court construction
 
-`python scripts/build_superiority_court.py superiority/suites/core.json scores-a.json scores-b.json --json court.json`
+```bash
+python scripts/build_superiority_court.py \
+  superiority/suites/core.json \
+  scores-a.json scores-b.json \
+  --json court.json
+```
 
 requires at least two unique contestants evaluated on the same suite.
 
-The court computes:
+The court refuses score artifacts whose authority commitment is malformed, differs across contestants, or differs from the current recomputed private authority. It also validates contestant-surface provenance and task identity before aggregation.
+
+The final court artifact preserves the single frozen `authority_commitment` and each contestant's `contestant_surface_digest`, then computes:
 
 - overall score per contestant;
 - category score per contestant;
@@ -104,22 +154,26 @@ The `superiority-court-core` job uses two deterministic synthetic replay profile
 - `reference` — exactly follows the private authority;
 - `degraded` — changes four non-hard-rule decisions while remaining structurally valid and above each fixture threshold.
 
-CI prepares public tasks twice, scores replay profiles twice, builds the court twice, and requires byte-identical artifacts. It also verifies that the synthetic reference profile is the strict winner over the degraded profile.
+CI builds the Security Skills contestant view twice outside the repository and requires byte-identical snapshots. It prepares public tasks/manifests twice, requires byte-identical task artifacts, scores replay profiles against the corresponding frozen manifests, builds the court twice, and requires byte-identical score/court artifacts. The final court check also verifies authority commitment and contestant-surface provenance.
 
-This proves that the court implementation is deterministic and that its dominance rule detects a controlled difference. It does **not** prove that Security Skills is empirically superior to any external framework.
+The synthetic replay profiles use an explicit fixed self-test surface digest. They are not representations of a real external framework run.
+
+This proves that the court implementation, firewall builder, authority commitment, scorer binding, provenance propagation, and dominance rule are deterministic under controlled fixtures. It does **not** prove that Security Skills is empirically superior to any external framework.
 
 ## Protocol for a real external comparison
 
 For a defensible comparison between Security Skills and another framework:
 
-1. pin the same model family, exact model version, system policy, context budget, tool budget, temperature/sampling settings, timeout, and retry policy;
-2. generate the public task set exactly once and preserve its task digests;
-3. assign opaque contestant IDs and keep the identity mapping sealed until scoring is complete;
-4. give every contestant the same public task and runtime budget; only the framework context being evaluated may differ;
-5. require the structured run contract above and reject task-digest drift;
-6. score every contestant with the same private corpus and scorer revision;
-7. freeze the score artifacts and court artifact before unblinding contestant identities;
-8. for stochastic models, repeat the full paired protocol across predeclared seeds/runs and report every result rather than selecting a favorable run.
+1. preregister the suite/corpus revision, model family, exact model version, system policy, context budget, tool budget, temperature/sampling settings, timeout, retry policy, and repeated-run/seed plan;
+2. build and freeze each contestant-visible framework surface; preserve its manifest/digest and ensure the judge authority is inaccessible from the contestant runtime;
+3. generate the public task set exactly once; freeze `SUITE_MANIFEST.json` before any contestant sees a task;
+4. assign opaque contestant IDs and keep the identity mapping sealed until scoring is complete;
+5. give every contestant the identical public task digest and equivalent runtime/tool budget; only the framework surface being evaluated may differ;
+6. require the structured run contract above and reject task-digest or contestant-surface drift;
+7. score every contestant with the same private corpus/scorer revision and the frozen public manifest; any authority-commitment mismatch invalidates the scoring attempt;
+8. build and freeze score artifacts and the final court artifact before unblinding contestant identities;
+9. preserve the court authority commitment, task digests, contestant-surface digests, model/runtime configuration, and raw structured runs as the audit record;
+10. for stochastic models, repeat the full paired protocol across all preregistered seeds/runs and report every result rather than selecting a favorable run.
 
 For a direct Security Skills versus Claude-Red experiment, the model itself must remain identical across both arms. Otherwise a model-quality difference is confounded with a framework-quality difference.
 
@@ -127,4 +181,4 @@ For a direct Security Skills versus Claude-Red experiment, the model itself must
 
 A court result means only that one evaluated framework produced better conformance on the reviewed Wave 9 decision corpus under the pinned experimental protocol.
 
-It does not establish universal superiority in exploit knowledge, general intelligence, every security domain, every model, or every real-world environment. Broader claims require broader preregistered corpora and independent repetitions.
+It does not establish universal superiority in exploit knowledge, general intelligence, every security domain, every model, or every real-world environment. Broader claims require broader preregistered corpora, independent repetitions, and additional domain-specific courts.
