@@ -113,6 +113,23 @@ class SuperiorityCourtTests(unittest.TestCase):
         self.assertTrue(pair['left_no_category_regression'])
         self.assertTrue(pair['absolute_superiority'])
 
+    def test_higher_average_with_category_regression_is_not_absolute(self):
+        court = load_module()
+        results = [
+            scored('contestant-a', 'case-1', 'scope', 100),
+            scored('contestant-a', 'case-2', 'evidence', 100),
+            scored('contestant-a', 'case-3', 'checks', 70),
+            scored('contestant-b', 'case-1', 'scope', 80),
+            scored('contestant-b', 'case-2', 'evidence', 80),
+            scored('contestant-b', 'case-3', 'checks', 90),
+        ]
+        result = court.build_court('suite-1', ['case-1', 'case-2', 'case-3'], results)
+        self.assertIsNone(result['absolute_winner'])
+        pair = result['pairwise'][0]
+        self.assertEqual(pair['verdict'], 'left-score-lead')
+        self.assertFalse(pair['left_no_category_regression'])
+        self.assertFalse(pair['absolute_superiority'])
+
 
 if __name__ == '__main__':
     unittest.main()
