@@ -8,7 +8,12 @@
       "positive_control": "A valid synthetic request matching the pinned schema is accepted by the test fixture.",
       "negative_control": "A neighboring synthetic request with one invalid version or length field is rejected consistently.",
       "stop_condition": "Stop before any request can change unrelated host or device state.",
-      "remediation_oracle": "Validation and handling use the same schema contract while the valid synthetic request remains accepted."
+      "remediation_oracle": "Validation and handling use the same schema contract while the valid synthetic request remains accepted.",
+      "contract_state_trace": "Caller authority and open/handle policy remain fixed while the fixture records command selection, transport provenance, schema/version decode, normalized length state, validation snapshot, and later consumption snapshot for the same synthetic request.",
+      "violated_invariant": "The finding requires validation and consumption to disagree about the same schema/version or normalized length contract term, with the disagreement changing the controlled decision or bounded diagnostic rather than merely producing different internal bookkeeping.",
+      "false_positive_guard": "Reject the case when the difference is explained by an intentionally documented transformation, mismatched build or symbols, an incorrect schema assumption, simulator divergence, or a diagnostic that also appears for the canonical valid request.",
+      "evidence_upgrade": "Upgrade to validated only after the first interpretation divergence is localized, restoring the canonical schema or normalized length removes the signal, and both the valid positive control and intentionally invalid negative control continue to behave as expected.",
+      "neighbor_regression": "After remediation, replay the original synthetic case plus a neighboring valid schema/version request and a neighboring intentionally invalid request so the fix proves contract consistency without disabling the entire command family."
     },
     {
       "id": "object-identity-binding",
@@ -17,7 +22,12 @@
       "positive_control": "The owning synthetic handle or identity resolves to the intended test object.",
       "negative_control": "A neighboring synthetic identity cannot resolve or operate on that same test object.",
       "stop_condition": "Stop if object validation cannot remain inside the disposable test fixture.",
-      "remediation_oracle": "Object lookup binds the complete intended identity and the owning synthetic control remains functional."
+      "remediation_oracle": "Object lookup binds the complete intended identity and the owning synthetic control remains functional.",
+      "contract_state_trace": "The trace keeps caller principal, open/handle gate, command selector, validated object identifier, object type, ownership binding, lifetime epoch, state prerequisite, lookup result, and bounded synthetic object marker in one causal sequence.",
+      "violated_invariant": "The object-binding invariant is broken only when the contract requires a particular owner or identity tuple, validation establishes that tuple, and later lookup or handling selects an object whose ownership or lifetime context is not equivalent under the documented policy.",
+      "false_positive_guard": "Downgrade the case when aliasing or shared ownership is documented, when the caller already has policy authority for the selected synthetic object, when the object table belongs to a different pinned build, or when the observed marker can be reproduced without the suspected ownership mismatch.",
+      "evidence_upgrade": "Upgrade to validated only when a controlled lookup trace identifies the first ownership-binding divergence, restoring the expected owner/identity tuple removes the bounded effect, and the owning plus neighboring synthetic identities retain their intended positive and negative outcomes.",
+      "neighbor_regression": "Regression proof must preserve the owning synthetic identity's valid access, continue rejecting a neighboring unauthorized synthetic identity, and check any sibling command that shares the same object table or ownership helper only when that shared root cause is established."
     },
     {
       "id": "lifecycle-state-consistency",
@@ -26,7 +36,12 @@
       "positive_control": "A synthetic request completed within its valid lifecycle reaches the expected test completion state.",
       "negative_control": "A neighboring synthetic lifecycle transition prevents completion after the relevant state is no longer valid.",
       "stop_condition": "Stop if timing validation would require non-disposable hardware or uncontrolled host state.",
-      "remediation_oracle": "Lifecycle checks reject stale synthetic state while preserving the valid completion control."
+      "remediation_oracle": "Lifecycle checks reject stale synthetic state while preserving the valid completion control.",
+      "contract_state_trace": "The fixture records submission authority, state prerequisite, referenced object and buffer ownership, asynchronous ownership after queuing, cancellation or lifecycle transition, completion context, completion authority, and the final bounded synthetic completion marker.",
+      "violated_invariant": "A lifecycle finding requires the documented contract to revoke or change authority after a specific controlled transition while later completion still relies on stale submission state or ownership; completion after a transition is not itself a violation when the design explicitly permits it.",
+      "false_positive_guard": "Reject conclusions caused by uncontrolled scheduling noise, simulator timing that does not match the reviewed contract, stale instrumentation, or a lifecycle transition that policy intentionally allows to complete outstanding work under preserved ownership.",
+      "evidence_upgrade": "Upgrade to validated only after the state prerequisite and completion authority are both captured, the first stale-state or ownership divergence is identified, a counterfactual preserving valid authority removes the anomaly, and repeated pinned runs show the signal depends on that lifecycle condition.",
+      "neighbor_regression": "After remediation, verify that a request completing inside its valid lifecycle still reaches the expected inert completion state, that the neighboring revoked-state case is rejected, and that related queue or sibling-command paths remain correct only where they share the repaired lifecycle invariant."
     }
   ]
 }
