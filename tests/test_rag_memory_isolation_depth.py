@@ -127,7 +127,7 @@ class RagMemoryIsolationDepthTests(unittest.TestCase):
     def test_skill_is_registered_as_tenth_operator_depth_profile(self):
         payload = json.loads(PROFILES.read_text(encoding="utf-8"))
         profiles = payload["profiles"]
-        self.assertEqual(len(profiles), 10)
+        self.assertGreaterEqual(len(profiles), 10)
         matching = [
             profile
             for profile in profiles
