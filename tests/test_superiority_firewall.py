@@ -32,9 +32,9 @@ class SuperiorityFirewallTests(unittest.TestCase):
             required = {
                 'AGENTS.md',
                 'SECURITY.md',
-                'scripts/graphlib.py',
                 'scripts/research_case.py',
                 'scripts/route_skills.py',
+                'scripts/security_graph.py',
                 'scripts/skilllib.py',
                 'scripts/validate_case.py',
             }
