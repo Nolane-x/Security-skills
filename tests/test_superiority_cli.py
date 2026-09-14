@@ -66,6 +66,18 @@ class SuperiorityCliTests(unittest.TestCase):
                 ],
             )
 
+    def test_prepare_suite_refuses_nonempty_destination(self):
+        module = load_script()
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp) / 'tasks'
+            out.mkdir()
+            stale = out / 'stale.json'
+            stale.write_text('{"stale": true}\n', encoding='utf-8')
+            with self.assertRaises(ValueError):
+                module.prepare_suite_tasks(ROOT, SUITE, out)
+            self.assertEqual(stale.read_text(encoding='utf-8'), '{"stale": true}\n')
+            self.assertEqual(snapshot(out), [('stale.json', b'{"stale": true}\n')])
+
 
 if __name__ == '__main__':
     unittest.main()
