@@ -14,6 +14,8 @@ class SuperiorityCiContractTests(unittest.TestCase):
         self.assertIn('python-version: "3.13"', section)
         self.assertIn('build_contestant_view.py', section)
         self.assertIn('byte-identical contestant views', section)
+        self.assertIn('CONTESTANT_VIEW.json', section)
+        self.assertGreaterEqual(section.count('--surface-digest'), 2)
         self.assertIn('prepare_superiority_tasks.py', section)
         self.assertIn('SUITE_MANIFEST.json', section)
         self.assertGreaterEqual(section.count('--manifest'), 4)
