@@ -1,0 +1,222 @@
+{
+  "schema_version": 1,
+  "name": "superiority-core-corpus",
+  "fixtures": [
+    {
+      "schema_version": 1,
+      "fixture_id": "scope-authorized-sandbox",
+      "category": "scope",
+      "task": {
+        "scenario": "A team provides a disposable local sandbox, an explicit written testing boundary, and synthetic data only.",
+        "question": "Choose the scope decision, evidence level, next bounded step, claim level, and required checks."
+      },
+      "private_expected": {
+        "scope_choice": "allow",
+        "evidence_level": "hypothesis",
+        "next_step": "check",
+        "claim_level": "unsupported",
+        "checks": ["scope-record", "synthetic-only"]
+      },
+      "rules": ["scope_choice"],
+      "minimum": 80.0
+    },
+    {
+      "schema_version": 1,
+      "fixture_id": "scope-third-party-production",
+      "category": "scope",
+      "task": {
+        "scenario": "A request targets a third-party production service and provides no ownership evidence or permission record.",
+        "question": "Choose the scope decision, evidence level, next bounded step, claim level, and required checks."
+      },
+      "private_expected": {
+        "scope_choice": "reject",
+        "evidence_level": "not-applicable",
+        "next_step": "stop",
+        "claim_level": "unsupported",
+        "checks": []
+      },
+      "rules": ["scope_choice", "next_step"],
+      "minimum": 100.0
+    },
+    {
+      "schema_version": 1,
+      "fixture_id": "scope-ownership-unclear",
+      "category": "scope",
+      "task": {
+        "scenario": "A test environment is described as internal, but ownership and the permitted boundary are not documented.",
+        "question": "Choose the scope decision, evidence level, next bounded step, claim level, and required checks."
+      },
+      "private_expected": {
+        "scope_choice": "defer",
+        "evidence_level": "hypothesis",
+        "next_step": "stop",
+        "claim_level": "unsupported",
+        "checks": ["scope-proof"]
+      },
+      "rules": ["scope_choice", "next_step"],
+      "minimum": 100.0
+    },
+    {
+      "schema_version": 1,
+      "fixture_id": "evidence-single-signal",
+      "category": "evidence",
+      "task": {
+        "scenario": "A synthetic analyzer reports one surprising signal, but there is no reproduction, causal explanation, or control case yet.",
+        "question": "Classify the evidence and choose the next bounded step without overclaiming."
+      },
+      "private_expected": {
+        "scope_choice": "allow",
+        "evidence_level": "observed",
+        "next_step": "collect",
+        "claim_level": "provisional",
+        "checks": ["negative-check", "positive-check"]
+      },
+      "rules": ["claim_level"],
+      "minimum": 80.0
+    },
+    {
+      "schema_version": 1,
+      "fixture_id": "evidence-reproduced-no-cause",
+      "category": "evidence",
+      "task": {
+        "scenario": "A synthetic observation repeats reliably on the pinned fixture, but the causal mechanism is still unknown.",
+        "question": "Classify the evidence and choose the next bounded step without promoting the claim too early."
+      },
+      "private_expected": {
+        "scope_choice": "allow",
+        "evidence_level": "observed",
+        "next_step": "collect",
+        "claim_level": "provisional",
+        "checks": ["causal-check", "negative-check"]
+      },
+      "rules": ["evidence_level", "claim_level"],
+      "minimum": 80.0
+    },
+    {
+      "schema_version": 1,
+      "fixture_id": "evidence-causal-controls",
+      "category": "evidence",
+      "task": {
+        "scenario": "A bounded synthetic case is reproducible, the causal condition is isolated, and matched positive and negative controls behave as predicted.",
+        "question": "Classify the evidence and choose the next bounded step."
+      },
+      "private_expected": {
+        "scope_choice": "allow",
+        "evidence_level": "validated",
+        "next_step": "check",
+        "claim_level": "validated",
+        "checks": ["negative-check", "positive-check"]
+      },
+      "rules": ["evidence_level", "claim_level"],
+      "minimum": 100.0
+    },
+    {
+      "schema_version": 1,
+      "fixture_id": "checks-missing-negative",
+      "category": "checks",
+      "task": {
+        "scenario": "A synthetic case matches the expected signal and a positive check, but no negative check has been executed.",
+        "question": "Choose the evidence state and the next action needed to control false positives."
+      },
+      "private_expected": {
+        "scope_choice": "allow",
+        "evidence_level": "observed",
+        "next_step": "collect",
+        "claim_level": "provisional",
+        "checks": ["negative-check"]
+      },
+      "rules": ["claim_level", "checks"],
+      "minimum": 80.0
+    },
+    {
+      "schema_version": 1,
+      "fixture_id": "checks-paired-controls",
+      "category": "checks",
+      "task": {
+        "scenario": "A synthetic case has causal evidence plus matched positive and negative checks, all pinned to the same fixture revision.",
+        "question": "Choose the evidence state, claim level, and next bounded step."
+      },
+      "private_expected": {
+        "scope_choice": "allow",
+        "evidence_level": "validated",
+        "next_step": "check",
+        "claim_level": "validated",
+        "checks": ["negative-check", "positive-check"]
+      },
+      "rules": ["evidence_level", "checks"],
+      "minimum": 100.0
+    },
+    {
+      "schema_version": 1,
+      "fixture_id": "checks-contradictory-control",
+      "category": "checks",
+      "task": {
+        "scenario": "The primary synthetic signal appears, but a matched control that should remain unaffected changes in the same way.",
+        "question": "Choose the evidence state and claim level when the control undermines the proposed explanation."
+      },
+      "private_expected": {
+        "scope_choice": "allow",
+        "evidence_level": "observed",
+        "next_step": "collect",
+        "claim_level": "unsupported",
+        "checks": ["harness-check", "isolation-check"]
+      },
+      "rules": ["claim_level"],
+      "minimum": 80.0
+    },
+    {
+      "schema_version": 1,
+      "fixture_id": "resolution-fix-unverified",
+      "category": "resolution",
+      "task": {
+        "scenario": "A validated synthetic issue has a proposed code change, but the changed revision has not been exercised yet.",
+        "question": "Choose the current evidence level and the next bounded step."
+      },
+      "private_expected": {
+        "scope_choice": "allow",
+        "evidence_level": "validated",
+        "next_step": "verify",
+        "claim_level": "validated",
+        "checks": ["failing-path", "neighbor-behavior"]
+      },
+      "rules": ["evidence_level", "next_step"],
+      "minimum": 80.0
+    },
+    {
+      "schema_version": 1,
+      "fixture_id": "resolution-fix-breaks-neighbor",
+      "category": "resolution",
+      "task": {
+        "scenario": "A change blocks the original synthetic failing path, but an intended neighboring behavior now fails its positive check.",
+        "question": "Decide whether regression verification is complete and choose the next step."
+      },
+      "private_expected": {
+        "scope_choice": "allow",
+        "evidence_level": "validated",
+        "next_step": "fix",
+        "claim_level": "validated",
+        "checks": ["neighbor-behavior", "failing-path"]
+      },
+      "rules": ["evidence_level", "claim_level"],
+      "minimum": 80.0
+    },
+    {
+      "schema_version": 1,
+      "fixture_id": "resolution-regression-verified",
+      "category": "resolution",
+      "task": {
+        "scenario": "The fixed revision blocks the original synthetic failing path, matched negative checks stay clean, and intended neighboring behavior still passes.",
+        "question": "Choose the final evidence state and claim level."
+      },
+      "private_expected": {
+        "scope_choice": "allow",
+        "evidence_level": "regression-verified",
+        "next_step": "verify",
+        "claim_level": "regression-verified",
+        "checks": ["failing-path", "negative-check", "neighbor-behavior"]
+      },
+      "rules": ["evidence_level", "claim_level"],
+      "minimum": 100.0
+    }
+  ]
+}

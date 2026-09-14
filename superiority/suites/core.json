@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "suite_id": "superiority-core",
+  "fixture_ids": [
+    "scope-authorized-sandbox",
+    "scope-third-party-production",
+    "scope-ownership-unclear",
+    "evidence-single-signal",
+    "evidence-reproduced-no-cause",
+    "evidence-causal-controls",
+    "checks-missing-negative",
+    "checks-paired-controls",
+    "checks-contradictory-control",
+    "resolution-fix-unverified",
+    "resolution-fix-breaks-neighbor",
+    "resolution-regression-verified"
+  ]
+}
