@@ -27,6 +27,9 @@ jobs:
       - name: Validate canonical skills
         run: python scripts/validate_skills.py
 
+      - name: Validate operator depth profiles
+        run: python scripts/validate_operator_depth.py
+
       - name: Validate skill graph
         run: python scripts/validate_graph.py
 
