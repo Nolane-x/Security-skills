@@ -24,6 +24,40 @@ def _mean(values: list[float]) -> float:
     return round(sum(values) / len(values), 2) if values else 0.0
 
 
+def build_authority_commitment(suite_id: str, fixtures: list[dict[str, Any]]) -> str:
+    """Commit to the semantic private scoring authority without exposing it."""
+    if not isinstance(suite_id, str) or not suite_id.strip():
+        raise ValueError('suite_id must be non-empty')
+
+    seen: set[str] = set()
+    authority = []
+    for fixture in sorted(fixtures, key=lambda item: item['fixture_id']):
+        fixture_id = fixture['fixture_id']
+        if fixture_id in seen:
+            raise ValueError(f'duplicate fixture id in authority: {fixture_id}')
+        seen.add(fixture_id)
+        private_expected = fixture['private_expected']
+        authority.append(
+            {
+                'fixture_id': fixture_id,
+                'category': fixture['category'],
+                'private_expected': {
+                    field: _normalized_answer(private_expected[field])
+                    for field in sorted(private_expected)
+                },
+                'rules': sorted(set(fixture.get('rules', []))),
+                'minimum': float(fixture.get('minimum', 100.0)),
+            }
+        )
+
+    payload = {
+        'schema_version': 1,
+        'suite_id': suite_id,
+        'authority': authority,
+    }
+    return hashlib.sha256(_canonical_json(payload).encode('utf-8')).hexdigest()
+
+
 def build_task(fixture: dict[str, Any]) -> dict[str, Any]:
     public = {
         'schema_version': 1,
