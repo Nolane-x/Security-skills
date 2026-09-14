@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "scenarios": [
+    {
+      "id": "schema-version-boundary",
+      "hypothesis": "A request version or length combination may be interpreted differently across validation and handling stages.",
+      "safe_oracle": "A controlled simulator or verifier records the synthetic request decision without device side effects.",
+      "positive_control": "A valid synthetic request matching the pinned schema is accepted by the test fixture.",
+      "negative_control": "A neighboring synthetic request with one invalid version or length field is rejected consistently.",
+      "stop_condition": "Stop before any request can change unrelated host or device state.",
+      "remediation_oracle": "Validation and handling use the same schema contract while the valid synthetic request remains accepted."
+    },
+    {
+      "id": "object-identity-binding",
+      "hypothesis": "A request may reference a test object whose identity or ownership is not preserved consistently through lookup and handling.",
+      "safe_oracle": "A controlled test fixture records the synthetic object identity selected by the request.",
+      "positive_control": "The owning synthetic handle or identity resolves to the intended test object.",
+      "negative_control": "A neighboring synthetic identity cannot resolve or operate on that same test object.",
+      "stop_condition": "Stop if object validation cannot remain inside the disposable test fixture.",
+      "remediation_oracle": "Object lookup binds the complete intended identity and the owning synthetic control remains functional."
+    },
+    {
+      "id": "lifecycle-state-consistency",
+      "hypothesis": "A request lifecycle may outlive or conflict with the state that authorized or created it.",
+      "safe_oracle": "A controlled diagnostic records the synthetic request lifecycle and completion state in the lab fixture.",
+      "positive_control": "A synthetic request completed within its valid lifecycle reaches the expected test completion state.",
+      "negative_control": "A neighboring synthetic lifecycle transition prevents completion after the relevant state is no longer valid.",
+      "stop_condition": "Stop if timing validation would require non-disposable hardware or uncontrolled host state.",
+      "remediation_oracle": "Lifecycle checks reject stale synthetic state while preserving the valid completion control."
+    }
+  ]
+}
