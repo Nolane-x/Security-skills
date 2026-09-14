@@ -56,6 +56,10 @@ class PromptInjectionBoundaryDepthTests(unittest.TestCase):
             self.assertIn(concept, lower)
 
     def test_runbook_requires_transition_level_prompt_injection_reasoning(self):
+        self.assertTrue(
+            RUNBOOK.is_file(),
+            "prompt-injection operator runbook must exist before depth can pass",
+        )
         text = RUNBOOK.read_text(encoding="utf-8")
         for section in (
             "## Attack surface",
@@ -90,6 +94,10 @@ class PromptInjectionBoundaryDepthTests(unittest.TestCase):
             self.assertIn(phrase, lower)
 
     def test_scenarios_encode_causal_prompt_injection_reasoning(self):
+        self.assertTrue(
+            SCENARIOS.is_file(),
+            "prompt-injection scenario matrix must exist before depth can pass",
+        )
         payload = json.loads(SCENARIOS.read_text(encoding="utf-8"))
         self.assertEqual(payload["version"], 1)
         self.assertGreaterEqual(len(payload["scenarios"]), 3)
