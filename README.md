@@ -6,9 +6,9 @@
 
 A **verification-first security skill graph and deterministic cross-agent evaluation framework for AI agents**.
 
-Security Skills gives coding agents, research agents, and autonomous security systems a portable set of reusable security reasoning skills — plus the evidence gates, routing logic, benchmarks, and cross-agent conformance tooling needed to verify that those skills are being used correctly.
+Security Skills gives coding agents, research agents, and autonomous security systems a portable set of reusable security reasoning skills — plus the evidence gates, routing logic, benchmarks, cross-agent conformance tooling, and selectively deep operator runbooks needed to verify that those skills are being used correctly.
 
-> **Stable baseline: Wave 6** — 83 canonical skills, 20 packs, 36 deterministic benchmark fixtures, and a vendor-neutral cross-agent evaluation harness.
+> **Stable baseline: Wave 7** — 83 canonical skills, 20 packs, 4 CI-enforced operator-depth profiles, 36 deterministic benchmark fixtures, and a vendor-neutral cross-agent evaluation harness.
 
 ## Why this project exists
 
@@ -21,6 +21,8 @@ security knowledge
       │
       ▼
 83 canonical Agent Skills
+      │
+      ├──► 4 selective operator-depth runbooks (Wave 7)
       │
       ▼
 deterministic research router
@@ -35,7 +37,7 @@ Wave 5 benchmark authority
 Wave 6 cross-agent evaluator
 ```
 
-The result is not just a collection of prompts. It is a **security intelligence system that can validate its own routing and evaluate how external AI agents follow the same security contract**.
+The result is not just a collection of prompts. It is a **security intelligence system that can validate its own routing, enforce depth contracts, and evaluate how external AI agents follow the same security contract**.
 
 ## What it is — and what it is not
 
@@ -43,6 +45,7 @@ The result is not just a collection of prompts. It is a **security intelligence 
 
 - a portable security reasoning graph for AI agents;
 - a set of reusable Agent Skills with explicit applicability and evidence contracts;
+- selectively deep operator runbooks for complex high-value domains;
 - a deterministic prerequisite-aware router;
 - a machine-readable research-case and evidence-state model;
 - a benchmark suite for routing, authorization, evidence, false-positive control, and remediation;
@@ -63,6 +66,7 @@ The result is not just a collection of prompts. It is a **security intelligence 
 | --- | ---: |
 | Canonical skills | **83** |
 | Validated packs | **20** |
+| Operator-depth profiles | **4** |
 | Benchmark fixtures | **36** |
 | Benchmark categories | **6** |
 | Cross-agent portability fixtures | **12** |
@@ -72,7 +76,7 @@ The result is not just a collection of prompts. It is a **security intelligence 
 
 CI validates Linux, macOS, and Windows on Python 3.11 and 3.13.
 
-## Three-layer architecture
+## Four-layer architecture
 
 ### 1. Security intelligence graph
 
@@ -88,11 +92,19 @@ skills/<skill-name>/
 
 Packs under `packs/` reference canonical skills instead of duplicating them.
 
-### 2. Deterministic benchmark authority
+### 2. Selective operator depth
+
+Wave 7 adds CI-enforced deep runbooks to selected high-value canonical skills without increasing the skill count or duplicating canonical prose. Each registered runbook must cover attack surface, falsifiable hypotheses, controlled validation, false-positive controls, evidence capture, and remediation regression.
+
+The first four profiles deepen AI-agent security, authorization boundaries, cloud IAM paths, and server-side request boundaries. They remain lab/owned/sandbox/authorized-only and prefer synthetic canaries, mock services, fake identities, policy simulation, and inert action sinks over risky real-world proof.
+
+See [docs/operator-depth-contract.md](docs/operator-depth-contract.md).
+
+### 3. Deterministic benchmark authority
 
 Wave 5 evaluates the production case validator and router against reviewed synthetic fixtures. Hard failures such as unauthorized acceptance, invalid evidence promotion, domain leakage, or broken prerequisite ordering cannot be averaged away by a high score.
 
-### 3. Cross-agent evaluation
+### 4. Cross-agent evaluation
 
 Wave 6 converts reviewed benchmark fixtures into **oracle-free agent tasks**, accepts normalized `agent-run` artifacts from external wrappers, and scores them using deterministic repository code.
 
@@ -158,6 +170,7 @@ git clone https://github.com/Nolane-x/Security-skills.git
 cd Security-skills
 
 python scripts/validate_skills.py
+python scripts/validate_operator_depth.py
 python scripts/validate_graph.py
 python scripts/validate_benchmarks.py
 python -m unittest discover -s tests -v
@@ -170,7 +183,7 @@ python scripts/build_catalog.py
 python scripts/build_graph.py
 ```
 
-Generated catalog/graph artifacts are intentionally ignored. Canonical truth remains in `SKILL.md`, `skill.meta.json`, and pack manifests.
+Generated catalog/graph artifacts are intentionally ignored. Canonical truth remains in `SKILL.md`, `skill.meta.json`, pack manifests, and the selective operator-depth registry/runbooks.
 
 ## Research-case engine
 
@@ -198,6 +211,25 @@ scope + authorization
   → remediation
   → regression verification
 ```
+
+## Operator depth
+
+Wave 7 registers deep runbooks for:
+
+- `ai-agent-security-assessment`
+- `authorization-boundary-analysis`
+- `cloud-iam-path-analysis`
+- `server-side-request-boundary-analysis`
+
+Validate them with:
+
+```bash
+python scripts/validate_operator_depth.py
+```
+
+The validator rejects missing/escaping runbooks, duplicate profiles, disabled lab-only policy, missing canonical links, missing required methodology sections, and missing authorization/evidence/control discipline. It intentionally does not reward file length or payload volume.
+
+See [docs/operator-depth-contract.md](docs/operator-depth-contract.md).
 
 ## Benchmark engine
 
@@ -324,7 +356,8 @@ See [packs/README.md](packs/README.md) for the full set.
 
 ```text
 Security-skills/
-├── skills/              # canonical Agent Skills
+├── skills/              # canonical Agent Skills and selective runbook references
+├── operator-depth/      # Wave 7 CI-enforced deep-profile registry
 ├── packs/               # curated skill routing manifests
 ├── benchmarks/          # Wave 5 deterministic fixtures and suites
 ├── agent-eval/          # Wave 6 cross-agent contracts and suites
@@ -345,6 +378,7 @@ No third-party Python package is required.
 
 ```bash
 python scripts/validate_skills.py
+python scripts/validate_operator_depth.py
 python scripts/validate_graph.py
 python scripts/build_catalog.py
 python scripts/build_graph.py
@@ -378,11 +412,13 @@ A canonical skill should encode a reusable **decision process**, not a thin wrap
 - output contract;
 - graph metadata.
 
+For selective deep methodology on an existing high-value skill, follow [the operator-depth contract](docs/operator-depth-contract.md) instead of creating a near-duplicate skill.
+
 ## Security boundary
 
 Intrusive techniques are restricted to local, owned, sandboxed, benchmark/CTF, or explicitly authorized targets.
 
-Proofs should prefer controlled and non-destructive evidence such as assertions, sanitizer reports, minimized crashes, synthetic resources, marker files, policy simulation, and regression tests over persistence, stealth, destructive impact, credential theft, or indiscriminate exploitation.
+Proofs should prefer controlled and non-destructive evidence such as assertions, sanitizer reports, minimized crashes, synthetic resources, marker files, policy simulation, mock services, synthetic canaries, and regression tests over persistence, stealth, destructive impact, credential theft, or indiscriminate exploitation.
 
 See [SECURITY.md](SECURITY.md).
 
@@ -400,6 +436,7 @@ See [docs/sources.md](docs/sources.md) and [sources/research-systems.json](sourc
 - [Simplified Chinese README](README-CN.md)
 - [Compatibility](docs/compatibility.md)
 - [Research-case contract](docs/research-case-contract.md)
+- [Operator-depth contract](docs/operator-depth-contract.md)
 - [Benchmark contract](docs/benchmark-contract.md)
 - [Cross-agent evaluation](agent-eval/README.md)
 - [Packs](packs/README.md)
