@@ -29,8 +29,19 @@ def _inside(child: Path, parent: Path) -> bool:
     return True
 
 
+def _safe_skill_name(value: str) -> bool:
+    """Return True only for one canonical directory segment."""
+    return (
+        value not in {".", ".."}
+        and "/" not in value
+        and "\\" not in value
+        and not Path(value).is_absolute()
+    )
+
+
 def validate(root: Path) -> list[str]:
     root = root.resolve()
+    skills_root = (root / "skills").resolve()
     manifest_path = root / MANIFEST_PATH
     errors: list[str] = []
 
@@ -68,6 +79,10 @@ def validate(root: Path) -> list[str]:
         skill = skill_value.strip()
         prefix = f"profile[{index}] {skill}"
 
+        if not _safe_skill_name(skill):
+            errors.append(f"{prefix}: skill path escapes skills directory")
+            continue
+
         if skill in seen_skills:
             errors.append(f"{prefix}: duplicate skill profile")
         seen_skills.add(skill)
@@ -104,7 +119,11 @@ def validate(root: Path) -> list[str]:
                 seen_sections.add(normalized)
                 sections.append(normalized)
 
-        skill_dir = (root / "skills" / skill).resolve()
+        skill_dir = (skills_root / skill).resolve()
+        if not _inside(skill_dir, skills_root) or skill_dir == skills_root:
+            errors.append(f"{prefix}: skill path escapes skills directory")
+            continue
+
         skill_file = skill_dir / "SKILL.md"
         if not skill_dir.is_dir():
             errors.append(f"{prefix}: missing canonical skill directory")
