@@ -54,6 +54,14 @@ def make_fixture(root: Path, *, runbook="references/operator-runbook.md", sectio
     return skill
 
 
+def write_complete_runbook(path: Path):
+    body = ["# Runbook", "", "Authorized lab only. Evidence must include controls.", ""]
+    for section in REQUIRED_SECTIONS:
+        body.extend([f"## {section}", f"Evidence and control notes for {section}.", ""])
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("\n".join(body), encoding="utf-8")
+
+
 class OperatorDepthCliTests(unittest.TestCase):
     def test_repository_contract_passes(self):
         proc = run_validator(ROOT)
@@ -74,6 +82,37 @@ class OperatorDepthCliTests(unittest.TestCase):
             proc = run_validator(root)
             self.assertNotEqual(proc.returncode, 0)
             self.assertIn("escapes skill directory", (proc.stdout + proc.stderr).lower())
+
+    def test_rejects_skill_path_escape(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            escaped = root / "escaped-skill"
+            write_complete_runbook(escaped / "references" / "operator-runbook.md")
+            (escaped / "SKILL.md").write_text(
+                "---\nname: escaped-skill\ndescription: test\n---\n"
+                "# Escaped\n\n## Operator depth\n"
+                "See [operator runbook](references/operator-runbook.md).\n",
+                encoding="utf-8",
+            )
+            (root / "skills").mkdir()
+            (root / "operator-depth").mkdir()
+            manifest = {
+                "version": 1,
+                "profiles": [
+                    {
+                        "skill": "../escaped-skill",
+                        "runbook": "references/operator-runbook.md",
+                        "lab_only": True,
+                        "required_runbook_sections": REQUIRED_SECTIONS,
+                    }
+                ],
+            }
+            (root / "operator-depth" / "profiles.json").write_text(
+                json.dumps(manifest), encoding="utf-8"
+            )
+            proc = run_validator(root)
+            self.assertNotEqual(proc.returncode, 0)
+            self.assertIn("skill path escapes skills directory", (proc.stdout + proc.stderr).lower())
 
     def test_rejects_missing_required_section(self):
         with tempfile.TemporaryDirectory() as td:
