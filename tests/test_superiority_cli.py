@@ -31,14 +31,40 @@ class SuperiorityCliTests(unittest.TestCase):
             self.assertEqual(module.main([str(SUITE), '--out', str(out_a)]), 0)
             self.assertEqual(module.main([str(SUITE), '--out', str(out_b)]), 0)
             self.assertEqual(snapshot(out_a), snapshot(out_b))
-            self.assertEqual(len(snapshot(out_a)), 12)
-            for path in out_a.glob('*.json'):
+            self.assertEqual(len(snapshot(out_a)), 13)
+
+            manifest_path = out_a / 'SUITE_MANIFEST.json'
+            self.assertTrue(manifest_path.is_file())
+            manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
+            self.assertEqual(manifest['kind'], 'superiority-public-suite-manifest')
+            self.assertEqual(manifest['task_count'], 12)
+            self.assertRegex(manifest['authority_commitment'], r'^[0-9a-f]{64}$')
+            manifest_text = json.dumps(manifest, sort_keys=True)
+            self.assertNotIn('private_expected', manifest_text)
+            self.assertNotIn('rules', manifest_text)
+            self.assertNotIn('minimum', manifest_text)
+
+            task_paths = sorted(
+                path for path in out_a.glob('*.json') if path.name != 'SUITE_MANIFEST.json'
+            )
+            self.assertEqual(len(task_paths), 12)
+            task_digests = {}
+            for path in task_paths:
                 task = json.loads(path.read_text(encoding='utf-8'))
                 text = json.dumps(task, sort_keys=True)
                 self.assertNotIn('private_expected', text)
                 self.assertNotIn('rules', text)
                 self.assertNotIn('minimum', text)
                 self.assertRegex(task['task_digest'], r'^[0-9a-f]{64}$')
+                task_digests[task['fixture_id']] = task['task_digest']
+
+            self.assertEqual(
+                manifest['tasks'],
+                [
+                    {'fixture_id': fixture_id, 'task_digest': task_digests[fixture_id]}
+                    for fixture_id in sorted(task_digests)
+                ],
+            )
 
 
 if __name__ == '__main__':
