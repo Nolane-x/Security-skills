@@ -8,7 +8,12 @@
       "positive_control": "A neighboring approved synthetic workload preserves the expected effective configuration.",
       "negative_control": "A synthetic workload with a denied configuration difference is rejected or normalized as policy requires.",
       "stop_condition": "Stop before modifying unrelated workloads or leaving the disposable test namespace.",
-      "remediation_oracle": "The effective configuration matches the reviewed policy while the approved synthetic workload remains functional."
+      "remediation_oracle": "The effective configuration matches the reviewed policy while the approved synthetic workload remains functional.",
+      "isolation_state_trace": "Record the threat principal and isolation objective, then compare requested state, controller-expanded/admitted state, selected runtime class, and effective runtime state for the same disposable workload instance so any widening is attributed to the layer that actually introduced it.",
+      "violated_invariant": "Promote only when the effective runtime state grants a capability or sharing relation that the reviewed isolation objective explicitly forbids for this workload class; a requested or admitted difference alone is not yet a runtime boundary violation.",
+      "false_positive_guard": "Rule out stale workload state, a different node pool or runtime class, an intentional admission default, a documented exception, and a synthetic fixture that accidentally requested broader privilege before attributing the effective-state difference to a defect.",
+      "evidence_upgrade": "Upgrade to validated only when the requested/admitted/effective states are tied to the same pinned workload revision, the causal mutator or runtime behavior is identified, a benign controlled oracle demonstrates the prohibited capability, and matched positive and neighboring denied controls behave as predicted.",
+      "neighbor_regression": "After remediation, replay the original workload plus one approved neighboring configuration and one denied neighboring configuration; confirm the fixed effective runtime state restores the invariant without disabling the approved workload or moving the widening to an equivalent state path."
     },
     {
       "id": "workload-identity-scope",
@@ -17,7 +22,12 @@
       "positive_control": "The synthetic identity can access its intended test resource class.",
       "negative_control": "The same identity is denied for the neighboring protected test resource class.",
       "stop_condition": "Stop if validation cannot remain inside the sandbox identity and synthetic resources.",
-      "remediation_oracle": "Identity scope is narrowed to the intended test resource class while the approved control still succeeds."
+      "remediation_oracle": "Identity scope is narrowed to the intended test resource class while the approved control still succeeds.",
+      "isolation_state_trace": "Trace the workload's requested identity, admitted service-account or credential projection state, effective credential exposure inside the synthetic workload, and the policy-simulated authorization decision for the intended and neighboring protected resource classes.",
+      "violated_invariant": "The invariant is violated only when the reviewed workload class is intended to receive access to resource class A but its effective identity authorizes neighboring protected class B without a documented exception; credential presence by itself is not the defect.",
+      "false_positive_guard": "Confirm the policy simulation uses the exact effective synthetic identity and resource classes, exclude inherited test-admin grants or fixture-wide permissions, and distinguish a deliberately broad maintenance identity from the ordinary workload identity under review.",
+      "evidence_upgrade": "Upgrade to validated only when effective credential exposure is tied to the workload, the intended resource succeeds, the neighboring protected resource is unexpectedly authorized under the same policy snapshot, and the broader scope is causally attributable to the reviewed identity or projection rule rather than the harness.",
+      "neighbor_regression": "After remediation, the same synthetic identity must retain access to its intended resource class, remain denied for the protected neighboring class, and preserve the expected credential projection and workload startup behavior under the fixed policy."
     },
     {
       "id": "controller-policy-consistency",
@@ -26,7 +36,12 @@
       "positive_control": "The direct synthetic workload receives the reviewed expected configuration.",
       "negative_control": "The controller-generated equivalent does not gain a policy-relevant configuration difference.",
       "stop_condition": "Stop before testing non-disposable controllers or production workloads.",
-      "remediation_oracle": "Controller templates and admission policy produce equivalent reviewed boundaries for the paired synthetic workloads."
+      "remediation_oracle": "Controller templates and admission policy produce equivalent reviewed boundaries for the paired synthetic workloads.",
+      "isolation_state_trace": "Build paired disposable workloads with the same intended isolation objective: one direct and one controller-generated. Record requested/controller-expanded state, admitted state, runtime class, and effective namespace, privilege, mount/device/socket, credential, and network dimensions relevant to the invariant.",
+      "violated_invariant": "A defect exists only when the controller-generated workload crosses a boundary that the equivalent direct workload and policy contract are required to preserve, such as an extra host interface, broader privilege envelope, wider identity scope, or weaker network isolation.",
+      "false_positive_guard": "Exclude intentional policy differences between workload classes, controller revision mismatch, admission rules that legitimately key on controller identity, different scheduling/runtime-class placement, and stale replicas before declaring the controller path inconsistent.",
+      "evidence_upgrade": "Upgrade to validated when the paired workloads are pinned to equivalent policy inputs, the controller path alone introduces the policy-relevant state difference, the effective runtime state demonstrates the broader controlled capability, and a neighboring control confirms the distinction is causal rather than incidental.",
+      "neighbor_regression": "After remediation, compare direct and controller-generated workloads again and also test an explicitly trusted neighboring controller class if one exists; equivalent ordinary workloads must preserve the same isolation invariant while documented privileged classes retain only their intended exception."
     }
   ]
 }
