@@ -31,6 +31,10 @@ Use only owned accounts or explicit authorization. Prefer policy simulation/read
 9. **Validate with policy simulation or synthetic no-op resource** when possible.
 10. **Produce minimal privilege remediation** that breaks dangerous paths without unrelated access loss.
 
+## Operator depth
+
+For a full authorized review, load the [operator runbook](references/operator-runbook.md). It expands this skill into effective-permission graph analysis across federation, delegation, policy composition, explicit denies, workload identity, cross-scope trust, session lifetime, synthetic validation, false-positive controls, and complete path regression.
+
 ## Evidence contract
 
 A privilege path is validated only when every edge has concrete effective permission and relevant conditions are satisfied. Preserve source policy statements/ids, denies/boundaries, path, synthetic validation, and assumptions.

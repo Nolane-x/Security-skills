@@ -29,6 +29,10 @@ Use when an application fetches user-influenced URLs, webhooks, images, imports,
 5. Use local loopback/mock services to prove reachability classes without scanning.
 6. Separate network reachability from sensitive-data access; require a benign protected mock endpoint to show security consequence.
 
+## Operator depth
+
+For a full authorized review, load the [operator runbook](references/operator-runbook.md). It expands the request path across parser normalization, DNS/address selection, IPv4/IPv6 interpretation, redirects, scheme/port changes, proxies, credential forwarding, asynchronous workers, paired false-positive controls, transport evidence, and remediation regression using controlled mock endpoints only.
+
 ## Evidence contract
 
 Record controlled input, parsed destination, resolution, redirect chain, final socket target, forwarded credentials/headers, and mock protected-resource outcome. “Server made a request” alone is only observed reachability.

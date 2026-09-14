@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "profiles": [
+    {
+      "skill": "ai-agent-security-assessment",
+      "runbook": "references/operator-runbook.md",
+      "lab_only": true,
+      "required_runbook_sections": [
+        "Attack surface",
+        "Hypothesis matrix",
+        "Controlled validation",
+        "False-positive controls",
+        "Evidence capture",
+        "Remediation checks"
+      ]
+    },
+    {
+      "skill": "authorization-boundary-analysis",
+      "runbook": "references/operator-runbook.md",
+      "lab_only": true,
+      "required_runbook_sections": [
+        "Attack surface",
+        "Hypothesis matrix",
+        "Controlled validation",
+        "False-positive controls",
+        "Evidence capture",
+        "Remediation checks"
+      ]
+    },
+    {
+      "skill": "cloud-iam-path-analysis",
+      "runbook": "references/operator-runbook.md",
+      "lab_only": true,
+      "required_runbook_sections": [
+        "Attack surface",
+        "Hypothesis matrix",
+        "Controlled validation",
+        "False-positive controls",
+        "Evidence capture",
+        "Remediation checks"
+      ]
+    },
+    {
+      "skill": "server-side-request-boundary-analysis",
+      "runbook": "references/operator-runbook.md",
+      "lab_only": true,
+      "required_runbook_sections": [
+        "Attack surface",
+        "Hypothesis matrix",
+        "Controlled validation",
+        "False-positive controls",
+        "Evidence capture",
+        "Remediation checks"
+      ]
+    }
+  ]
+}

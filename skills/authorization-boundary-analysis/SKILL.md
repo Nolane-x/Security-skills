@@ -31,6 +31,10 @@ Test only local/owned/sandboxed fixtures or systems for which explicit authoriza
 9. **Trace privileged sink only with benign actions.** Marker file, no-op update, synthetic resource, or policy decision log.
 10. **Centralize the invariant** in remediation and add regression tests for every bypass path.
 
+## Operator depth
+
+For a full authorized review, load the [operator runbook](references/operator-runbook.md). It expands the principal–operation–resource–context model across object, tenant, aggregate, batch, asynchronous, delegated, cached, and lifecycle paths with synthetic identity matrices, paired controls, evidence fields, and remediation regressions.
+
 ## Evidence contract
 
 A valid finding shows a specific unauthorized principal-operation-resource tuple that is accepted because a policy decision is absent, weak, or bound to the wrong identity/resource. Preserve both allowed and denied controls.
