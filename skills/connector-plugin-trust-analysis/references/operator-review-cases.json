@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "scenarios": [
+    {
+      "id": "identity-state-consistency",
+      "hypothesis": "A review should preserve one consistent integration identity and policy state across the recorded lifecycle transitions.",
+      "safe_oracle": "Use a read-only observation of synthetic metadata to compare the expected integration record with the recorded review state.",
+      "positive_control": "A neighboring synthetic record with matching identity, version, and policy metadata must remain classified as consistent.",
+      "negative_control": "A deliberately incomplete synthetic record must remain unpromoted until the missing review evidence is supplied.",
+      "stop_condition": "Stop the review if any step would require production accounts, sensitive data, or an uncontrolled external side effect.",
+      "remediation_oracle": "After correction, the same read-only fixture must show consistent metadata while the neighboring valid control stays unchanged.",
+      "integration_provenance": "Record the synthetic source, publisher label, version label, update label, and the evidence tying those labels together.",
+      "permission_profile": "Record the declared policy state and the effective reviewed state without inferring any capability not directly observed.",
+      "schema_argument_trace": "Record the declared and normalized interface metadata and note whether the review found any policy-relevant difference.",
+      "delegated_response_binding": "Record which synthetic integration produced the reviewed result and which invocation record the result belongs to.",
+      "composition_trace": "Record whether any upstream synthetic value influenced a downstream review decision and preserve its provenance label.",
+      "lifecycle_state": "Record the current grant, update, and revocation generation labels together with the expected convergence window.",
+      "counterfactual_control": "Repeat the read-only review while changing one metadata variable and confirm whether the original observation changes.",
+      "alternative_explanation": "Consider stale metadata, caching, expected propagation delay, or display-only differences before promoting the finding.",
+      "evidence_level": "Assign only the highest C0-C5 level directly supported by the synthetic records, controls, and observed policy state.",
+      "evidence_ceiling": "Cap the finding below any level that would require unobserved effects, missing provenance, or absent neighboring controls."
+    },
+    {
+      "id": "schema-state-consistency",
+      "hypothesis": "A review should distinguish descriptive interface changes from policy-relevant state changes using the same synthetic fixture.",
+      "safe_oracle": "Use a read-only observation of synthetic schema metadata and normalized metadata without executing any external operation.",
+      "positive_control": "A synthetic interface record whose declared and normalized forms agree must remain accepted as a valid neighboring control.",
+      "negative_control": "A synthetic record lacking normalization evidence must remain at a lower evidence level until the trace is complete.",
+      "stop_condition": "Stop before any review step that leaves the sandboxed metadata fixture or requires a real service-side action.",
+      "remediation_oracle": "After correction, the same read-only record must preserve the intended interface meaning and neighboring control behavior.",
+      "integration_provenance": "Record the synthetic integration identity and the source of each interface description used during the comparison.",
+      "permission_profile": "Record the expected policy state separately from interface text so descriptive differences are not overstated as authority changes.",
+      "schema_argument_trace": "Record declared metadata, normalized metadata, review inputs, and the final bounded observation in a stable ordered trace.",
+      "delegated_response_binding": "Record the synthetic result identity and ensure it remains associated with the same reviewed integration and invocation record.",
+      "composition_trace": "Record any transfer of reviewed metadata between synthetic components and preserve whether it was treated as data or policy state.",
+      "lifecycle_state": "Record the version and update generation associated with each interface snapshot so comparisons do not mix lifecycle states.",
+      "counterfactual_control": "Change only the schema-version label in the synthetic record and compare whether the same policy conclusion still follows.",
+      "alternative_explanation": "Consider formatting, caching, normalization, or presentation differences before treating a metadata difference as policy relevant.",
+      "evidence_level": "Assign C0-C5 only from the directly observed synthetic trace and never promote from interface text alone.",
+      "evidence_ceiling": "Limit the conclusion to the strongest state transition directly supported by the read-only trace and paired controls."
+    },
+    {
+      "id": "lifecycle-state-consistency",
+      "hypothesis": "A review should bind lifecycle generation and convergence state before interpreting any change in connector policy behavior.",
+      "safe_oracle": "Use read-only synthetic lifecycle records sampled before and after the documented convergence window for deterministic comparison.",
+      "positive_control": "A synthetic record inside the expected current generation must retain its intended policy classification after the comparison.",
+      "negative_control": "A stale synthetic generation must remain explicitly labeled stale and must not be promoted as current-state evidence.",
+      "stop_condition": "Stop if lifecycle verification would require a production integration, real sensitive information, or an uncontrolled remote effect.",
+      "remediation_oracle": "After correction, the same synthetic lifecycle fixture must converge to one consistent current generation without regressing controls.",
+      "integration_provenance": "Record the source and version labels for every synthetic lifecycle snapshot so current and stale records are not conflated.",
+      "permission_profile": "Record the policy state associated with each generation and keep that state separate from descriptive or cached metadata.",
+      "schema_argument_trace": "Record which interface snapshot belongs to each lifecycle generation and preserve the normalized review representation.",
+      "delegated_response_binding": "Record the synthetic response identity together with the lifecycle generation and invocation record used during review.",
+      "composition_trace": "Record whether lifecycle metadata crosses component boundaries and whether downstream review state preserves the generation label.",
+      "lifecycle_state": "Record grant, update, and revocation generation labels plus the bounded convergence window used to interpret the snapshot.",
+      "counterfactual_control": "Repeat the read-only comparison with one generation label changed while all neighboring synthetic metadata remains fixed.",
+      "alternative_explanation": "Consider expected propagation delay, stale cache state, duplicate observations, or mixed-generation evidence before promotion.",
+      "evidence_level": "Assign the C0-C5 level supported by the lifecycle trace, neighboring controls, and convergence evidence actually observed.",
+      "evidence_ceiling": "Do not claim a higher level when the current generation, convergence state, provenance, or paired control remains uncertain."
+    }
+  ]
+}
