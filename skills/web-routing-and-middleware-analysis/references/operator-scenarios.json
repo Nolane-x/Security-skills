@@ -8,7 +8,12 @@
       "positive_control": "The canonical synthetic representation reaches the expected inert handler under the reviewed policy.",
       "negative_control": "An intentionally different synthetic policy class remains distinct and receives its expected result.",
       "stop_condition": "Stop before any state-changing endpoint or non-test deployment is involved.",
-      "remediation_oracle": "Equivalent synthetic representations receive the same policy while intentionally distinct controls remain distinct."
+      "remediation_oracle": "Equivalent synthetic representations receive the same policy while intentionally distinct controls remain distinct.",
+      "request_state_trace": "Record canonical and equivalent synthetic fixtures from raw input through normalization, rewrite or mount provenance, route match, middleware order, policy attachment, and inert handler reachability.",
+      "violated_invariant": "The finding exists only if requests in the same declared semantic-equivalence class receive materially different required policy treatment before equivalent dispatch.",
+      "false_positive_guard": "Reject the case when the compared requests are intentionally different policy classes, documented semantic aliases, stale fixtures, or merely select different handlers under the same effective policy.",
+      "evidence_upgrade": "Upgrade to validated only after the first causal state divergence is identified, the changed policy attachment is proven, and a synthetic counterfactual removes the policy difference.",
+      "neighbor_regression": "After remediation, replay the equivalent pair plus an intentionally distinct neighboring class and confirm common policy for the pair while the neighbor remains intentionally distinct."
     },
     {
       "id": "middleware-coverage-consistency",
@@ -17,7 +22,12 @@
       "positive_control": "The reviewed synthetic route receives the expected middleware sequence.",
       "negative_control": "A route outside that reviewed policy class retains its intentionally different test sequence.",
       "stop_condition": "Stop if the middleware sequence cannot be observed safely in the authorized test deployment.",
-      "remediation_oracle": "All routes in the reviewed class receive the same required middleware while the distinct control class remains unchanged."
+      "remediation_oracle": "All routes in the reviewed class receive the same required middleware while the distinct control class remains unchanged.",
+      "request_state_trace": "Trace the reviewed fixture through route selection and middleware partial order, recording which request representation and identity state each policy component actually consumes.",
+      "violated_invariant": "A middleware trace difference becomes security-relevant only when a required policy decision no longer governs a handler that belongs to the same reviewed route and policy class.",
+      "false_positive_guard": "Reject differences caused by intentional route-group policy, instrumentation order, short-circuit behavior that still enforces the same policy, or a handler that is not actually reachable in the inert harness.",
+      "evidence_upgrade": "Upgrade only when deterministic traces bind the ordering difference to a changed policy attachment and a synthetic counterfactual restores the expected decision without changing unrelated fixture state.",
+      "neighbor_regression": "Regression verification must preserve both the reviewed route class and a neighboring intentionally different class, proving the fix did not simply flatten all middleware behavior into one result."
     },
     {
       "id": "identity-context-timing",
@@ -26,7 +36,12 @@
       "positive_control": "The intended synthetic identity is bound before the reviewed policy decision.",
       "negative_control": "A neighboring synthetic identity cannot reuse a decision made for the first identity.",
       "stop_condition": "Stop before using any real user or tenant data.",
-      "remediation_oracle": "Identity context is bound before the relevant policy decision and both synthetic controls retain their expected results."
+      "remediation_oracle": "Identity context is bound before the relevant policy decision and both synthetic controls retain their expected results.",
+      "request_state_trace": "Record the synthetic principal and tenant state at every routing and policy checkpoint so the trace shows exactly when identity binding and tenant binding become authoritative inputs.",
+      "violated_invariant": "The invariant is broken only when a reviewed routing or policy decision requires principal or tenant context but is made before that required context is bound to the synthetic request state.",
+      "false_positive_guard": "Reject the case when early routing is intentionally identity-independent, when later policy correctly re-evaluates the decision, or when fixture principals differ in ways the reviewed contract says are meaningful.",
+      "evidence_upgrade": "Upgrade only after deterministic source and synthetic traces show the timing dependency, a modeled counterfactual changes only binding timing, and neighboring principal controls exclude unrelated route-state explanations.",
+      "neighbor_regression": "After remediation, verify the intended synthetic identity is bound at the required checkpoint while a neighboring synthetic identity and intentionally public control retain their documented route and policy outcomes."
     }
   ]
 }
