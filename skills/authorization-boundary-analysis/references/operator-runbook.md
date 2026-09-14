@@ -1,173 +1,433 @@
 # Authorization Boundary Operator Runbook
 
-Use this runbook only with local, owned, sandboxed, benchmark/CTF, or explicitly authorized systems. Prefer synthetic accounts, tenants, objects, roles, and inert marker operations. Do not use real third-party identities or data as authorization probes.
+Use this runbook for code review, policy-model review, local unit/integration tests, synthetic fixtures, and explicitly authorized development environments. Prefer policy simulators, test doubles, synthetic identities, synthetic resources, and inert assertions. Do not use real third-party identities, data, or production effects as evidence.
 
-The operator goal is to prove or disprove a specific principal–operation–resource–context policy relation and identify the enforcement point that produced the result.
+The objective is to explain an authorization decision precisely enough that another reviewer can reproduce the reasoning from policy source to final protected effect without relying on intuition.
+
+## Policy semantics
+
+Begin with the expected rule, not with the implementation result.
+
+Represent each question as:
+
+```text
+principal P
+operation O
+resource R
+context C
+policy source S
+-> expected decision D
+```
+
+A **policy source** is the authority that defines the expected result: an approved access-control specification, product requirement, policy-engine configuration, ownership rule, tenant-isolation contract, workflow rule, or committed regression oracle.
+
+Do not infer the policy solely from current behavior. Implementation behavior is evidence about enforcement; it is not automatically evidence about intent.
+
+### Principal
+
+Identify the security subject whose authority should govern the operation. Keep separate concepts separate:
+
+- authenticated user;
+- tenant or organization membership;
+- role/group expansion;
+- API or OAuth scope;
+- service/workload identity;
+- delegated initiator;
+- background worker identity;
+- support/admin impersonation mode.
+
+A component may execute under a service identity while still being required to preserve and enforce the initiating user's narrower authority.
+
+### Operation
+
+Name the semantic action, not merely the transport label. A route, RPC method, resolver, queue message, and helper method may all implement the same protected operation.
+
+Examples of semantic operations include reading private content, changing object state, changing ownership/sharing, exporting a protected set, approving a transition, or performing an administrative action.
+
+### Resource
+
+Distinguish caller-provided identifiers from the authoritative object used by the implementation.
+
+Track the conceptual sequence:
+
+```text
+requested identifier
+-> normalized/canonical identifier
+-> resolved object
+-> tenant/owner relation
+-> derived representation or member set
+-> final protected object/effect
+```
+
+A correct policy decision about one object does not authorize a later effect on a different object unless that transformation is explicitly part of the policy model.
+
+### Context
+
+Include only dimensions that can change the decision, such as tenant, workspace, ownership, role, token scope, authentication strength, delegation purpose, approval state, lifecycle state, or policy revision.
+
+For each context value, record where it comes from. A tenant derived from authenticated membership is not equivalent to a tenant copied from caller-controlled metadata.
+
+### Necessary condition and sufficient condition
+
+Use these terms carefully.
+
+A **necessary condition** must hold for the expected allow. Its absence should make the policy reject the tuple.
+
+A **sufficient condition** is strong enough, together with the explicitly stated baseline assumptions, to justify the expected allow.
+
+One successful example rarely proves sufficiency. A role can be necessary while ownership, tenant membership, state, and scope are also required.
 
 ## Attack surface
 
-Model authorization as a graph of identities, resources, operations, policy inputs, enforcement points, and state transitions.
+For this runbook, "attack surface" means the set of code and policy paths that can influence an authorization decision. Review it without expanding scope beyond owned source, policy configuration, tests, and approved fixtures.
 
-### Principal dimensions
+### Identity flow
 
-Inventory every identity form that can reach the target operation:
+For each identity form, record:
 
-- human account and session;
-- tenant or organization membership;
-- role/group membership;
-- OAuth/API-token scopes;
-- service, workload, or machine identity;
-- delegated/on-behalf-of identity;
-- background worker identity;
-- internal service credential;
-- administrative or support impersonation mode;
-- anonymous/partially authenticated state.
+1. where it originates;
+2. how it is normalized;
+3. how roles/scopes/tenant are derived;
+4. how it is propagated between components;
+5. which identity is expected to govern the protected operation.
 
-Record where identities are created, translated, cached, delegated, refreshed, and attached to internal calls.
+Pay particular attention to transitions between user identity and service identity, delegated identity and executor identity, and request identity and asynchronous worker identity.
 
-### Resource dimensions
+### Resource flow
 
-For each resource class record:
+For each resource type, record:
 
-- stable identifier and alternate aliases;
-- owner and tenant;
-- parent/child hierarchy;
-- visibility and lifecycle state;
-- sharing/delegation state;
-- soft-delete/archive state;
-- cache/index representation;
-- export/download/report representation;
-- indirect references through jobs, attachments, comments, or child objects.
+- canonical identifier;
+- aliases;
+- owner/tenant relation;
+- parent-child relation;
+- sharing state;
+- lifecycle state;
+- cached/indexed form;
+- aggregate/batch membership;
+- export/report representation.
 
-Authorization bugs often appear when an alternate representation is checked less strictly than the canonical resource.
+The review question is always: **is the resource used by the policy decision the same security-relevant resource represented at the final sink?**
 
-### Operation and execution dimensions
+### Enforcement points
 
-Enumerate read, list, search, create, update, delete, restore, share, export, approve, admin, bulk, and background operations. Include alternate verbs/content types, batch endpoints, GraphQL/resolver paths, asynchronous jobs, helpers, internal RPC, and legacy routes.
+Locate the code or policy layer that decides or structurally constrains access:
 
-Locate every enforcement point: gateway, route middleware, controller, service method, policy engine, database row filter, storage layer, cache, message consumer, and privileged helper.
+- middleware or controller guard;
+- service-layer policy function;
+- policy engine;
+- tenant-scoped repository/query;
+- row-level policy;
+- privileged helper boundary;
+- worker/message consumer policy;
+- cache decision layer.
 
-### Context dimensions
-
-Record policy inputs that can change the decision:
-
-- tenant and organization;
-- project/workspace;
-- object ownership;
-- session age or authentication strength;
-- network/origin/channel;
-- feature flags;
-- resource lifecycle state;
-- delegation purpose;
-- approval workflow state;
-- time or region constraints.
+Classify each enforcement point as authoritative, defense-in-depth, or advisory. This prevents a reviewer from assuming that an early route check is the only meaningful boundary.
 
 ## Hypothesis matrix
 
-Construct explicit hypotheses before testing.
+Write a causal hypothesis before writing a test.
 
-| Hypothesis class | Policy question | Controlled proof |
-| --- | --- | --- |
-| object-level mismatch | can principal A act on object B by changing an identifier? | B is a synthetic neighboring object and the inert operation succeeds unexpectedly |
-| tenant-boundary mismatch | is tenant identity bound at every lookup/write? | tenant A principal reaches tenant B synthetic marker |
-| collection/item inconsistency | do list/search/export paths apply the same object policy as item fetch? | a denied synthetic item appears through an aggregate path |
-| batch partial-check gap | is every member of a batch authorized independently? | mixed authorized/denied synthetic objects are processed incorrectly |
-| async identity drift | does a queued job preserve/re-evaluate initiating authority? | worker performs inert action after initiating identity loses the required synthetic permission |
-| delegated-identity confusion | is caller identity distinguished from service/delegate identity? | delegated service acts outside the initiator's allowed synthetic scope |
-| stale-cache decision | can cached authorization survive revocation/context change? | revoked synthetic access remains usable through cache/index path |
-| policy/data binding gap | is the resource checked the same resource later mutated? | checked synthetic id differs from the inert sink actually changed |
-| alternate-route gap | do legacy/internal/helper routes enforce the same invariant? | only an alternate test route accepts the prohibited tuple |
-| state-transition gap | does authorization change correctly across share/archive/ownership transitions? | synthetic resource retains access after a transition that should remove it |
-| scope composition gap | are global, object, method, and token scopes combined correctly? | one permissive scope unintentionally overrides a required restrictive dimension |
-| confused deputy | can a low-authority caller induce a privileged component to use its own authority? | privileged mock helper performs an inert operation without caller-bound authorization |
+| Hypothesis | Candidate cause | Synthetic evidence that would support it | Main false-positive control |
+| --- | --- | --- | --- |
+| subject-resource binding is incomplete | decision input omits authoritative ownership/resource relation | policy unit test shows neighboring synthetic resource receives same allow | identical policy input except authoritative resource relation |
+| tenant binding is incomplete | tenant is derived from wrong source or omitted downstream | synthetic cross-tenant fixture reaches same policy branch as same-tenant fixture | same object shape with authoritative tenant changed only |
+| aggregate/member policy differs | collection path constrains envelope but not members | aggregate fixture includes a member that item policy denies | all-allowed aggregate plus denied item oracle |
+| delegated context is lost | executor identity replaces initiator identity | mocked delegate receives no initiator/purpose constraint | same delegate with approved initiator/purpose |
+| asynchronous authority drifts | worker evaluates broader identity than intended | local worker fixture shows missing caller-bound grant/context | explicit enqueue/execution authority contract |
+| cache identity is incomplete | cache key omits principal/resource/context/policy revision | unit test reuses decision after one policy-relevant dimension changes | exact same tuple should still be reusable |
+| resource changes after decision | later lookup/canonicalization selects different resource | instrumented test records decision resource != final sink resource | stable canonical-resolution control |
+| state transition leaves stale authority | derived permission/cache not invalidated | transition test preserves old decision beyond intended state change | before/after transition under same fixture |
 
-For each row write the expected decision and source of authority: product requirement, policy configuration, ownership rule, test oracle, or explicitly approved security invariant.
+A hypothesis is useful only if it predicts an observable difference and names the policy dimension responsible for that difference.
+
+## Decision trace
+
+The **decision trace** is the causal backbone of the review.
+
+Capture, where applicable:
+
+```text
+authenticated identity
+-> normalized principal
+-> tenant/workspace derivation
+-> role/scope expansion
+-> requested resource
+-> authoritative resource resolution
+-> decision input
+-> enforcement point
+-> decision
+-> later transformation
+-> final sink
+```
+
+### Decision input
+
+Record the exact security-relevant values presented to the enforcement point:
+
+```text
+principal
+operation
+resource
+context
+policy revision
+```
+
+Do not substitute route parameters or display-layer fields when the policy function consumes normalized values.
+
+### Enforcement point
+
+Name the exact function, policy rule, repository constraint, or equivalent local boundary that produces the decision. If multiple enforcement points exist, record which one is authoritative and which ones are defense-in-depth.
+
+### Final sink
+
+The **final sink** is the protected effect represented in the local test or review: returned protected object, mutated synthetic row, synthetic export member, state transition, queued synthetic action, or policy-protected helper call.
+
+The key comparison is:
+
+```text
+security meaning of decision input
+==
+security meaning of final sink
+```
+
+Literal identifiers may change through normalization, but the trace must show that the policy decision remains bound to the same principal/resource/context relation.
+
+### Causal candidate
+
+When the expected and actual result differ, name the smallest candidate cause supported by the trace:
+
+- missing decision input;
+- wrong principal;
+- wrong resource;
+- missing context dimension;
+- incorrect policy composition;
+- stale cached decision;
+- post-decision resource change;
+- lost delegation context;
+- worker identity replacing caller-bound authority;
+- alternate code path not converging on the authoritative policy layer.
+
+Avoid broad labels when the trace supports a narrower cause.
 
 ## Controlled validation
 
-1. **Freeze the policy snapshot.** Record application revision, policy-engine revision, route/service versions, test feature flags, identity configuration, and cache state.
-2. **Create a synthetic identity lattice.** At minimum use an owner, same-tenant non-owner, different-tenant user, lower-role user, and service/delegated identity where relevant.
-3. **Create paired synthetic resources.** Give each identity/tenant unique markers so accidental cross-access is unambiguous.
-4. **Establish positive controls.** Confirm each intended principal-operation-resource tuple succeeds through the canonical path.
-5. **Establish negative controls.** Confirm clearly prohibited neighboring tuples fail before exploring alternate paths.
-6. **Vary one dimension at a time.** Change object id, tenant, role, scope, operation, route, content type, worker path, or lifecycle state independently.
-7. **Trace policy input to sink.** Capture the identity/resource/context used at the decision and compare it to the identity/resource/context used at the final read/write/action.
-8. **Exercise aggregate paths.** Test list/search/export/batch behavior using only synthetic resources because aggregate authorization is often implemented separately.
-9. **Exercise asynchronous paths.** Queue benign marker operations and test whether authorization is bound to enqueue-time authority, execution-time authority, or an explicitly designed service identity.
-10. **Exercise state transitions.** Change synthetic sharing, role, ownership, revocation, archive, or approval state and test whether all representations update consistently.
-11. **Bound the consequence.** Use marker reads, no-op/benign updates, or dedicated test objects rather than destructive operations.
-12. **Stop at the first proven invariant break.** Do not broaden from a synthetic proof to real data or unrelated accounts.
+Use local automated tests and synthetic fixtures wherever possible.
 
-When the policy is intentionally delegated, shared, inherited, or eventually consistent, encode that expectation in the test oracle before deciding that a difference is unauthorized.
+1. Freeze the application/policy revision under review.
+2. Create synthetic principals whose roles, tenants, scopes, and delegation relationships are explicit.
+3. Create paired synthetic resources with known ownership/tenant/state.
+4. Establish an intended-allow positive control through the same policy API or code path.
+5. Establish a neighboring intended-deny control.
+6. Change one policy-relevant dimension at a time.
+7. Record the decision input and final sink identity/resource in test instrumentation or assertions.
+8. Exercise aggregate, batch, cache, worker, delegation, and lifecycle representations only when they share the same policy question.
+9. Keep protected effects inert: assertions, synthetic marker state, mock calls, or isolated test data.
+10. Stop once the causal policy mismatch is proven by the smallest safe fixture.
+
+Do not use a failing integration path as an authorization oracle until the corresponding positive control proves the path itself is healthy.
+
+## Counterfactual controls
+
+A **counterfactual** predicts what should change if the suspected authorization defect were corrected while unrelated variables remain fixed.
+
+### Neighboring control
+
+A **neighboring control** should differ from the case under review by the smallest policy-relevant dimension practical.
+
+Examples:
+
+- same principal/operation/context, different authoritative owner;
+- same resource/operation, different tenant membership;
+- same delegated service/resource, different initiating principal;
+- same cached tuple, different policy revision;
+- same batch shape, one member changed from allowed to denied.
+
+A control that changes many dimensions can still be useful, but it provides weaker causal isolation and should be described that way.
+
+### Necessary-condition reasoning
+
+If a test suggests tenant membership is a necessary condition, hold route, operation, resource shape, role, and other context constant while changing only authoritative tenant membership. Then inspect whether that dimension reaches the decision input.
+
+The goal is not simply to obtain one allow and one deny. The goal is to connect the policy dimension to the decision mechanism.
+
+### Sufficient-condition reasoning
+
+Treat sufficiency claims conservatively. If a rule appears to say "owner + scope X may update," state the baseline assumptions and test likely competing restrictions such as tenant membership or lifecycle state. Otherwise a successful fixture may depend on hidden administrator state rather than the rule being reviewed.
+
+### Alternative explanation
+
+For every promoted finding, write at least one plausible **alternative explanation** and the local control that weakens it.
+
+Common alternatives include:
+
+- intended sharing/inheritance;
+- implicit administrator/support role;
+- test resource accidentally owned by the principal;
+- stale fixture setup;
+- documented eventual consistency;
+- generic validation/lookup failure;
+- duplicate or ambiguous identifiers;
+- explicit service authority independent of the caller;
+- lifecycle/approval state different from the assumed state.
+
+Stronger evidence comes from excluding specific alternatives, not from stronger adjectives.
 
 ## False-positive controls
 
-Use paired controls to rule out policy misunderstanding and test-harness artifacts:
+Use paired controls appropriate to the policy dimension:
 
-- owner versus same-tenant non-owner;
-- same-tenant versus different-tenant;
-- allowed role versus lower role;
-- full scope versus reduced scope;
-- canonical item endpoint versus list/search/export representation;
-- single-object operation versus batch with only allowed objects;
-- immediate request versus asynchronous worker;
-- before and after explicit synthetic revocation;
-- direct caller versus explicitly delegated caller;
-- object id versus an unrelated nonexistent id to distinguish authorization from generic lookup behavior;
-- warmed cache versus cleared cache;
-- policy engine decision log versus final data-store/action log.
+- owner vs same-tenant non-owner;
+- same-tenant vs different-tenant;
+- allowed role vs lower role;
+- full scope vs reduced scope;
+- direct item vs aggregate representation;
+- single item vs batch members;
+- direct execution vs local worker fixture;
+- before vs after synthetic revocation/state change;
+- direct caller vs delegated caller;
+- cold decision vs cached decision;
+- current policy revision vs intentionally changed revision;
+- canonical resource vs alias representation.
 
-Do not call a case validated if the observed difference can be explained by intended resource sharing, test fixture ownership, stale test setup, eventual consistency inside the documented window, an implicit administrator role, or a generic existence/error-message difference without unauthorized access/effect.
+Do not promote a case while the observed difference can still be explained by an approved policy rule, fixture ownership mistake, stale test state, documented propagation delay, generic validation behavior, or an uncorrelated final sink.
 
-For enumeration-style behavior, distinguish information leakage about object existence from actual ability to read or modify the object; they may be separate findings with different evidence.
+A response-code difference or UI visibility difference is not by itself proof of an authorization defect. The protected decision/effect relation must be demonstrated in the local policy/test model.
+
+## Evidence ladder
+
+Use the smallest evidence state justified by the record.
+
+### Hypothesis
+
+Use when source/policy review suggests a possible defect but reachability or causal effect is unproven.
+
+Record:
+
+- policy source;
+- suspected mechanism;
+- exact missing evidence.
+
+### Observed
+
+Use when a controlled behavior difference is reproduced but the causal mechanism or final protected effect is incomplete.
+
+Record:
+
+- synthetic tuple;
+- environment/revision;
+- observation;
+- neighboring control;
+- unresolved alternative explanation.
+
+### Validated
+
+Use only when all are present:
+
+- authoritative policy source establishes the expected decision;
+- synthetic prohibited tuple reproducibly violates that decision in the local authorized fixture;
+- decision trace identifies the relevant wrong/missing/stale decision input or enforcement relation;
+- positive control proves path health;
+- neighboring control or equivalent counterfactual isolates the policy dimension;
+- material alternative explanations have been addressed for the scope of the claim.
+
+### Regression verified
+
+Use only after the fixed revision is checked with the original case plus neighbors. The prohibited tuple must now be denied for the intended policy reason, the allowed tuple must remain allowed, and relevant neighboring cases must preserve the expected policy.
 
 ## Evidence capture
 
-Capture authorization evidence as the complete decision tuple:
+Capture evidence in a form that preserves policy authority, causal trace, and controls:
 
 ```text
 case_id:
 application_revision:
 policy_revision:
-principal_id_and_type:
-principal_tenant_role_scopes:
-delegated_identity_if_any:
+policy_source:
+expected_decision:
+principal:
 operation:
-requested_resource_id:
-requested_resource_owner_tenant:
-context_and_state:
-policy_enforcement_point:
-policy_inputs:
-policy_decision:
-resource_id_at_final_sink:
-identity_at_final_sink:
-benign_effect_or_marker:
+requested_resource:
+authoritative_resource:
+context:
+decision_input:
+enforcement_point:
+actual_decision:
+post_decision_transformations:
+final_sink:
 positive_control:
-negative_control:
-cache_or_worker_state:
-expected_policy_source:
+neighboring_control:
+counterfactual_prediction:
+alternative_explanation:
+alternative_explanation_control:
 evidence_state:
+causal_mechanism:
 ```
 
-A `validated` finding requires proof that a specifically prohibited tuple is accepted or reaches a protected synthetic effect because a policy decision is absent, incomplete, stale, or bound to the wrong principal/resource/context. Preserve an allowed control and a denied neighboring control whenever possible.
+Prefer a causal statement such as:
 
-If only policy source code appears weak but no reachable path has been established, keep the claim as a hypothesis. If a request is accepted but the protected sink is not reached, record that intermediate boundary rather than overstating impact.
+> Policy source S denies tuple P/O/R/C. The policy helper receives P/O but resource ownership is absent from the decision input, so both owner and synthetic non-owner fixtures produce the same allow. A neighboring fixture that changes only ownership reproduces the same decision, while the positive owner control proves the path is healthy.
+
+Avoid conclusions that omit the policy source, decision input, final sink, or controls.
 
 ## Remediation checks
 
-Remediation should encode the authorization invariant at the narrowest authoritative layer that all relevant paths must traverse.
+Remediation should repair the invariant at the narrowest authoritative layer shared by relevant code paths.
 
-Check these dimensions:
+Review whether the fix:
 
-1. **Canonical policy function:** centralize principal-operation-resource-context evaluation instead of duplicating route-specific checks.
-2. **Object/tenant binding:** derive protected resource identity from authoritative data and bind tenant/owner constraints to the actual query or mutation.
-3. **Defense in depth at data access:** where appropriate, use tenant-aware queries, row-level controls, scoped repositories, or equivalent safeguards so missing middleware is not sufficient for cross-boundary access.
-4. **Delegation semantics:** carry both initiator and service identity; constrain privileged service actions by caller-authorized purpose and resource.
-5. **Batch/aggregate parity:** authorize each protected member and prevent list/search/export paths from bypassing item-level policy.
-6. **Async authority:** define whether jobs capture an immutable authorization grant, re-check current authorization, or use a narrowly scoped service role; avoid ambiguous inheritance.
-7. **Cache correctness:** include every policy-relevant identity/resource/context dimension in cache keys or avoid caching decisions that cannot be invalidated safely.
-8. **Revocation behavior:** invalidate sessions/tokens/cache entries according to the documented security requirement.
-9. **State transitions:** re-evaluate permissions when ownership, tenant, sharing, role, archive, or approval state changes.
-10. **Audit correlation:** record principal, delegated actor, resource, operation, policy result, and final sink without leaking sensitive content.
+1. evaluates the complete principal-operation-resource-context relation;
+2. derives resource/tenant identity from authoritative data;
+3. keeps the authorized resource bound to the final sink;
+4. preserves initiator context across delegation when policy requires it;
+5. gives workers only the authority model intended by the policy contract;
+6. applies member-level constraints after aggregate/batch expansion when required;
+7. includes all policy-relevant dimensions in decision caches or invalidation;
+8. invalidates derived authority on ownership, sharing, role, revocation, or lifecycle change;
+9. converges alternate implementations of the same semantic operation on the same authoritative policy rule;
+10. preserves useful audit correlation among principal, resource, decision, and local protected effect.
 
-Regression verification must replay the original failing synthetic tuple and a matrix of neighboring intended-allow/intended-deny cases. A remediation that blocks the exploit path by disabling the feature, breaking all access, or special-casing one test identifier is not sufficient.
+A route-specific conditional that blocks one fixture is not sufficient if the same invariant is implemented independently elsewhere.
+
+## Remediation proof
+
+Prove the fix against the original causal claim rather than only against the original request shape.
+
+### Original denied case
+
+Replay the synthetic tuple under the fixed revision. Confirm that the decision now follows the policy source because the corrected decision input or authoritative constraint is present.
+
+### Original allowed case
+
+The intended-allow positive control must still succeed. A change that blocks both cases is an availability change, not proof of correct authorization.
+
+### Neighboring regression matrix
+
+Choose neighbors based on the causal mechanism:
+
+- ownership binding -> owner/non-owner;
+- tenant binding -> same/different tenant;
+- scope composition -> adjacent scope combinations;
+- delegation -> approved/denied initiator or purpose;
+- cache -> exact same tuple plus one changed policy dimension;
+- batch -> all-allowed/mixed/all-denied synthetic members;
+- lifecycle -> before/after approved state transition.
+
+### Decision-trace confirmation
+
+Inspect the fixed **decision input**, **enforcement point**, and **final sink**. The repaired trace should show that the previously missing or incorrect policy dimension now remains bound through the protected effect.
+
+### Overfitting checks
+
+Reject a remediation proof that depends on:
+
+- a specific test account or resource identifier;
+- disabling the whole feature;
+- changing only UI visibility;
+- changing only error text/status;
+- adding one route guard while the shared policy layer remains incomplete;
+- breaking documented sharing or delegation semantics.
+
+### Residual scope
+
+State exactly what was verified. If a changed repository layer covers reads and exports but a separate worker path was not part of the fix, say so. Precise residual scope is stronger than an unsupported universal claim.
