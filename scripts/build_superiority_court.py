@@ -11,7 +11,7 @@ if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
 from prepare_superiority_tasks import ROOT, load_suite_fixtures, stable_json_text
-from superiority_court import build_court
+from superiority_court import build_authority_commitment, build_court
 
 SHA256_RE = re.compile(r'^[0-9a-f]{64}$')
 
@@ -25,6 +25,9 @@ def load_score_artifact(path: Path) -> dict:
     surface_digest = data.get('contestant_surface_digest')
     if not isinstance(surface_digest, str) or not SHA256_RE.fullmatch(surface_digest):
         raise ValueError(f'invalid contestant_surface_digest: {path}')
+    authority_commitment = data.get('authority_commitment')
+    if not isinstance(authority_commitment, str) or not SHA256_RE.fullmatch(authority_commitment):
+        raise ValueError(f'invalid authority_commitment: {path}')
     if not isinstance(data.get('results'), list):
         raise ValueError(f'invalid results list: {path}')
     if data.get('result_count') != len(data['results']):
@@ -38,14 +41,19 @@ def build_court_artifact(root: Path, suite_path: Path, score_paths: list[Path]) 
         raise ValueError('at least two contestant score artifacts are required')
 
     expected_ids = sorted(fixture['fixture_id'] for fixture in fixtures)
+    expected_authority = build_authority_commitment(suite['suite_id'], fixtures)
     seen_contestants: set[str] = set()
     surface_digests: dict[str, str] = {}
+    authority_commitments: set[str] = set()
     all_results: list[dict] = []
 
     for path in score_paths:
         artifact = load_score_artifact(path)
         if artifact.get('suite_id') != suite['suite_id']:
             raise ValueError(f'suite mismatch: {path}')
+        authority_commitments.add(artifact['authority_commitment'])
+        if artifact['authority_commitment'] != expected_authority:
+            raise ValueError(f'authority commitment mismatch: {path}')
         contestant_id = artifact['contestant_id']
         if contestant_id in seen_contestants:
             raise ValueError(f'duplicate contestant score artifact: {contestant_id}')
@@ -58,7 +66,11 @@ def build_court_artifact(root: Path, suite_path: Path, score_paths: list[Path]) 
                 raise ValueError(f'contestant identity mismatch inside score artifact: {path}')
         all_results.extend(artifact['results'])
 
+    if authority_commitments != {expected_authority}:
+        raise ValueError('contestant score artifacts do not share one frozen authority')
+
     court = build_court(suite['suite_id'], expected_ids, all_results)
+    court['authority_commitment'] = expected_authority
     for contestant in court['contestants']:
         contestant['contestant_surface_digest'] = surface_digests[contestant['contestant_id']]
     return court
