@@ -51,6 +51,13 @@
       "required_runbook_sections": ["Attack surface", "Hypothesis matrix", "Controlled validation", "False-positive controls", "Evidence capture", "Remediation checks"]
     },
     {
+      "skill": "rag-memory-data-isolation-analysis",
+      "runbook": "references/operator-runbook.md",
+      "scenario_matrix": "references/operator-scenarios.json",
+      "lab_only": true,
+      "required_runbook_sections": ["Attack surface", "Hypothesis matrix", "Controlled validation", "False-positive controls", "Evidence capture", "Remediation checks"]
+    },
+    {
       "skill": "server-side-request-boundary-analysis",
       "runbook": "references/operator-runbook.md",
       "scenario_matrix": "references/operator-scenarios.json",
