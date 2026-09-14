@@ -110,4 +110,4 @@ remediation regression:
 
 ## Operator depth
 
-Use `references/operator-runbook.md` and `references/operator-scenarios.json` for deeper reviewed methodology and deterministic benign scenarios.
+Use `references/operator-runbook.md` and `references/operator-review-cases.json` for deeper reviewed methodology and deterministic benign audit cases.
