@@ -32,6 +32,20 @@ def sample_fixture():
     }
 
 
+def scored(contestant_id, digest):
+    return {
+        'schema_version': 1,
+        'contestant_id': contestant_id,
+        'fixture_id': 'case-1',
+        'category': 'review',
+        'task_digest': digest,
+        'score': 100.0,
+        'metrics': {'choice': 100.0},
+        'rule_failures': [],
+        'passed': True,
+    }
+
+
 class SuperiorityCourtTests(unittest.TestCase):
     def test_court_module_exists(self):
         self.assertTrue(MODULE_PATH.is_file())
@@ -70,6 +84,12 @@ class SuperiorityCourtTests(unittest.TestCase):
         rejected = court.score_run(source, task, wrong)
         self.assertIn('scope_choice', rejected['rule_failures'])
         self.assertFalse(rejected['passed'])
+
+    def test_court_rejects_task_drift_between_contestants(self):
+        court = load_module()
+        results = [scored('contestant-a', 'a' * 64), scored('contestant-b', 'b' * 64)]
+        with self.assertRaises(ValueError):
+            court.build_court('suite-1', ['case-1'], results)
 
 
 if __name__ == '__main__':
