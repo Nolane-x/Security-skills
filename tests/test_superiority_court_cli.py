@@ -7,6 +7,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 COURT_CLI = ROOT / 'scripts' / 'build_superiority_court.py'
 SCORER = ROOT / 'scripts' / 'score_superiority_runs.py'
+PREPARE = ROOT / 'scripts' / 'prepare_superiority_tasks.py'
 COURT_MODULE = ROOT / 'scripts' / 'superiority_court.py'
 SUITE = ROOT / 'superiority' / 'suites' / 'core.json'
 CORPUS = ROOT / 'superiority' / 'corpus.json'
@@ -24,6 +25,7 @@ class SuperiorityCourtCliTests(unittest.TestCase):
         self.assertTrue(COURT_CLI.is_file())
         court_cli = load(COURT_CLI, 'build_superiority_court')
         scorer = load(SCORER, 'score_superiority_runs_for_court')
+        prepare = load(PREPARE, 'prepare_superiority_tasks_for_court')
         court = load(COURT_MODULE, 'superiority_court_for_court_cli')
         corpus = json.loads(CORPUS.read_text(encoding='utf-8'))
         fixtures = {item['fixture_id']: item for item in corpus['fixtures']}
@@ -36,6 +38,9 @@ class SuperiorityCourtCliTests(unittest.TestCase):
 
         with tempfile.TemporaryDirectory() as tmp:
             base = Path(tmp)
+            tasks = base / 'tasks'
+            prepare.prepare_suite_tasks(ROOT, SUITE, tasks)
+            manifest = tasks / 'SUITE_MANIFEST.json'
             score_paths = []
             for contestant_id, surface_digest, degraded in [
                 ('opaque-a', '1' * 64, False),
@@ -60,7 +65,7 @@ class SuperiorityCourtCliTests(unittest.TestCase):
                     (runs / f'{fixture_id}.json').write_text(
                         json.dumps(run, sort_keys=True), encoding='utf-8'
                     )
-                scored = scorer.score_suite_runs(ROOT, SUITE, runs)
+                scored = scorer.score_suite_runs(ROOT, SUITE, runs, manifest)
                 path = base / f'{contestant_id}.json'
                 path.write_text(json.dumps(scored, sort_keys=True), encoding='utf-8')
                 score_paths.append(path)
