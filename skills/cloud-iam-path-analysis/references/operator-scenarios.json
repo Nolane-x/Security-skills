@@ -3,30 +3,45 @@
   "scenarios": [
     {
       "id": "delegated-role-path",
-      "hypothesis": "A sequence of individually permitted delegation edges may produce an effective test capability outside the intended privilege boundary.",
-      "safe_oracle": "A policy simulator reports the synthetic path and final allowed or denied test capability without changing cloud state.",
-      "positive_control": "The documented synthetic delegation path reaches only its intended test capability.",
-      "negative_control": "A neighboring test identity lacking one required edge cannot reach the same simulated capability.",
-      "stop_condition": "Stop before any state-changing operation or any account outside the dedicated sandbox.",
-      "remediation_oracle": "The unsafe simulated path is broken while the documented synthetic delegation path remains valid."
+      "hypothesis": "A sequence of individually plausible delegation edges may appear to produce a capability outside the intended boundary even though one or more trust, session, deny, or maximum-scope conditions decide whether the path is actually effective.",
+      "safe_oracle": "A provider policy simulator or equivalent read-only model evaluates the synthetic ordered edges and final bounded capability without changing production cloud state.",
+      "positive_control": "The documented synthetic delegation path satisfies its complete trust and session tuple and reaches only the intended simulated capability.",
+      "negative_control": "A neighboring synthetic identity or context missing one required trust or policy precondition causes the corresponding edge to be denied or unresolved.",
+      "stop_condition": "Stop before production state changes, unrelated accounts, real sensitive data, or any conclusion that depends on an unresolved intermediate effective decision.",
+      "remediation_oracle": "The selected path-breaking control removes the unintended effective edge while the approved neighboring delegation path remains effective under the same provider semantics.",
+      "edge_preconditions": "For every ordered edge record source permission, target trust, authoritative resource scope, applicable explicit denies, maximum-permission controls, condition values, session context, temporal validity, and any service-specific prerequisite required by the provider.",
+      "path_causality": "Treat the path as validated only when each edge has an effective decision under one mutually compatible policy and session state; do not infer transitivity merely because separate source and target policies look permissive in isolation.",
+      "false_positive_guard": "Rule out omitted organization controls, permission boundaries, resource-policy composition, inherited identity state, simulator blind spots, incompatible session timing, and intended delegation semantics before promoting the path.",
+      "evidence_upgrade": "Promote from hypothesis or observed only when all required edges are effective, the trust/session tuple is preserved, restrictive layers are evaluated, and a counterfactual that removes one required precondition breaks the expected edge.",
+      "neighbor_regression": "After remediation, recompute the original synthetic path and an intended neighboring delegation path, confirming that the exact path-breaking condition removes only the unintended authority relation rather than disabling all delegation."
     },
     {
       "id": "policy-layer-intersection",
-      "hypothesis": "Identity, resource, boundary, condition, and deny layers may combine differently from the reviewed intended policy.",
-      "safe_oracle": "A controlled policy simulator returns the effective decision and contributing synthetic policy layers.",
-      "positive_control": "An intended synthetic resource/action tuple is allowed under the complete policy set.",
-      "negative_control": "A nearby synthetic tuple that violates one required condition is denied.",
-      "stop_condition": "Stop if a result cannot be established through read-only inventory or policy simulation.",
-      "remediation_oracle": "The corrected policy set denies the unintended tuple and preserves the intended simulated access."
+      "hypothesis": "Identity, resource, trust, organization, boundary, session, condition, and deny layers may compose to an effective decision that differs from a grant-only reading of the reviewed policy set.",
+      "safe_oracle": "A controlled policy simulator or local normalized model returns the effective synthetic decision together with the policy layers and conditions that contributed to it.",
+      "positive_control": "An intended synthetic principal-action-resource-context tuple is allowed under the complete authoritative policy set and current session model.",
+      "negative_control": "A neighboring synthetic tuple changes one decision-relevant condition, deny applicability, or maximum-scope constraint and receives the corresponding denied or limited effective decision.",
+      "stop_condition": "Stop if a material policy layer is unavailable, provider precedence cannot be established, simulator coverage omits a decisive layer without another safe oracle, or the policy snapshot is not coherent.",
+      "remediation_oracle": "The corrected complete policy set denies or limits the unintended tuple for the intended reason while preserving the intended neighboring synthetic access.",
+      "edge_preconditions": "Record the positive grant, authoritative resource match, every applicable explicit deny, maximum-permission ceiling, session restriction, condition value, resource policy contribution, and provider composition rule needed to determine the single effective authorization edge.",
+      "path_causality": "Do not create a graph edge from one permissive statement; the edge exists only after the complete policy composition yields an effective allow, and any later path must consume the exact principal, scope, and session context produced by that decision.",
+      "false_positive_guard": "Rule out grant-only modeling, omitted inherited roles, organization-level controls, session-policy narrowing, resource-policy grants or restrictions, stale policy revisions, resource hierarchy mistakes, and provider-specific implicit semantics.",
+      "evidence_upgrade": "Promote only when the reviewer can reconstruct the effective decision from authoritative policy sources and provider semantics, and neighboring controls demonstrate that a specific condition or restrictive layer actually changes the result as predicted.",
+      "neighbor_regression": "After remediation, replay the intended tuple plus adjacent deny, boundary, condition, and resource-scope controls so the fix proves policy composition rather than merely changing one policy document's appearance."
     },
     {
       "id": "workload-identity-binding",
-      "hypothesis": "A workload identity binding may accept a broader synthetic workload selector than the owner intended.",
-      "safe_oracle": "A simulated identity exchange records the controlled workload attributes and resulting test principal.",
-      "positive_control": "The intended synthetic workload attributes map to the expected test principal.",
-      "negative_control": "A neighboring synthetic workload with one mismatched bound attribute is rejected.",
-      "stop_condition": "Stop before using production workload identities or non-sandbox resources.",
-      "remediation_oracle": "The binding requires the complete intended workload identity tuple while the approved synthetic workload still succeeds."
+      "hypothesis": "A workload identity binding may accept a broader synthetic workload tuple than the owner intended when issuer, subject, audience, namespace, service identity, source scope, or other bound claims are incompletely represented in trust policy.",
+      "safe_oracle": "A simulated or local identity-exchange model records the complete synthetic workload claim tuple, trust evaluation, resulting test principal, and derived session context without using production workload credentials.",
+      "positive_control": "The intended synthetic workload claim tuple maps to the expected test principal with the documented session restrictions and target scope.",
+      "negative_control": "A neighboring synthetic workload changes exactly one policy-relevant bound attribute and the trust decision no longer creates the identity-transition edge.",
+      "stop_condition": "Stop before production workload identities or non-sandbox resources are used, and stop if authoritative trust semantics or the complete expected workload tuple cannot be established.",
+      "remediation_oracle": "The binding requires the complete intended workload identity tuple, rejects the neighboring synthetic tuple, and continues to map the approved workload to the expected test principal with intended session constraints.",
+      "edge_preconditions": "Record the authoritative issuer/source, subject or workload selector, audience, source scope, required claims or attributes, target trust rule, source-side eligibility if applicable, session restrictions, maximum-scope controls, and current policy revision required for the identity transition.",
+      "path_causality": "Model workload-to-cloud identity as an explicit transition edge whose output is a derived session, then evaluate downstream permissions using that session's actual claims, scope, policy restrictions, issue time, and expiry rather than the long-lived target identity in the abstract.",
+      "false_positive_guard": "Rule out intentionally shared workload selectors, claim normalization differences, stale federation configuration, simulator claim-mapping limitations, namespace or subject aliases, and session restrictions that already prevent the downstream capability under review.",
+      "evidence_upgrade": "Promote only when the policy source defines the intended workload tuple, the neighboring tuple is accepted contrary to that rule, the trust decision explains why, and downstream authority is evaluated against the actual derived session rather than assumed from principal name alone.",
+      "neighbor_regression": "After remediation, compare the approved workload with one-at-a-time changes to issuer, subject, audience, source scope, and another policy-relevant claim, confirming the intended mapping survives while broadened neighboring tuples no longer create equivalent sessions."
     }
   ]
 }
