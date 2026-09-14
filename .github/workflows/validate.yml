@@ -226,8 +226,10 @@ jobs:
 
       - name: Prepare superiority replay profiles
         run: |
-          python scripts/prepare_superiority_replays.py superiority/suites/core.json --profile reference --contestant-id opaque-a --out superiority-runs-reference
-          python scripts/prepare_superiority_replays.py superiority/suites/core.json --profile degraded --contestant-id opaque-b --out superiority-runs-degraded
+          SURFACE_A=$(python -c "import json, os; from pathlib import Path; p = Path(os.environ['RUNNER_TEMP']) / 'security-skills-contestant-a' / 'CONTESTANT_VIEW.json'; print(json.load(open(p, encoding='utf-8'))['surface_digest'])")
+          SURFACE_B=$(python -c "import json, os; from pathlib import Path; p = Path(os.environ['RUNNER_TEMP']) / 'security-skills-contestant-b' / 'CONTESTANT_VIEW.json'; print(json.load(open(p, encoding='utf-8'))['surface_digest'])")
+          python scripts/prepare_superiority_replays.py superiority/suites/core.json --profile reference --contestant-id opaque-a --surface-digest "$SURFACE_A" --out superiority-runs-reference
+          python scripts/prepare_superiority_replays.py superiority/suites/core.json --profile degraded --contestant-id opaque-b --surface-digest "$SURFACE_B" --out superiority-runs-degraded
 
       - name: Score superiority profiles twice
         run: |
@@ -254,14 +256,20 @@ jobs:
         run: |
           python - <<'PY'
           import json
+          import os
           from pathlib import Path
           assert Path('superiority-court-a.json').read_bytes() == Path('superiority-court-b.json').read_bytes(), 'byte-identical superiority court check failed'
           data = json.load(open('superiority-court-a.json', encoding='utf-8'))
           manifest = json.load(open('superiority-tasks-a/SUITE_MANIFEST.json', encoding='utf-8'))
+          view_a = json.load(open(Path(os.environ['RUNNER_TEMP']) / 'security-skills-contestant-a' / 'CONTESTANT_VIEW.json', encoding='utf-8'))
+          view_b = json.load(open(Path(os.environ['RUNNER_TEMP']) / 'security-skills-contestant-b' / 'CONTESTANT_VIEW.json', encoding='utf-8'))
+          contestants = {item['contestant_id']: item for item in data['contestants']}
           assert data['authority_commitment'] == manifest['authority_commitment'], data
           assert data['absolute_winner'] == 'opaque-a', data
           assert len(data['pairwise']) == 1, data
           assert data['pairwise'][0]['verdict'] == 'left-absolute-superiority', data
-          assert all(len(item['contestant_surface_digest']) == 64 for item in data['contestants']), data
+          assert view_a['surface_digest'] == view_b['surface_digest'], (view_a, view_b)
+          assert contestants['opaque-a']['contestant_surface_digest'] == view_a['surface_digest'], contestants
+          assert contestants['opaque-b']['contestant_surface_digest'] == view_b['surface_digest'], contestants
           print('byte-identical superiority court check passed.')
           PY
