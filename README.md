@@ -8,7 +8,7 @@ A **verification-first security skill graph and deterministic cross-agent evalua
 
 Security Skills gives coding agents, research agents, and autonomous security systems a portable set of reusable security reasoning skills — plus the evidence gates, routing logic, benchmarks, cross-agent conformance tooling, and selectively deep operator runbooks needed to verify that those skills are being used correctly.
 
-> **Stable baseline: Wave 8** — 83 canonical skills, 20 packs, 8 CI-enforced operator-depth profiles with machine-readable scenario matrices, 36 deterministic benchmark fixtures, and a vendor-neutral cross-agent evaluation harness.
+> **Stable baseline: Wave 8; Wave 10 depth expansion active** — 83 canonical skills, 20 packs, 9 CI-enforced operator-depth profiles with machine-readable scenario matrices, 36 deterministic benchmark fixtures, and a vendor-neutral cross-agent evaluation harness.
 
 ## Why this project exists
 
@@ -22,7 +22,7 @@ security knowledge
       ▼
 83 canonical Agent Skills
       │
-      ├──► 8 scenario-enforced operator-depth profiles (Wave 8)
+      ├──► 9 scenario-enforced operator-depth profiles (Wave 8 + Wave 10 expansion)
       │
       ▼
 deterministic research router
@@ -66,7 +66,7 @@ The result is not just a collection of prompts. It is a **security intelligence 
 | --- | ---: |
 | Canonical skills | **83** |
 | Validated packs | **20** |
-| Operator-depth profiles | **8** |
+| Operator-depth profiles | **9** |
 | Benchmark fixtures | **36** |
 | Benchmark categories | **6** |
 | Cross-agent portability fixtures | **12** |
@@ -94,9 +94,9 @@ Packs under `packs/` reference canonical skills instead of duplicating them.
 
 ### 2. Selective operator depth
 
-Wave 8 combines reviewed domain runbooks with CI-enforced scenario matrices. Each registered profile must cover attack surface, falsifiable hypotheses, controlled validation, false-positive controls, evidence capture, and remediation regression. Each scenario must additionally provide a benign oracle, positive and negative controls, an explicit stop condition, and a remediation oracle.
+Wave 8 established the reviewed domain-runbook + CI-enforced scenario-matrix contract. Each registered profile must cover attack surface, falsifiable hypotheses, controlled validation, false-positive controls, evidence capture, and remediation regression. Each scenario must additionally provide a benign oracle, positive and negative controls, an explicit stop condition, and a remediation oracle.
 
-The eight profiles cover AI-agent security, authorization boundaries, cloud IAM paths, container isolation, driver interfaces, exploitability/evidence triage, server-side request boundaries, and web routing/middleware. They remain lab/owned/sandbox/authorized-only and prefer synthetic canaries, mock services, fake identities, policy simulation, inert action sinks, and read-only evidence over risky real-world proof.
+Wave 8 established eight profiles covering AI-agent security, authorization boundaries, cloud IAM paths, container isolation, driver interfaces, exploitability/evidence triage, server-side request boundaries, and web routing/middleware. Wave 10 begins a second depth ring by promoting `prompt-injection-boundary-analysis` as the ninth profile, adding explicit instruction-lineage, provenance, authority-conflict, decision/effect, counterfactual, and evidence-ceiling contracts. All profiles remain lab/owned/sandbox/authorized-only and prefer synthetic canaries, mock services, fake identities, policy simulation, inert action sinks, and read-only evidence over risky real-world proof.
 
 See [docs/operator-depth-contract.md](docs/operator-depth-contract.md).
 
@@ -214,7 +214,7 @@ scope + authorization
 
 ## Operator depth
 
-Wave 8 registers scenario-enforced operator depth for:
+Wave 8 established scenario-enforced operator depth for eight profiles, and Wave 10 expands the current registry to nine by adding `prompt-injection-boundary-analysis`:
 
 - `ai-agent-security-assessment`
 - `authorization-boundary-analysis`
@@ -222,6 +222,7 @@ Wave 8 registers scenario-enforced operator depth for:
 - `container-isolation-review`
 - `driver-ioctl-surface-analysis`
 - `exploitability-triage`
+- `prompt-injection-boundary-analysis`
 - `server-side-request-boundary-analysis`
 - `web-routing-and-middleware-analysis`
 
@@ -361,7 +362,7 @@ See [packs/README.md](packs/README.md) for the full set.
 ```text
 Security-skills/
 ├── skills/              # canonical Agent Skills and selective depth resources
-├── operator-depth/      # Wave 8 CI-enforced profile registry
+├── operator-depth/      # CI-enforced operator-depth profile registry
 ├── packs/               # curated skill routing manifests
 ├── benchmarks/          # Wave 5 deterministic fixtures and suites
 ├── agent-eval/          # Wave 6 cross-agent contracts and suites
@@ -400,7 +401,7 @@ python scripts/evaluate_agent_runs.py benchmarks/suites/portability.json /tmp/ag
 python -m unittest discover -s tests -v
 ```
 
-CI repeats the critical gates across Ubuntu, macOS, and Windows on Python 3.11 and 3.13, then runs dedicated deterministic `benchmark-core` and `agent-eval-core` jobs.
+CI repeats the critical gates across Ubuntu, macOS, and Windows on Python 3.11 and 3.13, then runs dedicated deterministic `benchmark-core`, `agent-eval-core`, and `superiority-court-core` jobs.
 
 ## Adding a skill
 
