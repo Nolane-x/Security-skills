@@ -8,7 +8,16 @@
       "positive_control": "An explicitly approved synthetic request reaches the inert test sink.",
       "negative_control": "A non-approved synthetic source cannot cause the same test action.",
       "stop_condition": "Stop before any production or third-party action and keep all effects inside the controlled fixture.",
-      "remediation_oracle": "Source-aware policy blocks the non-approved path while preserving the approved synthetic control."
+      "remediation_oracle": "Source-aware policy blocks the non-approved path while preserving the approved synthetic control.",
+      "provenance_trace": "The fixture records the source label, tenant binding, ingestion path, transformations, and final metadata visible to the policy component before the test result is produced.",
+      "authority_capability_profile": "The fixture records the initiating test identity, the components allowed to propose work, the component allowed to perform the inert operation, and the final bounded authority state.",
+      "decision_effect_trace": "The fixture records proposal, normalized parameters, policy result, confirmation state, sink acceptance, and marker observation as separate stages in one reproducible trace.",
+      "persistence_trace": "No durable state is expected in this base scenario; the fixture records that no store changes, and any later durable state would be tested as a separate state-transition case.",
+      "delegation_trace": "No delegated worker is required in the base scenario; if one is introduced, the fixture records its identity, assigned task, bounded authority, and independent policy check.",
+      "counterfactual_control": "The fixture keeps the same benign task while changing only the source classification; the disputed test path must disappear while the neighboring approved control still succeeds.",
+      "alternative_explanation": "The fixture checks stale state, retrieval contamination, configuration mismatch, and harness behavior before attributing the observed policy difference to source metadata handling.",
+      "evidence_ceiling": "The conclusion stops at the strongest observed stage; without sink acceptance there is only proposal or decision evidence, while a marker observation supports a bounded effect claim.",
+      "neighbor_regression": "The fixed case replays the original source, the approved source, and a benign near-neighbor source so the corrected rule blocks only the failing path and preserves intended behavior."
     },
     {
       "id": "identity-isolation-canary",
@@ -17,7 +26,16 @@
       "positive_control": "The owning test identity can read its own synthetic canary.",
       "negative_control": "A neighboring test identity cannot read that canary under the same controlled query.",
       "stop_condition": "Stop if validation would leave the dedicated sandbox or use non-test data.",
-      "remediation_oracle": "Identity binding blocks the neighboring path while the owning identity still succeeds."
+      "remediation_oracle": "Identity binding blocks the neighboring path while the owning identity still succeeds.",
+      "provenance_trace": "The fixture records marker ownership, tenant metadata, store identity, query filters, returned-result provenance, and the test identity visible to policy for both comparison cases.",
+      "authority_capability_profile": "The two synthetic identities use the same read mechanism but have intentionally different bounded access, making identity binding the single controlled authority variable in the comparison.",
+      "decision_effect_trace": "The fixture captures query inputs, normalized selectors, test identity, policy result, returned record identity, and marker visibility as distinct observable stages in the trace.",
+      "persistence_trace": "The marker exists only in the disposable test store, and the fixture records its stored ownership plus later retrieval context so both identity comparisons use the same durable state.",
+      "delegation_trace": "The base scenario uses no delegated worker; if retrieval is delegated later, the fixture records worker identity, assigned task, bounded authority, and policy evaluation separately.",
+      "counterfactual_control": "The fixture holds the query and stored marker constant while changing only the identity binding rule; neighboring visibility must disappear while owner visibility remains intact.",
+      "alternative_explanation": "The fixture checks duplicate records, stale indexes, shared test state, cache artifacts, identifier mismatch, and harness insertion before attributing the result to isolation behavior.",
+      "evidence_ceiling": "A suspicious answer without returned marker evidence remains below a data-isolation conclusion; stronger evidence requires the neighboring test identity to receive the owner-only marker.",
+      "neighbor_regression": "The fixed case replays owner access, neighboring denial, and a shared-record control to prove identity binding is restored without breaking reads that the policy intentionally allows."
     },
     {
       "id": "confirmation-tuple-binding",
@@ -26,7 +44,16 @@
       "positive_control": "The exact confirmed synthetic tuple is accepted by the inert sink.",
       "negative_control": "Changing one bounded tuple field causes the inert sink to reject the request.",
       "stop_condition": "Stop before any action outside the inert test sink.",
-      "remediation_oracle": "Confirmation is bound to the complete normalized synthetic tuple and neighboring intended behavior remains available."
+      "remediation_oracle": "Confirmation is bound to the complete normalized synthetic tuple and neighboring intended behavior remains available.",
+      "provenance_trace": "The fixture records the approved source, the tuple displayed for confirmation, every normalization step, and the origin of any later value that changes the final tuple.",
+      "authority_capability_profile": "The synthetic identity approves one inert tuple only, while the execution component supports a wider test surface; the final authority is therefore bounded by the exact confirmation object.",
+      "decision_effect_trace": "The fixture preserves proposed tuple, normalized confirmed tuple, confirmation state, final tuple, policy result, sink acceptance, and inert result as separate evidence stages.",
+      "persistence_trace": "No durable confirmation state is required in the base case; if confirmation spans turns later, the fixture records storage, expiry, identity binding, and later retrieval separately.",
+      "delegation_trace": "The base case stays in one execution context; if another worker consumes confirmation state, the fixture records initiating identity, worker identity, transferred tuple, and fresh policy evaluation.",
+      "counterfactual_control": "The fixture keeps the confirmed operation constant and changes exactly one normalized field; the changed tuple must fail while the exact confirmed tuple continues to succeed.",
+      "alternative_explanation": "The fixture checks display mismatch, harmless normalization, stale confirmation state, harness rewriting, and incomplete mock comparison before attributing the result to tuple binding.",
+      "evidence_ceiling": "A conversational mismatch alone supports only a confirmation-state concern; stronger evidence requires the controlled sink to accept a materially changed normalized tuple and record the inert result.",
+      "neighbor_regression": "The fixed case replays the exact tuple, one-field variations, expiry behavior, and a separate low-impact control to prove strict binding without disabling intended operations."
     }
   ]
 }
