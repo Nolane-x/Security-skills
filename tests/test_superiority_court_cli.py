@@ -74,6 +74,9 @@ class SuperiorityCourtCliTests(unittest.TestCase):
             result = json.loads(out_a.read_text(encoding='utf-8'))
             self.assertEqual(result['absolute_winner'], 'opaque-a')
             self.assertEqual(result['pairwise'][0]['verdict'], 'left-absolute-superiority')
+            contestants = {item['contestant_id']: item for item in result['contestants']}
+            self.assertEqual(contestants['opaque-a']['contestant_surface_digest'], '1' * 64)
+            self.assertEqual(contestants['opaque-b']['contestant_surface_digest'], '2' * 64)
 
 
 if __name__ == '__main__':
