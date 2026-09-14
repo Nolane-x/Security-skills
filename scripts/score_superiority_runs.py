@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -11,6 +12,8 @@ if str(SCRIPT_DIR) not in sys.path:
 
 from prepare_superiority_tasks import ROOT, load_suite_fixtures, stable_json_text
 from superiority_court import build_task, score_run
+
+SHA256_RE = re.compile(r'^[0-9a-f]{64}$')
 
 
 def load_runs(runs_dir: Path) -> list[dict]:
@@ -33,6 +36,15 @@ def score_suite_runs(root: Path, suite_path: Path, runs_dir: Path) -> dict:
     if None in contestant_ids or '' in contestant_ids or len(contestant_ids) != 1:
         raise ValueError('runs directory must contain exactly one non-empty contestant_id')
     contestant_id = next(iter(contestant_ids))
+
+    surface_digests = {run.get('contestant_surface_digest') for run in runs}
+    if len(surface_digests) != 1:
+        raise ValueError('runs directory must contain exactly one contestant_surface_digest')
+    contestant_surface_digest = next(iter(surface_digests))
+    if not isinstance(contestant_surface_digest, str) or not SHA256_RE.fullmatch(
+        contestant_surface_digest
+    ):
+        raise ValueError('contestant_surface_digest must be a lowercase SHA-256 digest')
 
     by_fixture: dict[str, dict] = {}
     for run in runs:
@@ -60,6 +72,7 @@ def score_suite_runs(root: Path, suite_path: Path, runs_dir: Path) -> dict:
         'schema_version': 1,
         'suite_id': suite['suite_id'],
         'contestant_id': contestant_id,
+        'contestant_surface_digest': contestant_surface_digest,
         'result_count': len(results),
         'results': results,
     }
