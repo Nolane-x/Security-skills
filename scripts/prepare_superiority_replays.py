@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import copy
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -19,6 +20,9 @@ DEGRADED_OVERRIDES = {
     'checks-contradictory-control': ('next_step', 'check'),
     'resolution-fix-unverified': ('claim_level', 'provisional'),
 }
+SELF_TEST_SURFACE_DIGEST = hashlib.sha256(
+    b'wave9-superiority-court-self-test-surface-v1'
+).hexdigest()
 
 
 def prepare_replays(
@@ -50,6 +54,7 @@ def prepare_replays(
             'schema_version': 1,
             'fixture_id': fixture['fixture_id'],
             'contestant_id': contestant_id,
+            'contestant_surface_digest': SELF_TEST_SURFACE_DIGEST,
             'task_digest': task['task_digest'],
             'answers': answers,
         }
