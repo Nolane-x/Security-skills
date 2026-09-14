@@ -191,6 +191,24 @@ jobs:
         with:
           python-version: "3.13"
 
+      - name: Build contestant views twice
+        run: |
+          python scripts/build_contestant_view.py --out "$RUNNER_TEMP/security-skills-contestant-a"
+          python scripts/build_contestant_view.py --out "$RUNNER_TEMP/security-skills-contestant-b"
+
+      - name: Check byte-identical contestant views
+        run: |
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          def snapshot(root):
+              return [(p.relative_to(root).as_posix(), p.read_bytes()) for p in sorted(root.rglob('*')) if p.is_file()]
+          a = Path(os.environ['RUNNER_TEMP']) / 'security-skills-contestant-a'
+          b = Path(os.environ['RUNNER_TEMP']) / 'security-skills-contestant-b'
+          assert snapshot(a) == snapshot(b), 'byte-identical contestant views check failed'
+          print('byte-identical contestant views check passed.')
+          PY
+
       - name: Prepare superiority tasks twice
         run: |
           python scripts/prepare_superiority_tasks.py superiority/suites/core.json --out superiority-tasks-a
@@ -213,10 +231,10 @@ jobs:
 
       - name: Score superiority profiles twice
         run: |
-          python scripts/score_superiority_runs.py superiority/suites/core.json superiority-runs-reference --json superiority-reference-a.json
-          python scripts/score_superiority_runs.py superiority/suites/core.json superiority-runs-reference --json superiority-reference-b.json
-          python scripts/score_superiority_runs.py superiority/suites/core.json superiority-runs-degraded --json superiority-degraded-a.json
-          python scripts/score_superiority_runs.py superiority/suites/core.json superiority-runs-degraded --json superiority-degraded-b.json
+          python scripts/score_superiority_runs.py superiority/suites/core.json superiority-runs-reference --manifest superiority-tasks-a/SUITE_MANIFEST.json --json superiority-reference-a.json
+          python scripts/score_superiority_runs.py superiority/suites/core.json superiority-runs-reference --manifest superiority-tasks-b/SUITE_MANIFEST.json --json superiority-reference-b.json
+          python scripts/score_superiority_runs.py superiority/suites/core.json superiority-runs-degraded --manifest superiority-tasks-a/SUITE_MANIFEST.json --json superiority-degraded-a.json
+          python scripts/score_superiority_runs.py superiority/suites/core.json superiority-runs-degraded --manifest superiority-tasks-b/SUITE_MANIFEST.json --json superiority-degraded-b.json
 
       - name: Check byte-identical superiority scores
         run: |
@@ -239,8 +257,11 @@ jobs:
           from pathlib import Path
           assert Path('superiority-court-a.json').read_bytes() == Path('superiority-court-b.json').read_bytes(), 'byte-identical superiority court check failed'
           data = json.load(open('superiority-court-a.json', encoding='utf-8'))
+          manifest = json.load(open('superiority-tasks-a/SUITE_MANIFEST.json', encoding='utf-8'))
+          assert data['authority_commitment'] == manifest['authority_commitment'], data
           assert data['absolute_winner'] == 'opaque-a', data
           assert len(data['pairwise']) == 1, data
           assert data['pairwise'][0]['verdict'] == 'left-absolute-superiority', data
+          assert all(len(item['contestant_surface_digest']) == 64 for item in data['contestants']), data
           print('byte-identical superiority court check passed.')
           PY
