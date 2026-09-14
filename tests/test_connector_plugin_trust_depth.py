@@ -5,7 +5,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SKILL = ROOT / "skills" / "connector-plugin-trust-analysis" / "SKILL.md"
 RUNBOOK = ROOT / "skills" / "connector-plugin-trust-analysis" / "references" / "operator-runbook.md"
-SCENARIOS = ROOT / "skills" / "connector-plugin-trust-analysis" / "references" / "operator-scenarios.json"
+CASES = ROOT / "skills" / "connector-plugin-trust-analysis" / "references" / "operator-review-cases.json"
 PROFILES = ROOT / "operator-depth" / "profiles.json"
 
 
@@ -86,9 +86,9 @@ class ConnectorPluginTrustDepthTests(unittest.TestCase):
         ):
             self.assertIn(phrase, lower)
 
-    def test_scenarios_encode_connector_lifecycle_reasoning(self):
-        self.assertTrue(SCENARIOS.is_file(), "connector scenario matrix must exist before depth can pass")
-        payload = json.loads(SCENARIOS.read_text(encoding="utf-8"))
+    def test_review_cases_encode_connector_lifecycle_reasoning(self):
+        self.assertTrue(CASES.is_file(), "connector review-case matrix must exist before depth can pass")
+        payload = json.loads(CASES.read_text(encoding="utf-8"))
         self.assertEqual(payload["version"], 1)
         self.assertGreaterEqual(len(payload["scenarios"]), 3)
         for scenario in payload["scenarios"]:
@@ -122,7 +122,7 @@ class ConnectorPluginTrustDepthTests(unittest.TestCase):
         self.assertEqual(len(matching), 1)
         profile = matching[0]
         self.assertEqual(profile["runbook"], "references/operator-runbook.md")
-        self.assertEqual(profile["scenario_matrix"], "references/operator-scenarios.json")
+        self.assertEqual(profile["scenario_matrix"], "references/operator-review-cases.json")
         self.assertTrue(profile["lab_only"])
         self.assertEqual(
             profile["required_runbook_sections"],
