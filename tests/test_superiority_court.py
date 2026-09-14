@@ -32,15 +32,16 @@ def sample_fixture():
     }
 
 
-def scored(contestant_id, digest):
+def scored(contestant_id, fixture_id='case-1', category='review', score=100.0, digest=None):
+    digest = digest or ({'case-1': 'a', 'case-2': 'b', 'case-3': 'c'}[fixture_id] * 64)
     return {
         'schema_version': 1,
         'contestant_id': contestant_id,
-        'fixture_id': 'case-1',
-        'category': 'review',
+        'fixture_id': fixture_id,
+        'category': category,
         'task_digest': digest,
-        'score': 100.0,
-        'metrics': {'choice': 100.0},
+        'score': float(score),
+        'metrics': {'choice': float(score)},
         'rule_failures': [],
         'passed': True,
     }
@@ -87,9 +88,30 @@ class SuperiorityCourtTests(unittest.TestCase):
 
     def test_court_rejects_task_drift_between_contestants(self):
         court = load_module()
-        results = [scored('contestant-a', 'a' * 64), scored('contestant-b', 'b' * 64)]
+        results = [
+            scored('contestant-a', digest='a' * 64),
+            scored('contestant-b', digest='b' * 64),
+        ]
         with self.assertRaises(ValueError):
             court.build_court('suite-1', ['case-1'], results)
+
+    def test_absolute_superiority_requires_paired_and_category_dominance(self):
+        court = load_module()
+        results = [
+            scored('contestant-a', 'case-1', 'scope', 100),
+            scored('contestant-a', 'case-2', 'evidence', 100),
+            scored('contestant-a', 'case-3', 'checks', 100),
+            scored('contestant-b', 'case-1', 'scope', 100),
+            scored('contestant-b', 'case-2', 'evidence', 80),
+            scored('contestant-b', 'case-3', 'checks', 80),
+        ]
+        result = court.build_court('suite-1', ['case-1', 'case-2', 'case-3'], results)
+        self.assertEqual(result['absolute_winner'], 'contestant-a')
+        pair = result['pairwise'][0]
+        self.assertEqual(pair['verdict'], 'left-absolute-superiority')
+        self.assertEqual(pair['fixture_wins'], {'left': 2, 'right': 0, 'ties': 1})
+        self.assertTrue(pair['left_no_category_regression'])
+        self.assertTrue(pair['absolute_superiority'])
 
 
 if __name__ == '__main__':
