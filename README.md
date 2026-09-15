@@ -8,7 +8,7 @@ A **verification-first security skill graph and deterministic cross-agent evalua
 
 Security Skills gives coding agents, research agents, and autonomous security systems a portable set of reusable security reasoning skills — plus the evidence gates, routing logic, benchmarks, cross-agent conformance tooling, and selectively deep operator runbooks needed to verify that those skills are being used correctly.
 
-> **Stable baseline: Wave 8; Wave 10 depth expansion active** — 83 canonical skills, 20 packs, 13 CI-enforced operator-depth profiles with machine-readable matrices, 36 deterministic benchmark fixtures, and a vendor-neutral cross-agent evaluation harness.
+> **Stable baseline: Wave 8; Wave 10 depth expansion active** — 83 canonical skills, 20 packs, 14 CI-enforced operator-depth profiles with machine-readable matrices, 36 deterministic benchmark fixtures, and a vendor-neutral cross-agent evaluation harness.
 
 ## Why this project exists
 
@@ -22,7 +22,7 @@ security knowledge
       ▼
 83 canonical Agent Skills
       │
-      ├──► 13 matrix-enforced operator-depth profiles (Wave 8 + Wave 10 expansion)
+      ├──► 14 matrix-enforced operator-depth profiles (Wave 8 + Wave 10 expansion)
       │
       ▼
 deterministic research router
@@ -66,7 +66,7 @@ The result is not just a collection of prompts. It is a **security intelligence 
 | --- | ---: |
 | Canonical skills | **83** |
 | Validated packs | **20** |
-| Operator-depth profiles | **13** |
+| Operator-depth profiles | **14** |
 | Benchmark fixtures | **36** |
 | Benchmark categories | **6** |
 | Cross-agent portability fixtures | **12** |
@@ -96,7 +96,7 @@ Packs under `packs/` reference canonical skills instead of duplicating them.
 
 Wave 8 established the reviewed domain-runbook + CI-enforced machine-readable matrix contract. Each registered profile must cover attack surface, falsifiable hypotheses, controlled validation, false-positive controls, evidence capture, and remediation regression. Each case must additionally provide a benign oracle, positive and negative controls, an explicit stop condition, and a remediation oracle.
 
-Wave 8 established eight profiles covering AI-agent security, authorization boundaries, cloud IAM paths, container isolation, driver interfaces, exploitability/evidence triage, server-side request boundaries, and web routing/middleware. Wave 10 adds `prompt-injection-boundary-analysis` as the ninth profile, `rag-memory-data-isolation-analysis` as the tenth, `connector-plugin-trust-analysis` as the eleventh, `tool-capability-and-confirmation-analysis` as the twelfth, and `canonicalization-and-namespace-analysis` as the thirteenth. Prompt-injection depth adds instruction-lineage, provenance, authority-conflict, decision/effect, counterfactual, and evidence-ceiling contracts. RAG/memory depth adds end-to-end principal binding, derived-state lineage, retrieval-policy traces, lifecycle/revocation generations, bounded convergence, cache/memory coherence, and R0–R5 evidence ceilings. Connector/plugin trust depth adds integration provenance, effective-permission traces, schema/argument state, response binding, composition boundaries, lifecycle generations, C0–C5 evidence ceilings, and deterministic audit-only review cases. Tool capability/confirmation depth adds request-to-action binding, argument-normalization traces, effective-authority reasoning, confirmation tuples, execution-state drift, transaction/retry/idempotency semantics, post-action receipt/final-state verification, and T0–T5 evidence ceilings. Canonicalization/namespace depth adds typed representation-to-identity traces, transformation ordering and non-commutativity, normalization idempotence, policy-key-to-resolved-identity binding, namespace-root and name-to-object state, namespace generations, counterfactual controls, deterministic audit-only review cases, and N0–N5 evidence ceilings. All profiles remain lab/owned/sandbox/authorized-only and prefer synthetic canaries, mock services, fake identities, policy simulation, inert action sinks, and read-only evidence over risky real-world proof.
+Wave 8 established eight profiles covering AI-agent security, authorization boundaries, cloud IAM paths, container isolation, driver interfaces, exploitability/evidence triage, server-side request boundaries, and web routing/middleware. Wave 10 adds `prompt-injection-boundary-analysis` as the ninth profile, `rag-memory-data-isolation-analysis` as the tenth, `connector-plugin-trust-analysis` as the eleventh, `tool-capability-and-confirmation-analysis` as the twelfth, `canonicalization-and-namespace-analysis` as the thirteenth, and `confused-deputy-analysis` as the fourteenth. Prompt-injection depth adds instruction-lineage, provenance, authority-conflict, decision/effect, counterfactual, and evidence-ceiling contracts. RAG/memory depth adds end-to-end principal binding, derived-state lineage, retrieval-policy traces, lifecycle/revocation generations, bounded convergence, cache/memory coherence, and R0–R5 evidence ceilings. Connector/plugin trust depth adds integration provenance, effective-permission traces, schema/argument state, response binding, composition boundaries, lifecycle generations, C0–C5 evidence ceilings, and deterministic audit-only review cases. Tool capability/confirmation depth adds request-to-action binding, argument-normalization traces, effective-authority reasoning, confirmation tuples, execution-state drift, transaction/retry/idempotency semantics, post-action receipt/final-state verification, and T0–T5 evidence ceilings. Canonicalization/namespace depth adds typed representation-to-identity traces, transformation ordering and non-commutativity, normalization idempotence, policy-key-to-resolved-identity binding, namespace-root and name-to-object state, namespace generations, counterfactual controls, deterministic audit-only review cases, and N0–N5 evidence ceilings. Confused-deputy depth adds causal authority-transfer traces, delegated-versus-ambient authority distinctions, monotonic attenuation, operation/resource and resolved-target binding, delegation generation/lifecycle reasoning, result/receipt binding, counterfactual controls, deterministic audit-only review cases, and D0–D5 evidence ceilings. All profiles remain lab/owned/sandbox/authorized-only and prefer synthetic canaries, mock services, fake identities, policy simulation, inert action sinks, and read-only evidence over risky real-world proof.
 
 See [docs/operator-depth-contract.md](docs/operator-depth-contract.md).
 
@@ -214,12 +214,13 @@ scope + authorization
 
 ## Operator depth
 
-Wave 8 established scenario-enforced operator depth for eight profiles. Wave 10 expands the current registry to thirteen with `prompt-injection-boundary-analysis` as the ninth profile, `rag-memory-data-isolation-analysis` as the tenth, `connector-plugin-trust-analysis` as the eleventh, `tool-capability-and-confirmation-analysis` as the twelfth, and `canonicalization-and-namespace-analysis` as the thirteenth:
+Wave 8 established scenario-enforced operator depth for eight profiles. Wave 10 expands the current registry to fourteen with `prompt-injection-boundary-analysis` as the ninth profile, `rag-memory-data-isolation-analysis` as the tenth, `connector-plugin-trust-analysis` as the eleventh, `tool-capability-and-confirmation-analysis` as the twelfth, `canonicalization-and-namespace-analysis` as the thirteenth, and `confused-deputy-analysis` as the fourteenth:
 
 - `ai-agent-security-assessment`
 - `authorization-boundary-analysis`
 - `canonicalization-and-namespace-analysis`
 - `cloud-iam-path-analysis`
+- `confused-deputy-analysis`
 - `connector-plugin-trust-analysis`
 - `container-isolation-review`
 - `driver-ioctl-surface-analysis`
