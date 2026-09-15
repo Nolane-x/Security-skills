@@ -31,7 +31,7 @@
     {
       "id": "delegation-attenuation-consistency",
       "hypothesis": "A deputy with broad synthetic ambient authority must monotonically attenuate what it delegates downstream, so a neighboring operation or resource never inherits broader rights by default.",
-      "safe_oracle": "The audit harness compares incoming delegated authority, local policy, deputy ambient authority, outgoing delegated authority, and next-hop target without performing any real privileged operation.",
+      "safe_oracle": "The synthetic audit harness compares incoming delegated authority, local policy, deputy ambient authority, outgoing delegated authority, and next-hop target without performing any real privileged operation.",
       "positive_control": "Use a synthetic delegation whose downstream subset is intentionally permitted; the next hop should receive exactly that subset and return a read-only deterministic acknowledgment.",
       "negative_control": "Keep the same principal and deputy but request a neighboring synthetic operation excluded from the incoming delegation; outgoing delegated authority must remain absent for that operation.",
       "stop_condition": "Stop before any experiment that would require production roles, real service accounts, irreversible state, persistence, destructive behavior, or access outside the owned synthetic environment.",
