@@ -34,7 +34,7 @@ A collision is meaningful only when the safe oracle expects different security-r
 
 ## Namespace and entry-identity trace
 
-Record the full entry selector, not only visible key text. Include cache name, partition/shard, namespace, tenant/user prefix, version, policy generation, resource generation, key bytes, and any implicit framework scoping that affects entry selection.
+Record the full cache namespace and entry selector, not only visible key text. Include cache name, partition/shard, namespace, tenant/user prefix, version, policy generation, resource generation, key bytes, and any implicit framework scoping that affects entry selection.
 
 The cache entry identity should answer: which exact stored object would be reused, under which namespace and generation, and why does the reader map to that same object? If a framework isolates identical key bytes by tenant or request scope, capture that as a false-positive control.
 
