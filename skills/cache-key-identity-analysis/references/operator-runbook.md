@@ -46,7 +46,7 @@ Treat data results, authorization/policy decisions, memoized derived objects, an
 
 ## First-writer and replay-order trace
 
-Run paired controls:
+Run paired controls as a reverse order test:
 
 `A -> B`: context A populates the entry, then context B requests the computation.
 
