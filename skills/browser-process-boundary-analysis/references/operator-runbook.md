@@ -52,7 +52,7 @@ Compare the requested operation/resource to the effective brokered authority act
 
 ## Privileged-consumer and result trace
 
-Identify the privileged consumer/action and bind its bounded result to the initiating process, origin/site/frame context, routed object generation, capability/resource tuple, and request correlation identity. Prefer a read-only synthetic resource, inert marker, mock callback, or reversible owner-controlled state. A concurrent unrelated result cannot promote evidence.
+Identify the privileged consumer/action and bind its bounded result to the initiating process, origin/site/frame context, routed object generation, capability/resource tuple, and request correlation identity. Preserve explicit receipt/result binding so the observed output is attributable to that same causal tuple. Prefer a read-only synthetic resource, inert marker, mock callback, or reversible owner-controlled state. A concurrent unrelated result cannot promote evidence.
 
 ## Lifecycle/revocation generation trace
 
