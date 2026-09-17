@@ -177,6 +177,10 @@ A secure-boot-enabled flag, a signature-valid result, measurement entry, attesta
 
 BC4/BC5 require bounded causal acceptance through the exact root/policy/selection/load/handoff chain. If selected-versus-loaded identity, signer authorization, rollback generation, or result correlation is missing, cap the claim below causal boot-chain proof.
 
+## Evidence contract
+
+Preserve boot generation, boot mode/path, root-of-trust identity, active verification-policy/key generation, candidate component identity/digest/version, signer identity and signer-authorization decision, rollback domain/generation, selector state, selected component identity, loaded/executed component identity, verified-to-loaded binding, handoff state and next-stage consumer, recovery/alternate-path state, bounded result/receipt correlation, positive/negative controls, counterfactuals, eliminated alternative explanations, remediation regression, and the final BC evidence level/ceiling. Evidence may not claim a later transition that these bindings do not directly establish.
+
 ## Stop conditions
 
 Stop if validation would require irreversible fuse/key changes, production signing-key compromise, destructive flashing, persistent security disablement, unrecoverable device state, boot-bypass weaponization, arbitrary code execution, or any unauthorized/third-party target.
