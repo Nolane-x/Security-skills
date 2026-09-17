@@ -41,7 +41,7 @@ It is materially distinct from existing profiles:
 
 ## Scope
 
-Expected final PR scope is exactly nine paths:
+Final PR scope is exactly ten paths:
 
 1. `README.md`
 2. `docs/operator-depth-contract.md`
@@ -52,6 +52,7 @@ Expected final PR scope is exactly nine paths:
 7. `skills/certificate-and-hostname-validation-analysis/references/operator-review-cases.json`
 8. `skills/certificate-and-hostname-validation-analysis/references/operator-runbook.md`
 9. `tests/test_certificate_hostname_depth.py`
+10. `tests/test_deserialization_trust_depth.py` — one-line extensibility maintenance required because profile #21 incorrectly froze the global registry at exactly 21 entries.
 
 Explicitly out of scope:
 
@@ -62,6 +63,14 @@ Explicitly out of scope:
 - agent-eval or superiority-court authority;
 - workflow semantics;
 - external superiority claims.
+
+## Implementation discovery amendment
+
+The test-first RED contract for profile #22 remained correct and was not weakened. After the four profile #22 behavioral artifacts were added, the first behavioral CI run showed that all four #22 dedicated tests passed and the operator-depth validator accepted 22 profiles, but the existing profile #21 test `tests/test_deserialization_trust_depth.py` still asserted that the entire registry length must equal exactly 21.
+
+That assertion was an unintended global freeze, not a profile #21 semantic invariant. The minimal root-cause correction changes only that global-count assertion from exact equality to `>= 21`, while preserving every profile-specific #21 assertion. This makes the older profile test extensible without weakening profile #21 itself or modifying the dedicated #22 test.
+
+Because this dependency was discovered by behavioral CI rather than known at design time, the final reviewed scope is ten paths rather than the original nine. The amendment is recorded here so design provenance matches the tested implementation rather than retroactively hiding the failed behavioral attempt.
 
 ## Selected approach
 
@@ -263,7 +272,7 @@ The test freezes four groups:
 3. at least three substantive deterministic benign review cases with common and PKI-domain fields;
 4. exactly one new registry entry, correct paths, `lab_only: true`, schema version 2, and profile count increasing from 21 to 22.
 
-The test is not weakened after valid RED merely to accommodate an incomplete implementation.
+The dedicated profile #22 test is not weakened after valid RED merely to accommodate an incomplete implementation. The separate one-line profile #21 extensibility correction does not change this contract.
 
 ## Integration and closure gates
 
@@ -273,15 +282,16 @@ The test is not weakened after valid RED merely to accommodate an incomplete imp
 4. Commit dedicated test only.
 5. Open Draft PR at exact test-first SHA and capture RED CI.
 6. Accept RED only if the intended four groups fail and old gates remain valid.
-7. Implement canonical skill, runbook, review cases, and exactly one registry entry without changing the dedicated test.
-8. Require full behavioral CI GREEN across six OS/Python jobs plus benchmark, agent-eval, and superiority-court cores.
-9. After behavioral GREEN only, update `README.md` and `docs/operator-depth-contract.md`; prove that delta is docs-only.
-10. Require exact-final-head full CI GREEN.
-11. Fresh-check head, base, scope, mergeability, and current `main`.
-12. Merge using the exact expected final head SHA.
-13. Require post-merge push CI GREEN on the exact merge SHA.
-14. Read registry, README, and operator-depth contract from the merge tree.
-15. Record closure provenance only then.
+7. Implement canonical skill, runbook, review cases, and exactly one registry entry without changing the dedicated #22 test.
+8. If behavioral CI reveals a pre-existing test that incorrectly freezes global registry growth, repair only that stale extensibility assertion and preserve the older profile-specific contract.
+9. Require full behavioral CI GREEN across six OS/Python jobs plus benchmark, agent-eval, and superiority-court cores.
+10. After behavioral GREEN only, update `README.md` and `docs/operator-depth-contract.md` and reconcile this design plus the implementation plan with discovered provenance; prove that the post-behavioral delta is exactly those four documentation files.
+11. Require exact-final-head full CI GREEN.
+12. Fresh-check head, base, scope, mergeability, and current `main`.
+13. Merge using the exact expected final head SHA.
+14. Require post-merge push CI GREEN on the exact merge SHA.
+15. Read registry, README, and operator-depth contract from the merge tree.
+16. Record closure provenance only then.
 
 ## Non-claim
 

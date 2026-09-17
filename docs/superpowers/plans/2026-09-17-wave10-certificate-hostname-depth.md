@@ -14,7 +14,7 @@ The implementation must freeze causal peer-identity reasoning across endpoint/re
 
 ## Exact final scope
 
-Exactly nine paths are allowed:
+Exactly ten paths are allowed after the behavioral discovery described below:
 
 1. `README.md`
 2. `docs/operator-depth-contract.md`
@@ -25,8 +25,17 @@ Exactly nine paths are allowed:
 7. `skills/certificate-and-hostname-validation-analysis/references/operator-review-cases.json`
 8. `skills/certificate-and-hostname-validation-analysis/references/operator-runbook.md`
 9. `tests/test_certificate_hostname_depth.py`
+10. `tests/test_deserialization_trust_depth.py` — one-line maintenance of a stale profile #21 global registry-count assertion.
 
 No `skill.meta.json`, graph, pack, routing, benchmark authority, agent-eval authority, superiority-court authority, or workflow-semantic changes.
+
+## Provenance amendment from behavioral verification
+
+The original plan expected nine paths. The first behavioral implementation added only the four profile #22 behavioral artifacts and kept the dedicated #22 test unchanged. Behavioral CI then demonstrated that every #22 dedicated test passed and the operator-depth validator accepted 22 profiles, while the older profile #21 test still required the entire registry to contain exactly 21 entries.
+
+That failure identified an existing extensibility defect rather than an incomplete #22 implementation. The narrow correction changes only profile #21's total-count assertion from exact equality to a lower bound of 21; all profile #21 binding/path/lab-only assertions remain intact. The dedicated #22 test remains unchanged from the valid RED commit.
+
+This amendment expands the final scope to ten paths and records the failed behavioral attempt instead of rewriting history around it.
 
 ## Phase 1 — TDD RED
 
@@ -61,13 +70,13 @@ The review-case group must require at least three cases and common fields:
 
 It must additionally require substantive PKI fields covering intended peer identity, endpoint/SNI/reference identity, verifier, trust-store generation, chain/path/anchor, certificate constraints, SAN/name match, pin/revocation/callback state, final decision, authenticated peer/session, consumer/result/receipt, lifecycle generation, counterfactual, alternatives, evidence level, and evidence ceiling.
 
-The registry group must require schema version 2, exactly 22 profiles, exactly one certificate/hostname entry, the new review-case path, and `lab_only: true`.
+The registry group must require schema version 2, exactly 22 profiles at the profile #22 test-first contract, exactly one certificate/hostname entry, the new review-case path, and `lab_only: true`.
 
 Open a Draft PR at the exact test-first SHA before any production implementation. Capture the RED workflow run. RED is valid only if the four intended groups fail with zero unittest errors and pre-existing authorities pass before the dedicated failures.
 
 ## Phase 2 — Minimal behavioral implementation
 
-Do not modify the dedicated test after valid RED unless the test itself is objectively wrong.
+Do not modify the dedicated #22 test after valid RED unless that test itself is objectively wrong.
 
 Update `skills/certificate-and-hostname-validation-analysis/SKILL.md` to encode the causal model, distinctions/invariants, PKI0–PKI5 ladder, counterfactuals, alternative explanations, evidence ceiling, lifecycle/session semantics, and safe validation boundary.
 
@@ -83,6 +92,8 @@ Update `operator-depth/profiles.json` with exactly one new profile entry pointin
 
 No public README/operator contract change in this phase.
 
+If behavioral CI exposes a pre-existing older-profile test that freezes the global registry count and therefore blocks valid growth, change only that stale global-count invariant while preserving all older profile-specific assertions. Such maintenance is not permission to weaken the dedicated #22 test or any evidence/safety semantics.
+
 ## Phase 3 — Behavioral verification
 
 Require a full PR workflow on the behavioral candidate:
@@ -96,7 +107,14 @@ Require a full PR workflow on the behavioral candidate:
 
 All nine jobs must pass. Benchmark/agent/court deterministic outputs must remain byte-identical; cautious/faulty replay controls must still behave as expected.
 
-If a test fails, identify root cause and make the narrowest production fix. Do not weaken the test to accommodate incomplete semantics.
+Observed implementation provenance:
+
+- exact test-first head: `3a9ce6e32bcccb96e82bae4c3d7c4256d3f31be2`;
+- RED run: `35228172204` (#293), with 223 tests, exactly four intended dedicated failures, and zero unittest errors in the inspected matrix job while existing validation authorities passed first;
+- initial behavioral implementation: `8dc2f50c985c6890c5496c889929b4f7217145ec`;
+- first behavioral run: `35228833343` (#294), where all four #22 tests passed but the stale profile #21 exact registry-count assertion failed because the valid registry now had 22 entries;
+- minimal profile #21 extensibility correction and behavioral authority: `3f9f781626b483c18bce23057413a4bf9f4ec06e`;
+- behavioral GREEN run: `35229003174` (#295), full 9/9 success across six OS/Python jobs plus benchmark, agent-eval, and superiority-court deterministic jobs.
 
 ## Phase 4 — Public documentation only after behavioral GREEN
 
@@ -105,9 +123,15 @@ Only after the behavioral candidate is full GREEN:
 - update README counts from 21 to 22;
 - identify `certificate-and-hostname-validation-analysis` as the twenty-second Wave 10 profile;
 - summarize peer-identity/path/anchor/policy/callback/session/lifecycle depth and PKI0–PKI5;
-- update `docs/operator-depth-contract.md` with the same profile and causal evidence ladder.
+- update `docs/operator-depth-contract.md` with the same profile and causal evidence ladder;
+- amend this implementation plan and its design authority to record the discovered profile #21 test-maintenance dependency and final ten-path scope.
 
-Prove the delta from behavioral authority to final candidate is exactly those two documentation files.
+Prove the delta from behavioral authority to final candidate is exactly these four documentation files:
+
+1. `README.md`;
+2. `docs/operator-depth-contract.md`;
+3. `docs/superpowers/specs/2026-09-17-wave10-certificate-hostname-depth-design.md`;
+4. `docs/superpowers/plans/2026-09-17-wave10-certificate-hostname-depth.md`.
 
 ## Phase 5 — Exact-head verification and guarded integration
 
@@ -119,7 +143,7 @@ Fresh-check immediately before merge:
 - PR base equals the current `main` SHA used by the branch;
 - current `main` has not drifted;
 - PR is mergeable;
-- changed files are exactly the nine expected paths;
+- changed files are exactly the ten expected paths;
 - no forbidden authority files changed.
 
 Mark ready and merge using `expected_head_sha` equal to the exact final head.
@@ -139,7 +163,7 @@ Read directly from the merge tree:
 - `README.md` — 22 profiles and profile #22 published;
 - `docs/operator-depth-contract.md` — profile #22 and PKI0–PKI5 published.
 
-Only then add the closure provenance comment containing design, plan, test-first SHA, RED run, behavioral authority/run, exact final head/run, merge SHA/parents, post-merge run, exact scope, safety boundary, and non-claim.
+Only then add the closure provenance comment containing design, plan, test-first SHA, RED run, behavioral attempts/authority/run, exact final head/run, merge SHA/parents, post-merge run, exact scope, safety boundary, and non-claim.
 
 ## Safety
 
