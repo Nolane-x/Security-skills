@@ -1,0 +1,184 @@
+# Deserialization Trust Analysis — Operator Runbook
+
+Use this runbook only for local, owned, sandboxed, benchmark/CTF, or explicitly authorized systems. The objective is causal reconstruction-trust validation using synthetic serialized artifacts, mock registries and services, inert callback markers, read-only synthetic resources, and bounded reversible effects. It is not a recipe for unsafe gadget development or harmful execution.
+
+## Attack surface
+
+Inventory every place structured or serialized state crosses a trust boundary: network/RPC messages, uploaded documents, session or token payloads, cache entries, databases, local config, saved application state, persisted object graphs, model/config loaders, plugin manifests, message queues, clipboard/import formats, and inter-service envelopes.
+
+For each surface, record the concrete parser/format implementation, schema identity and schema version, polymorphic selector or discriminator, registry/resolver, registry generation, object-construction mechanism, post-load hooks, secondary interpreters, reconstruction policy, and final privileged consumer. Reachability alone is DT0.
+
+## Hypothesis matrix
+
+Write a falsifiable hypothesis before testing. Each hypothesis names the authoritative tuple and one mismatch under review.
+
+| Hypothesis class | Intended invariant | Safe control |
+| --- | --- | --- |
+| Type binding | normalized selector + schema + registry generation resolves only to an authorized runtime type identity | neighboring synthetic allowed type |
+| Hook capability | construction/post-load behavior stays within the sender's approved reconstructed authority | inert callback disabled or safe data-only mapping |
+| Secondary interpretation | a field validated as data cannot silently acquire broader path/template/query/plugin semantics | same object with secondary interpreter constrained |
+| Lifecycle | stale schema/registry/policy/object generations do not inherit current authority | current-generation synthetic artifact |
+| Authenticity scope | signed/authenticated payload authority is limited to its declared purpose | same sender with narrower synthetic scope |
+
+Do not define the hypothesis as “serializer is dangerous.” Define the exact identity, authority, generation, or consumer transition expected to differ.
+
+## Artifact origin and authenticity trace
+
+Record artifact origin, field-control ownership, transport/storage envelope identity, and authenticity/integrity mechanism. State the represented purpose/scope, not just signature validity.
+
+A valid signature or authenticated envelope is not blanket reconstruction permission. Distinguish artifact authenticity from capability authorization and record the sender's allowed schema/type/capability scope. If authenticity is absent, record that explicitly rather than inferring identity.
+
+## Parser and canonical-field trace
+
+Pin parser implementation and configuration. Record framing, syntax acceptance, duplicate-key behavior when relevant, normalization, default insertion, alias expansion, case/Unicode/canonicalization rules, and the canonical field state presented to schema/type resolution.
+
+Parser acceptance is representation evidence only. Preserve canonical field state so later type/policy divergence cannot be attributed to a different parse result.
+
+## Schema identity and version trace
+
+Record schema identity, schema version, compatibility/migration rules, variant/discriminator declarations, unknown-field handling, and where schema validation occurs relative to canonicalization and type lookup.
+
+Schema validity does not prove runtime type authorization. Compatible schema versions with different security semantics remain distinct security identities.
+
+## Discriminator and registry-resolution trace
+
+Trace the serialized selector through normalization and schema policy into the exact type registry/resolver. Record aliases, namespace/package rules, inheritance/base-class checks, reflection/plugin lookup, resolver identity, and registry generation.
+
+The security-relevant output is canonical runtime type identity, not the incoming class name, tag, alias, or registry key. A textual allowlist must be evaluated against final resolved identity.
+
+## Runtime type and object-construction trace
+
+Record resolved runtime type identity, allocation/constructor path, object identity, object-graph placement, ownership semantics, setters/property binding, factories, and dependency injection involved in reconstruction.
+
+Object construction is not side-effect authorization. Also record whether reachable child objects expose capabilities broader than the initiating principal's effective reconstructed authority.
+
+## Hook/callback and secondary-interpretation trace
+
+Trace constructors, setters, post-load hooks, validators, callbacks, finalizers, resource openers, plugin initialization, and later interpretation of reconstructed fields as paths, templates, expressions, queries, policy names, callback identifiers, module/plugin keys, or resource selectors.
+
+Use an inert callback or mock consumer to prove an unexpected behavior boundary. A benign marker is sufficient; do not escalate proof to arbitrary execution. Record secondary interpretation as a separate transition because schema-valid data can acquire new semantics later.
+
+## Authority and reconstruction-policy trace
+
+Record caller/principal/request authority, authenticated purpose/scope, requested reconstructed capability, policy or allowlist inputs, the policy decision, and effective reconstructed authority. The effective reconstructed authority must be no broader than the exact tuple the initiating principal is permitted to request.
+
+Separate data ownership from authority to select behavior-bearing types. Separate payload authenticity from authority to invoke callbacks, plugins, resource openers, policies, templates, or other privileged behavior.
+
+## Privileged-consumer and result trace
+
+Identify the final privileged consumer or behavior boundary. Prefer a mock service, inert sink, read-only synthetic capability, or reversible owner-controlled effect. Record the bounded result and bind it to the initiating artifact, schema version, registry generation, runtime type identity, authority tuple, policy decision, and correlation identity.
+
+A successful action without receipt/result binding may belong to another concurrent request and cannot promote the evidence ceiling.
+
+## Lifecycle/schema/registry generation trace
+
+Track schema version/generation, registry generation, resolver-table changes, alias remapping, plugin/module reload, policy/allowlist revision, credential/signing-scope revocation, cache/session restoration, persisted-object migration, service/runtime restart, and capability revocation.
+
+For lifecycle hypotheses, pair stale state with a current-generation control while holding the remaining fixture constant. Reuse of a logical alias, schema name, plugin key, or object label does not prove continuity of authority.
+
+## Controlled validation
+
+Use deterministic bounded fixtures. Preferred sequence:
+
+1. Pin parser, schema version, registry generation, reconstruction policy, and synthetic principal.
+2. Run intended positive control and capture canonical runtime type plus inert result.
+3. Change one security-relevant variable: discriminator, canonical type binding, sender scope, hook enablement, secondary interpreter, or lifecycle generation.
+4. Capture parser/schema decisions separately from registry/type/policy decisions.
+5. If wrong context is accepted, use only an inert callback, synthetic canary, mock plugin, read-only synthetic capability, or reversible fixture state for the bounded effect.
+6. Bind every result to the exact causal tuple with a deterministic receipt.
+7. Repeat after remediation and prove neighboring data-only or explicit-schema behavior remains valid.
+
+Do not broaden the experiment merely to raise an evidence level.
+
+## False-positive controls
+
+Before promotion, verify the observation is not caused by:
+
+- harness registration of the wrong synthetic type;
+- parser fallback/default-type behavior unrelated to the hypothesis;
+- schema migration or compatibility transformation;
+- stale fixture cache/session state;
+- registry reload race or alias collision;
+- an expected benign hook documented by the application;
+- rejection or mutation at an earlier parse/schema boundary;
+- marker output from another concurrent request;
+- debug-only permissive configuration;
+- data-only mode failing for an unrelated syntax/schema reason;
+- logging, timestamp, or receipt-correlation error.
+
+Run at least one positive and one negative control that separates the hypothesis from the strongest plausible alternative explanation.
+
+## Counterfactual controls
+
+Use single-variable counterfactuals wherever possible:
+
+- same canonical payload with neighboring allowed discriminator;
+- same discriminator and schema under a different registry generation;
+- same selector with canonical resolver mapped to a neighboring runtime type identity;
+- same authenticated synthetic sender with narrower reconstruction scope;
+- same runtime type with inert callback disabled while data construction remains valid;
+- same object graph with secondary interpretation disabled or narrowed;
+- same stale artifact before and after schema/registry/policy generation advance;
+- same result shape with deliberately different receipt/correlation identity.
+
+Counterfactual proof is strongest when parser/schema acceptance remains constant while the authoritative type or policy decision changes.
+
+## Alternative explanations
+
+Maintain an explicit list of alternative explanations and evidence excluding each one. At minimum consider harness registration mistakes, schema migration, parser fallback, alias collision, registry reload races, benign post-load behavior, stale caches, debug-only configuration, concurrent marker effects, and result-correlation errors.
+
+Do not silently discard a plausible alternative explanation because a type or callback is surprising. If a material alternative survives, cap the claim below causal proof.
+
+## Evidence capture
+
+Capture enough deterministic state to reconstruct the claim:
+
+```text
+artifact fixture identity and digest
+artifact origin / synthetic principal
+transport or storage envelope identity
+authenticity mechanism and represented scope
+parser implementation/configuration
+canonical field state
+schema identity and schema version
+discriminator/variant state
+registry/resolver identity and registry generation
+resolved runtime type identity
+object construction path and object-graph identity
+hook/callback state
+secondary interpretation state
+requested reconstructed capability
+policy decision and effective reconstructed authority
+privileged consumer identity
+bounded result and receipt/result tuple
+lifecycle generations
+positive/negative/counterfactual results
+alternative explanations and eliminations
+remediation revision and regression result
+```
+
+Prefer machine-readable fixture values and synthetic identifiers. Do not collect production secrets or third-party data when a controlled fixture proves the same transition.
+
+## Evidence promotion and ceiling
+
+Apply DT0–DT5 conservatively:
+
+- **DT0:** surface mapped only.
+- **DT1:** identity/interpreter/generation divergence observed.
+- **DT2:** bounded reconstruction or policy mismatch demonstrated.
+- **DT3:** inert wrong-context acceptance demonstrated.
+- **DT4:** bounded synthetic authority effect causally bound to the initiating tuple.
+- **DT5:** DT4 plus full artifact/parser/schema/type/registry/construction/authority/generation/result provenance, counterfactual proof, alternative-explanation elimination, and remediation regression.
+
+The evidence ceiling is the weakest unproven material link. Parser success, a polymorphic feature, a signed payload, suspicious class, hook reachability, or debug-only permissiveness cannot by themselves establish DT4/DT5.
+
+## Remediation checks
+
+Prefer causal-boundary fixes rather than blocking one sample. Depending on root cause, remediation can include explicit schema-to-data mapping, closed canonical type registries, resolver decisions on canonical type identity, purpose-scoped authentication, least-capability reconstruction, side-effect-free construction, delayed/authorized secondary interpretation, and generation-aware invalidation.
+
+Regression verification proves both:
+
+1. the previously accepted wrong-context synthetic artifact is denied before unauthorized trust promotion; and
+2. intended neighboring data-only or explicit-schema behavior still succeeds under current schema version, registry generation, and reconstruction policy.
+
+Stop or abort the experiment if validation would require gadget-chain development, command execution, arbitrary file writes, external network effects, real stolen credentials, production secrets, third-party accounts, persistence, malware, destructive behavior, evasion, public dependency/registry manipulation, or any unauthorized target.
