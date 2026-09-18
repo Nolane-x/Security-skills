@@ -130,7 +130,7 @@ Record:
 - required current state/operation generation;
 - effective concurrent capability;
 - whether action is idempotent by contract;
-- single-effect or uniqueness invariant;
+- single effect or uniqueness invariant (implemented by a single-effect guard when appropriate);
 - bounded result;
 - receipt/result correlation.
 
