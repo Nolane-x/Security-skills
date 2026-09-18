@@ -6,154 +6,322 @@
       "runbook": "references/operator-runbook.md",
       "scenario_matrix": "references/operator-scenarios.json",
       "lab_only": true,
-      "required_runbook_sections": ["Attack surface", "Hypothesis matrix", "Controlled validation", "False-positive controls", "Evidence capture", "Remediation checks"]
+      "required_runbook_sections": [
+        "Attack surface",
+        "Hypothesis matrix",
+        "Controlled validation",
+        "False-positive controls",
+        "Evidence capture",
+        "Remediation checks"
+      ]
     },
     {
       "skill": "authorization-boundary-analysis",
       "runbook": "references/operator-runbook.md",
       "scenario_matrix": "references/operator-scenarios.json",
       "lab_only": true,
-      "required_runbook_sections": ["Attack surface", "Hypothesis matrix", "Controlled validation", "False-positive controls", "Evidence capture", "Remediation checks"]
+      "required_runbook_sections": [
+        "Attack surface",
+        "Hypothesis matrix",
+        "Controlled validation",
+        "False-positive controls",
+        "Evidence capture",
+        "Remediation checks"
+      ]
     },
     {
       "skill": "boot-chain-and-secure-boot-analysis",
       "runbook": "references/operator-runbook.md",
       "scenario_matrix": "references/operator-review-cases.json",
       "lab_only": true,
-      "required_runbook_sections": ["Attack surface", "Hypothesis matrix", "Controlled validation", "False-positive controls", "Evidence capture", "Remediation checks"]
+      "required_runbook_sections": [
+        "Attack surface",
+        "Hypothesis matrix",
+        "Controlled validation",
+        "False-positive controls",
+        "Evidence capture",
+        "Remediation checks"
+      ]
     },
     {
       "skill": "browser-process-boundary-analysis",
       "runbook": "references/operator-runbook.md",
       "scenario_matrix": "references/operator-review-cases.json",
       "lab_only": true,
-      "required_runbook_sections": ["Attack surface", "Hypothesis matrix", "Controlled validation", "False-positive controls", "Evidence capture", "Remediation checks"]
+      "required_runbook_sections": [
+        "Attack surface",
+        "Hypothesis matrix",
+        "Controlled validation",
+        "False-positive controls",
+        "Evidence capture",
+        "Remediation checks"
+      ]
     },
     {
       "skill": "cache-key-identity-analysis",
       "runbook": "references/operator-runbook.md",
       "scenario_matrix": "references/operator-review-cases.json",
       "lab_only": true,
-      "required_runbook_sections": ["Attack surface", "Hypothesis matrix", "Controlled validation", "False-positive controls", "Evidence capture", "Remediation checks"]
+      "required_runbook_sections": [
+        "Attack surface",
+        "Hypothesis matrix",
+        "Controlled validation",
+        "False-positive controls",
+        "Evidence capture",
+        "Remediation checks"
+      ]
     },
     {
       "skill": "canonicalization-and-namespace-analysis",
       "runbook": "references/operator-runbook.md",
       "scenario_matrix": "references/operator-review-cases.json",
       "lab_only": true,
-      "required_runbook_sections": ["Attack surface", "Hypothesis matrix", "Controlled validation", "False-positive controls", "Evidence capture", "Remediation checks"]
+      "required_runbook_sections": [
+        "Attack surface",
+        "Hypothesis matrix",
+        "Controlled validation",
+        "False-positive controls",
+        "Evidence capture",
+        "Remediation checks"
+      ]
     },
     {
       "skill": "certificate-and-hostname-validation-analysis",
       "runbook": "references/operator-runbook.md",
       "scenario_matrix": "references/operator-review-cases.json",
       "lab_only": true,
-      "required_runbook_sections": ["Attack surface", "Hypothesis matrix", "Controlled validation", "False-positive controls", "Evidence capture", "Remediation checks"]
+      "required_runbook_sections": [
+        "Attack surface",
+        "Hypothesis matrix",
+        "Controlled validation",
+        "False-positive controls",
+        "Evidence capture",
+        "Remediation checks"
+      ]
     },
     {
       "skill": "cloud-iam-path-analysis",
       "runbook": "references/operator-runbook.md",
       "scenario_matrix": "references/operator-scenarios.json",
       "lab_only": true,
-      "required_runbook_sections": ["Attack surface", "Hypothesis matrix", "Controlled validation", "False-positive controls", "Evidence capture", "Remediation checks"]
+      "required_runbook_sections": [
+        "Attack surface",
+        "Hypothesis matrix",
+        "Controlled validation",
+        "False-positive controls",
+        "Evidence capture",
+        "Remediation checks"
+      ]
     },
     {
       "skill": "confused-deputy-analysis",
       "runbook": "references/operator-runbook.md",
       "scenario_matrix": "references/operator-review-cases.json",
       "lab_only": true,
-      "required_runbook_sections": ["Attack surface", "Hypothesis matrix", "Controlled validation", "False-positive controls", "Evidence capture", "Remediation checks"]
+      "required_runbook_sections": [
+        "Attack surface",
+        "Hypothesis matrix",
+        "Controlled validation",
+        "False-positive controls",
+        "Evidence capture",
+        "Remediation checks"
+      ]
     },
     {
       "skill": "connector-plugin-trust-analysis",
       "runbook": "references/operator-runbook.md",
       "scenario_matrix": "references/operator-review-cases.json",
       "lab_only": true,
-      "required_runbook_sections": ["Attack surface", "Hypothesis matrix", "Controlled validation", "False-positive controls", "Evidence capture", "Remediation checks"]
+      "required_runbook_sections": [
+        "Attack surface",
+        "Hypothesis matrix",
+        "Controlled validation",
+        "False-positive controls",
+        "Evidence capture",
+        "Remediation checks"
+      ]
     },
     {
       "skill": "container-isolation-review",
       "runbook": "references/operator-runbook.md",
       "scenario_matrix": "references/operator-scenarios.json",
       "lab_only": true,
-      "required_runbook_sections": ["Attack surface", "Hypothesis matrix", "Controlled validation", "False-positive controls", "Evidence capture", "Remediation checks"]
+      "required_runbook_sections": [
+        "Attack surface",
+        "Hypothesis matrix",
+        "Controlled validation",
+        "False-positive controls",
+        "Evidence capture",
+        "Remediation checks"
+      ]
+    },
+    {
+      "skill": "cryptographic-protocol-misuse-analysis",
+      "runbook": "references/operator-runbook.md",
+      "scenario_matrix": "references/operator-review-cases.json",
+      "lab_only": true,
+      "required_runbook_sections": [
+        "Attack surface",
+        "Hypothesis matrix",
+        "Controlled validation",
+        "False-positive controls",
+        "Evidence capture",
+        "Remediation checks"
+      ]
     },
     {
       "skill": "deserialization-trust-analysis",
       "runbook": "references/operator-runbook.md",
       "scenario_matrix": "references/operator-review-cases.json",
       "lab_only": true,
-      "required_runbook_sections": ["Attack surface", "Hypothesis matrix", "Controlled validation", "False-positive controls", "Evidence capture", "Remediation checks"]
+      "required_runbook_sections": [
+        "Attack surface",
+        "Hypothesis matrix",
+        "Controlled validation",
+        "False-positive controls",
+        "Evidence capture",
+        "Remediation checks"
+      ]
     },
     {
       "skill": "driver-ioctl-surface-analysis",
       "runbook": "references/operator-runbook.md",
       "scenario_matrix": "references/operator-scenarios.json",
       "lab_only": true,
-      "required_runbook_sections": ["Attack surface", "Hypothesis matrix", "Controlled validation", "False-positive controls", "Evidence capture", "Remediation checks"]
+      "required_runbook_sections": [
+        "Attack surface",
+        "Hypothesis matrix",
+        "Controlled validation",
+        "False-positive controls",
+        "Evidence capture",
+        "Remediation checks"
+      ]
     },
     {
       "skill": "exploitability-triage",
       "runbook": "references/operator-runbook.md",
       "scenario_matrix": "references/operator-scenarios.json",
       "lab_only": true,
-      "required_runbook_sections": ["Attack surface", "Hypothesis matrix", "Controlled validation", "False-positive controls", "Evidence capture", "Remediation checks"]
+      "required_runbook_sections": [
+        "Attack surface",
+        "Hypothesis matrix",
+        "Controlled validation",
+        "False-positive controls",
+        "Evidence capture",
+        "Remediation checks"
+      ]
     },
     {
       "skill": "multi-tenant-data-isolation-analysis",
       "runbook": "references/operator-runbook.md",
       "scenario_matrix": "references/operator-review-cases.json",
       "lab_only": true,
-      "required_runbook_sections": ["Attack surface", "Hypothesis matrix", "Controlled validation", "False-positive controls", "Evidence capture", "Remediation checks"]
+      "required_runbook_sections": [
+        "Attack surface",
+        "Hypothesis matrix",
+        "Controlled validation",
+        "False-positive controls",
+        "Evidence capture",
+        "Remediation checks"
+      ]
     },
     {
       "skill": "prompt-injection-boundary-analysis",
       "runbook": "references/operator-runbook.md",
       "scenario_matrix": "references/operator-scenarios.json",
       "lab_only": true,
-      "required_runbook_sections": ["Attack surface", "Hypothesis matrix", "Controlled validation", "False-positive controls", "Evidence capture", "Remediation checks"]
+      "required_runbook_sections": [
+        "Attack surface",
+        "Hypothesis matrix",
+        "Controlled validation",
+        "False-positive controls",
+        "Evidence capture",
+        "Remediation checks"
+      ]
     },
     {
       "skill": "rag-memory-data-isolation-analysis",
       "runbook": "references/operator-runbook.md",
       "scenario_matrix": "references/operator-scenarios.json",
       "lab_only": true,
-      "required_runbook_sections": ["Attack surface", "Hypothesis matrix", "Controlled validation", "False-positive controls", "Evidence capture", "Remediation checks"]
+      "required_runbook_sections": [
+        "Attack surface",
+        "Hypothesis matrix",
+        "Controlled validation",
+        "False-positive controls",
+        "Evidence capture",
+        "Remediation checks"
+      ]
     },
     {
       "skill": "secrets-and-token-flow-analysis",
       "runbook": "references/operator-runbook.md",
       "scenario_matrix": "references/operator-review-cases.json",
       "lab_only": true,
-      "required_runbook_sections": ["Attack surface", "Hypothesis matrix", "Controlled validation", "False-positive controls", "Evidence capture", "Remediation checks"]
+      "required_runbook_sections": [
+        "Attack surface",
+        "Hypothesis matrix",
+        "Controlled validation",
+        "False-positive controls",
+        "Evidence capture",
+        "Remediation checks"
+      ]
     },
     {
       "skill": "server-side-request-boundary-analysis",
       "runbook": "references/operator-runbook.md",
       "scenario_matrix": "references/operator-scenarios.json",
       "lab_only": true,
-      "required_runbook_sections": ["Attack surface", "Hypothesis matrix", "Controlled validation", "False-positive controls", "Evidence capture", "Remediation checks"]
+      "required_runbook_sections": [
+        "Attack surface",
+        "Hypothesis matrix",
+        "Controlled validation",
+        "False-positive controls",
+        "Evidence capture",
+        "Remediation checks"
+      ]
     },
     {
       "skill": "supply-chain-dependency-review",
       "runbook": "references/operator-runbook.md",
       "scenario_matrix": "references/operator-review-cases.json",
       "lab_only": true,
-      "required_runbook_sections": ["Attack surface", "Hypothesis matrix", "Controlled validation", "False-positive controls", "Evidence capture", "Remediation checks"]
+      "required_runbook_sections": [
+        "Attack surface",
+        "Hypothesis matrix",
+        "Controlled validation",
+        "False-positive controls",
+        "Evidence capture",
+        "Remediation checks"
+      ]
     },
     {
       "skill": "tool-capability-and-confirmation-analysis",
       "runbook": "references/operator-runbook.md",
       "scenario_matrix": "references/operator-review-cases.json",
       "lab_only": true,
-      "required_runbook_sections": ["Attack surface", "Hypothesis matrix", "Controlled validation", "False-positive controls", "Evidence capture", "Remediation checks"]
+      "required_runbook_sections": [
+        "Attack surface",
+        "Hypothesis matrix",
+        "Controlled validation",
+        "False-positive controls",
+        "Evidence capture",
+        "Remediation checks"
+      ]
     },
     {
       "skill": "web-routing-and-middleware-analysis",
       "runbook": "references/operator-runbook.md",
       "scenario_matrix": "references/operator-scenarios.json",
       "lab_only": true,
-      "required_runbook_sections": ["Attack surface", "Hypothesis matrix", "Controlled validation", "False-positive controls", "Evidence capture", "Remediation checks"]
+      "required_runbook_sections": [
+        "Attack surface",
+        "Hypothesis matrix",
+        "Controlled validation",
+        "False-positive controls",
+        "Evidence capture",
+        "Remediation checks"
+      ]
     }
   ]
 }
