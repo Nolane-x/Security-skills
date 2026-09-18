@@ -238,6 +238,8 @@ Sanitizer output is supporting evidence, not the entire finding.
 
 ## Evidence promotion and ceiling
 
+The evidence ceiling is the strongest directly demonstrated ML stage; do not promote beyond the captured causal tuple and controls.
+
 Use the ML ladder:
 
 - **ML0:** surfaces and lifetime transitions mapped.
