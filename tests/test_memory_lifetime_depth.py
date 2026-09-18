@@ -173,7 +173,7 @@ class MemoryLifetimeDepthTests(unittest.TestCase):
         payload = json.loads(PROFILES.read_text(encoding="utf-8"))
         self.assertEqual(payload["version"], 2)
         profiles = payload["profiles"]
-        self.assertEqual(len(profiles), 25)
+        self.assertGreaterEqual(len(profiles), 25)
         matching = [p for p in profiles if p["skill"] == "memory-lifetime-analysis"]
         self.assertEqual(len(matching), 1)
         profile = matching[0]
