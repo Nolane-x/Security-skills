@@ -7,7 +7,7 @@ Use this runbook only for local, owned, sandboxed, staging, benchmark/CTF, simul
 Map:
 
 - uploader principal/tenant;
-- upload request and transaction generations;
+- upload request generation and upload transaction generation;
 - raw artifact identity, hash, and metadata;
 - client filename, extension, declared MIME, and sniffed type;
 - normalized storage identity;
