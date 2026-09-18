@@ -139,7 +139,7 @@ Use:
 
 - local test chains with deterministic resets;
 - synthetic caller/callback contracts;
-- callback depth capped to one unless a deeper bounded level is necessary for a specific invariant;
+- callback bounded depth is capped to one unless a deeper bounded level is necessary for a specific invariant;
 - fake hook tokens with fixed behavior;
 - synthetic balances/shares/claims;
 - shadow ledgers;
