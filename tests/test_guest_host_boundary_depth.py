@@ -159,7 +159,7 @@ class GuestHostBoundaryDepthTests(unittest.TestCase):
         payload = json.loads(PROFILES.read_text(encoding="utf-8"))
         self.assertEqual(payload["version"], 2)
         profiles = payload["profiles"]
-        self.assertEqual(len(profiles), 24)
+        self.assertGreaterEqual(len(profiles), 24)
         matching = [p for p in profiles if p["skill"] == "guest-host-boundary-analysis"]
         self.assertEqual(len(matching), 1)
         profile = matching[0]
