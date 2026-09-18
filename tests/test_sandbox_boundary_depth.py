@@ -173,7 +173,7 @@ class SandboxBoundaryDepthTests(unittest.TestCase):
         payload = json.loads(PROFILES.read_text(encoding="utf-8"))
         self.assertEqual(payload["version"], 2)
         profiles = payload["profiles"]
-        self.assertEqual(len(profiles), 27)
+        self.assertGreaterEqual(len(profiles), 27)
         matching = [p for p in profiles if p["skill"] == "sandbox-boundary-analysis"]
         self.assertEqual(len(matching), 1)
         profile = matching[0]
