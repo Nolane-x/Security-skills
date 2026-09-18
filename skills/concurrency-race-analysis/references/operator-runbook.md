@@ -140,7 +140,7 @@ Use a fake ledger, inert counter, read-only object, synthetic marker, or bounded
 
 Prefer deterministic control over probability amplification:
 
-- explicit barriers;
+- explicit deterministic barrier controls;
 - test-only scheduler hooks;
 - event/latch synchronization;
 - controlled executor suspension;
