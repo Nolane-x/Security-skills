@@ -40,8 +40,8 @@ Record:
 - function/compilation-unit identity;
 - baseline execution generation;
 - profile/warmup generation;
-- tier identity/generation;
-- optimized code identity/generation;
+- tier identity and tier generation;
+- optimized code identity and optimized code generation;
 - OSR/inlining/specialization generations;
 - invalidation/recompile/deopt generations.
 
