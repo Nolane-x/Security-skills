@@ -174,6 +174,12 @@ Before promotion, rule out at least the relevant alternatives:
 - an RNG/nonce-generation defect that belongs to the dedicated randomness-lifecycle skill;
 - certificate/hostname acceptance that belongs to the dedicated PKI profile.
 
+## Evidence contract
+
+Record the exact security goal/protocol intent, peer/role/session identities, negotiation and selected suite, transcript identity and authenticated binding, synthetic key-schedule root/context, key role/direction/epoch, domain-separation labels, nonce/sequence/record identity, protocol phase, authenticated context/AAD, verification/authentication order, replay/freshness state, final application decision, authenticated protocol/session state, lifecycle/rekey/resumption generation, privileged consumer, bounded result/receipt, counterfactual controls, alternative explanations, and remediation result.
+
+Evidence must stay bound to stable synthetic fixture and test-run identifiers. Primitive names, valid tags/signatures, decrypt or handshake success, selected-suite logs, nonce observations, replay-cache telemetry, or a protocol crash are observations, not causal proof by themselves. Promotion requires the CP0–CP5 ladder and may not exceed the weakest uncaptured material transition.
+
 ## Evidence ceiling
 
 Primitive names, static warnings, approved algorithms, signature/tag success, decrypt success, handshake success, selected-suite logs, unique-looking nonces, replay-cache state, or protocol crashes cannot by themselves exceed CP1.
