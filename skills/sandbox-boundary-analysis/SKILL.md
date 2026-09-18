@@ -16,7 +16,7 @@ Use for browser renderers, document/media sandboxes, plugin workers, build sandb
 
 ## Preconditions
 
-All tests stay on owned/local/sandboxed targets or explicit authorization. Use benign boundary proofs such as access to a synthetic broker resource; do not pursue persistence or host compromise.
+All tests stay on local/owned/sandboxed targets or explicit authorization. Use benign boundary proofs such as access to a synthetic broker resource; do not pursue persistence or host compromise.
 
 ## Workflow
 
