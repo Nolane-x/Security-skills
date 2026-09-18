@@ -73,6 +73,8 @@ Record:
 
 A strong KDF does not repair missing context. Prove whether two logically distinct authorities can derive confusable keys because role, direction, phase, purpose, protocol, or epoch is omitted.
 
+Treat domain separation as an explicit security binding: document which protocol, role, direction, purpose, phase, and epoch each label separates, and prove paired controls cannot cross those domains.
+
 Use only synthetic key material. Never require real-key recovery.
 
 ## Nonce, sequence, and record identity trace
