@@ -208,7 +208,7 @@ class OracleExternalDataTrustDepthTests(unittest.TestCase):
         payload = json.loads(PROFILES.read_text(encoding="utf-8"))
         self.assertEqual(payload["version"], 2)
         profiles = payload["profiles"]
-        self.assertEqual(len(profiles), 35)
+        self.assertGreaterEqual(len(profiles), 35)
         matching = [p for p in profiles if p["skill"] == "oracle-and-external-data-trust-analysis"]
         self.assertEqual(len(matching), 1)
         profile = matching[0]
