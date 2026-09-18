@@ -240,6 +240,20 @@
       ]
     },
     {
+      "skill": "file-upload-processing-analysis",
+      "runbook": "references/operator-runbook.md",
+      "scenario_matrix": "references/operator-review-cases.json",
+      "lab_only": true,
+      "required_runbook_sections": [
+        "Attack surface",
+        "Hypothesis matrix",
+        "Controlled validation",
+        "False-positive controls",
+        "Evidence capture",
+        "Remediation checks"
+      ]
+    },
+    {
       "skill": "firmware-update-trust-chain-analysis",
       "runbook": "references/operator-runbook.md",
       "scenario_matrix": "references/operator-review-cases.json",
