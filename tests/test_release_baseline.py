@@ -71,7 +71,10 @@ def make_fixture(root: Path) -> None:
     (root / "CONTRIBUTING.md").write_text("# Contributing\n", encoding="utf-8")
     (root / "docs").mkdir()
     (root / "docs" / "wave10-closure-audit.md").write_text(
-        "# Wave 10 Closure Audit\n", encoding="utf-8"
+        "Wave 10\n1\nApache-2.0\n", encoding="utf-8"
+    )
+    (root / "docs" / "repository-metadata.md").write_text(
+        "Wave 10\n1\nApache-2.0\n", encoding="utf-8"
     )
 
     write_json(
@@ -89,7 +92,13 @@ def make_fixture(root: Path) -> None:
             },
             "operator_depth_registry_version": 2,
             "license": "Apache-2.0",
-            "public_readmes": ["README.md", "README-VN.md", "README-CN.md"],
+            "published_release_documents": [
+                "README.md",
+                "README-VN.md",
+                "README-CN.md",
+                "docs/repository-metadata.md",
+                "docs/wave10-closure-audit.md",
+            ],
             "required_readme_tokens": ["Wave 10", "1", "Apache-2.0"],
             "required_paths": [
                 "LICENSE",
