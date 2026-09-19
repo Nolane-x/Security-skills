@@ -37,7 +37,7 @@ Verification-first security skill graph and deterministic cross-agent evaluation
 - CI-enforced operator-depth profiles: **40**
 - License: **Apache-2.0**
 
-See `docs/wave10-closure-audit.md` for the closure contract.
+Machine-readable authority: `release-baseline.json`. Validation contract: `docs/release-baseline-contract.md`. Closure rationale: `docs/wave10-closure-audit.md`.
 
 ## Language landing pages
 
