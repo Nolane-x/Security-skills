@@ -11,11 +11,6 @@
   },
   "operator_depth_registry_version": 2,
   "license": "Apache-2.0",
-  "public_readmes": [
-    "README.md",
-    "README-VN.md",
-    "README-CN.md"
-  ],
   "required_readme_tokens": [
     "Wave 10",
     "83",
@@ -24,12 +19,23 @@
     "Apache-2.0"
   ],
   "required_paths": [
+    "release-baseline.json",
     "LICENSE",
     "SECURITY.md",
     "CONTRIBUTING.md",
+    "scripts/validate_release_baseline.py",
     "operator-depth/profiles.json",
     "benchmarks/suites/core.json",
     "benchmarks/suites/portability.json",
+    "docs/release-baseline-contract.md",
+    "docs/repository-metadata.md",
+    "docs/wave10-closure-audit.md"
+  ],
+  "published_release_documents": [
+    "README.md",
+    "README-VN.md",
+    "README-CN.md",
+    "docs/repository-metadata.md",
     "docs/wave10-closure-audit.md"
   ]
 }
