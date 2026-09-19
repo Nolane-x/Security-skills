@@ -1,0 +1,649 @@
+{
+  "schema_version": 1,
+  "closure": "wave10-40-profile-freeze",
+  "canonical_skill_count": 83,
+  "operator_depth_profile_count": 40,
+  "intentionally_non_profile_skill_count": 43,
+  "policy": "Do not add operator-depth profiles solely to increase count. Add one only if a reviewed closure audit proves a distinct causal mechanism not owned by an existing profile.",
+  "entries": [
+    {
+      "skill": "ai-agent-security-assessment",
+      "role": "operator-depth-profile",
+      "causal_owners": [
+        "ai-agent-security-assessment"
+      ],
+      "rationale": "Owns a distinct CI-enforced causal security mechanism with an operator runbook, deterministic review matrix, evidence ladder, counterfactual controls, and remediation replay."
+    },
+    {
+      "skill": "android-component-exposure-analysis",
+      "role": "domain-surface-specialist",
+      "causal_owners": [
+        "authorization-boundary-analysis",
+        "confused-deputy-analysis"
+      ],
+      "rationale": "Maps Android component/exported/permission surfaces; causal authorization and deputy failures are owned by boundary profiles."
+    },
+    {
+      "skill": "android-intent-and-deeplink-analysis",
+      "role": "domain-surface-specialist",
+      "causal_owners": [
+        "authorization-boundary-analysis",
+        "canonicalization-and-namespace-analysis",
+        "confused-deputy-analysis"
+      ],
+      "rationale": "Maps intent and deep-link entry surfaces; authority, identity normalization, and deputy mechanisms have dedicated causal owners."
+    },
+    {
+      "skill": "android-keystore-and-local-storage-analysis",
+      "role": "domain-surface-specialist",
+      "causal_owners": [
+        "secrets-and-token-flow-analysis",
+        "authorization-boundary-analysis"
+      ],
+      "rationale": "Maps mobile secret/storage surfaces while credential lifecycle and access authority remain owned by existing causal profiles."
+    },
+    {
+      "skill": "android-webview-bridge-analysis",
+      "role": "domain-surface-specialist",
+      "causal_owners": [
+        "browser-process-boundary-analysis",
+        "confused-deputy-analysis",
+        "authorization-boundary-analysis"
+      ],
+      "rationale": "Maps WebView bridge exposure; browser boundary, delegated authority, and authorization mechanisms are already modeled causally."
+    },
+    {
+      "skill": "attack-surface-mapping",
+      "role": "discovery-workflow",
+      "causal_owners": [],
+      "rationale": "Enumerates reachable security surfaces and feeds hypotheses; it does not own a distinct failure mechanism."
+    },
+    {
+      "skill": "authorization-boundary-analysis",
+      "role": "operator-depth-profile",
+      "causal_owners": [
+        "authorization-boundary-analysis"
+      ],
+      "rationale": "Owns a distinct CI-enforced causal security mechanism with an operator runbook, deterministic review matrix, evidence ladder, counterfactual controls, and remediation replay."
+    },
+    {
+      "skill": "binary-reconnaissance",
+      "role": "discovery-workflow",
+      "causal_owners": [],
+      "rationale": "Discovers binary structure, symbols, and candidate surfaces; causal findings are promoted into the relevant mechanism profile."
+    },
+    {
+      "skill": "boot-chain-and-secure-boot-analysis",
+      "role": "operator-depth-profile",
+      "causal_owners": [
+        "boot-chain-and-secure-boot-analysis"
+      ],
+      "rationale": "Owns a distinct CI-enforced causal security mechanism with an operator runbook, deterministic review matrix, evidence ladder, counterfactual controls, and remediation replay."
+    },
+    {
+      "skill": "bounds-and-integer-analysis",
+      "role": "operator-depth-profile",
+      "causal_owners": [
+        "bounds-and-integer-analysis"
+      ],
+      "rationale": "Owns a distinct CI-enforced causal security mechanism with an operator runbook, deterministic review matrix, evidence ladder, counterfactual controls, and remediation replay."
+    },
+    {
+      "skill": "browser-process-boundary-analysis",
+      "role": "operator-depth-profile",
+      "causal_owners": [
+        "browser-process-boundary-analysis"
+      ],
+      "rationale": "Owns a distinct CI-enforced causal security mechanism with an operator runbook, deterministic review matrix, evidence ladder, counterfactual controls, and remediation replay."
+    },
+    {
+      "skill": "cache-key-identity-analysis",
+      "role": "operator-depth-profile",
+      "causal_owners": [
+        "cache-key-identity-analysis"
+      ],
+      "rationale": "Owns a distinct CI-enforced causal security mechanism with an operator runbook, deterministic review matrix, evidence ladder, counterfactual controls, and remediation replay."
+    },
+    {
+      "skill": "canonicalization-and-namespace-analysis",
+      "role": "operator-depth-profile",
+      "causal_owners": [
+        "canonicalization-and-namespace-analysis"
+      ],
+      "rationale": "Owns a distinct CI-enforced causal security mechanism with an operator runbook, deterministic review matrix, evidence ladder, counterfactual controls, and remediation replay."
+    },
+    {
+      "skill": "certificate-and-hostname-validation-analysis",
+      "role": "operator-depth-profile",
+      "causal_owners": [
+        "certificate-and-hostname-validation-analysis"
+      ],
+      "rationale": "Owns a distinct CI-enforced causal security mechanism with an operator runbook, deterministic review matrix, evidence ladder, counterfactual controls, and remediation replay."
+    },
+    {
+      "skill": "cloud-iam-path-analysis",
+      "role": "operator-depth-profile",
+      "causal_owners": [
+        "cloud-iam-path-analysis"
+      ],
+      "rationale": "Owns a distinct CI-enforced causal security mechanism with an operator runbook, deterministic review matrix, evidence ladder, counterfactual controls, and remediation replay."
+    },
+    {
+      "skill": "concurrency-race-analysis",
+      "role": "operator-depth-profile",
+      "causal_owners": [
+        "concurrency-race-analysis"
+      ],
+      "rationale": "Owns a distinct CI-enforced causal security mechanism with an operator runbook, deterministic review matrix, evidence ladder, counterfactual controls, and remediation replay."
+    },
+    {
+      "skill": "confused-deputy-analysis",
+      "role": "operator-depth-profile",
+      "causal_owners": [
+        "confused-deputy-analysis"
+      ],
+      "rationale": "Owns a distinct CI-enforced causal security mechanism with an operator runbook, deterministic review matrix, evidence ladder, counterfactual controls, and remediation replay."
+    },
+    {
+      "skill": "connector-plugin-trust-analysis",
+      "role": "operator-depth-profile",
+      "causal_owners": [
+        "connector-plugin-trust-analysis"
+      ],
+      "rationale": "Owns a distinct CI-enforced causal security mechanism with an operator runbook, deterministic review matrix, evidence ladder, counterfactual controls, and remediation replay."
+    },
+    {
+      "skill": "container-isolation-review",
+      "role": "operator-depth-profile",
+      "causal_owners": [
+        "container-isolation-review"
+      ],
+      "rationale": "Owns a distinct CI-enforced causal security mechanism with an operator runbook, deterministic review matrix, evidence ladder, counterfactual controls, and remediation replay."
+    },
+    {
+      "skill": "controlled-security-experiment-design",
+      "role": "evidence-workflow",
+      "causal_owners": [],
+      "rationale": "Defines safe falsifiable experiments and controls across domains rather than owning a vulnerability mechanism."
+    },
+    {
+      "skill": "corpus-engineering",
+      "role": "fuzzing-workflow",
+      "causal_owners": [],
+      "rationale": "Builds and curates fuzzing inputs; resulting failures are routed to parser, protocol, memory, bounds, or other causal profiles."
+    },
+    {
+      "skill": "crash-triage-and-minimization",
+      "role": "evidence-workflow",
+      "causal_owners": [
+        "memory-lifetime-analysis",
+        "bounds-and-integer-analysis",
+        "type-confusion-analysis",
+        "parser-state-machine-analysis"
+      ],
+      "rationale": "Minimizes and classifies crashes; root cause belongs to the causal mechanism established by evidence."
+    },
+    {
+      "skill": "cryptographic-protocol-misuse-analysis",
+      "role": "operator-depth-profile",
+      "causal_owners": [
+        "cryptographic-protocol-misuse-analysis"
+      ],
+      "rationale": "Owns a distinct CI-enforced causal security mechanism with an operator runbook, deterministic review matrix, evidence ladder, counterfactual controls, and remediation replay."
+    },
+    {
+      "skill": "deserialization-trust-analysis",
+      "role": "operator-depth-profile",
+      "causal_owners": [
+        "deserialization-trust-analysis"
+      ],
+      "rationale": "Owns a distinct CI-enforced causal security mechanism with an operator runbook, deterministic review matrix, evidence ladder, counterfactual controls, and remediation replay."
+    },
+    {
+      "skill": "differential-testing",
+      "role": "analysis-workflow",
+      "causal_owners": [],
+      "rationale": "Compares implementations or builds to discover divergences; a divergence is not itself a distinct security mechanism."
+    },
+    {
+      "skill": "driver-ioctl-surface-analysis",
+      "role": "operator-depth-profile",
+      "causal_owners": [
+        "driver-ioctl-surface-analysis"
+      ],
+      "rationale": "Owns a distinct CI-enforced causal security mechanism with an operator runbook, deterministic review matrix, evidence ladder, counterfactual controls, and remediation replay."
+    },
+    {
+      "skill": "embedded-interface-and-debug-surface-analysis",
+      "role": "domain-surface-specialist",
+      "causal_owners": [
+        "authorization-boundary-analysis",
+        "boot-chain-and-secure-boot-analysis",
+        "firmware-update-trust-chain-analysis"
+      ],
+      "rationale": "Maps embedded/debug interfaces; authority and platform trust-chain consequences have dedicated owners."
+    },
+    {
+      "skill": "evidence-driven-vulnerability-validation",
+      "role": "evidence-workflow",
+      "causal_owners": [],
+      "rationale": "Promotes claims through evidence states and controls; it is repository-wide verification methodology."
+    },
+    {
+      "skill": "evidence-ledger-and-claim-tracking",
+      "role": "evidence-workflow",
+      "causal_owners": [],
+      "rationale": "Tracks claims, receipts, and evidence provenance across investigations instead of defining a vulnerability mechanism."
+    },
+    {
+      "skill": "exploitability-triage",
+      "role": "operator-depth-profile",
+      "causal_owners": [
+        "exploitability-triage"
+      ],
+      "rationale": "Owns a distinct CI-enforced causal security mechanism with an operator runbook, deterministic review matrix, evidence ladder, counterfactual controls, and remediation replay."
+    },
+    {
+      "skill": "false-positive-elimination",
+      "role": "evidence-workflow",
+      "causal_owners": [],
+      "rationale": "Eliminates alternative explanations and false positives across all causal profiles."
+    },
+    {
+      "skill": "file-upload-processing-analysis",
+      "role": "operator-depth-profile",
+      "causal_owners": [
+        "file-upload-processing-analysis"
+      ],
+      "rationale": "Owns a distinct CI-enforced causal security mechanism with an operator runbook, deterministic review matrix, evidence ladder, counterfactual controls, and remediation replay."
+    },
+    {
+      "skill": "firmware-attack-surface-analysis",
+      "role": "domain-surface-specialist",
+      "causal_owners": [
+        "boot-chain-and-secure-boot-analysis",
+        "firmware-update-trust-chain-analysis"
+      ],
+      "rationale": "Maps firmware surfaces; boot/update trust transitions are handled by causal trust-chain profiles."
+    },
+    {
+      "skill": "firmware-update-trust-chain-analysis",
+      "role": "operator-depth-profile",
+      "causal_owners": [
+        "firmware-update-trust-chain-analysis"
+      ],
+      "rationale": "Owns a distinct CI-enforced causal security mechanism with an operator runbook, deterministic review matrix, evidence ladder, counterfactual controls, and remediation replay."
+    },
+    {
+      "skill": "fix-validation-experiment",
+      "role": "remediation-workflow",
+      "causal_owners": [],
+      "rationale": "Designs before/after remediation experiments and regression evidence across domains."
+    },
+    {
+      "skill": "fuzz-harness-design",
+      "role": "fuzzing-workflow",
+      "causal_owners": [],
+      "rationale": "Creates bounded harnesses and oracles; the discovered defect is assigned to its causal mechanism profile."
+    },
+    {
+      "skill": "fuzzing-workflow",
+      "role": "fuzzing-workflow",
+      "causal_owners": [],
+      "rationale": "Orchestrates fuzzing campaigns and evidence capture rather than owning the resulting failure mechanism."
+    },
+    {
+      "skill": "grammar-aware-fuzzing",
+      "role": "fuzzing-workflow",
+      "causal_owners": [
+        "parser-state-machine-analysis",
+        "protocol-state-machine-analysis"
+      ],
+      "rationale": "Generates grammar-aware inputs; parser/protocol state failures have dedicated causal owners."
+    },
+    {
+      "skill": "guest-host-boundary-analysis",
+      "role": "operator-depth-profile",
+      "causal_owners": [
+        "guest-host-boundary-analysis"
+      ],
+      "rationale": "Owns a distinct CI-enforced causal security mechanism with an operator runbook, deterministic review matrix, evidence ladder, counterfactual controls, and remediation replay."
+    },
+    {
+      "skill": "hypervisor-shared-memory-analysis",
+      "role": "domain-surface-specialist",
+      "causal_owners": [
+        "guest-host-boundary-analysis",
+        "concurrency-race-analysis",
+        "memory-lifetime-analysis"
+      ],
+      "rationale": "Maps hypervisor shared-memory surfaces; boundary, race, and lifetime mechanisms are modeled by existing profiles."
+    },
+    {
+      "skill": "ios-entitlement-and-sandbox-analysis",
+      "role": "domain-surface-specialist",
+      "causal_owners": [
+        "sandbox-boundary-analysis",
+        "authorization-boundary-analysis"
+      ],
+      "rationale": "Maps iOS entitlement/sandbox surfaces while sandbox capability and authorization failures have causal owners."
+    },
+    {
+      "skill": "ios-url-scheme-and-universal-link-analysis",
+      "role": "domain-surface-specialist",
+      "causal_owners": [
+        "canonicalization-and-namespace-analysis",
+        "authorization-boundary-analysis",
+        "confused-deputy-analysis"
+      ],
+      "rationale": "Maps URL/universal-link entry surfaces; identity resolution and authority transfer are covered causally."
+    },
+    {
+      "skill": "jit-invariant-analysis",
+      "role": "operator-depth-profile",
+      "causal_owners": [
+        "jit-invariant-analysis"
+      ],
+      "rationale": "Owns a distinct CI-enforced causal security mechanism with an operator runbook, deterministic review matrix, evidence ladder, counterfactual controls, and remediation replay."
+    },
+    {
+      "skill": "kernel-attack-surface-analysis",
+      "role": "domain-surface-specialist",
+      "causal_owners": [
+        "driver-ioctl-surface-analysis",
+        "memory-lifetime-analysis",
+        "bounds-and-integer-analysis",
+        "type-confusion-analysis"
+      ],
+      "rationale": "Maps kernel-facing surfaces; concrete driver, lifetime, bounds, and type mechanisms have operator-depth owners."
+    },
+    {
+      "skill": "memory-lifetime-analysis",
+      "role": "operator-depth-profile",
+      "causal_owners": [
+        "memory-lifetime-analysis"
+      ],
+      "rationale": "Owns a distinct CI-enforced causal security mechanism with an operator runbook, deterministic review matrix, evidence ladder, counterfactual controls, and remediation replay."
+    },
+    {
+      "skill": "mobile-network-trust-analysis",
+      "role": "domain-surface-specialist",
+      "causal_owners": [
+        "certificate-and-hostname-validation-analysis",
+        "cryptographic-protocol-misuse-analysis",
+        "secrets-and-token-flow-analysis"
+      ],
+      "rationale": "Maps mobile network trust surfaces while PKI, protocol crypto, and credential flow have dedicated profiles."
+    },
+    {
+      "skill": "multi-tenant-data-isolation-analysis",
+      "role": "operator-depth-profile",
+      "causal_owners": [
+        "multi-tenant-data-isolation-analysis"
+      ],
+      "rationale": "Owns a distinct CI-enforced causal security mechanism with an operator runbook, deterministic review matrix, evidence ladder, counterfactual controls, and remediation replay."
+    },
+    {
+      "skill": "nonce-and-randomness-lifecycle-analysis",
+      "role": "operator-depth-profile",
+      "causal_owners": [
+        "nonce-and-randomness-lifecycle-analysis"
+      ],
+      "rationale": "Owns a distinct CI-enforced causal security mechanism with an operator runbook, deterministic review matrix, evidence ladder, counterfactual controls, and remediation replay."
+    },
+    {
+      "skill": "oracle-and-external-data-trust-analysis",
+      "role": "operator-depth-profile",
+      "causal_owners": [
+        "oracle-and-external-data-trust-analysis"
+      ],
+      "rationale": "Owns a distinct CI-enforced causal security mechanism with an operator runbook, deterministic review matrix, evidence ladder, counterfactual controls, and remediation replay."
+    },
+    {
+      "skill": "parser-state-machine-analysis",
+      "role": "operator-depth-profile",
+      "causal_owners": [
+        "parser-state-machine-analysis"
+      ],
+      "rationale": "Owns a distinct CI-enforced causal security mechanism with an operator runbook, deterministic review matrix, evidence ladder, counterfactual controls, and remediation replay."
+    },
+    {
+      "skill": "patch-diff-variant-analysis",
+      "role": "discovery-workflow",
+      "causal_owners": [
+        "variant-hunting"
+      ],
+      "rationale": "Uses code deltas to discover candidate variants; causal validation remains with the mechanism-specific profile."
+    },
+    {
+      "skill": "prompt-injection-boundary-analysis",
+      "role": "operator-depth-profile",
+      "causal_owners": [
+        "prompt-injection-boundary-analysis"
+      ],
+      "rationale": "Owns a distinct CI-enforced causal security mechanism with an operator runbook, deterministic review matrix, evidence ladder, counterfactual controls, and remediation replay."
+    },
+    {
+      "skill": "protocol-state-machine-analysis",
+      "role": "operator-depth-profile",
+      "causal_owners": [
+        "protocol-state-machine-analysis"
+      ],
+      "rationale": "Owns a distinct CI-enforced causal security mechanism with an operator runbook, deterministic review matrix, evidence ladder, counterfactual controls, and remediation replay."
+    },
+    {
+      "skill": "rag-memory-data-isolation-analysis",
+      "role": "operator-depth-profile",
+      "causal_owners": [
+        "rag-memory-data-isolation-analysis"
+      ],
+      "rationale": "Owns a distinct CI-enforced causal security mechanism with an operator runbook, deterministic review matrix, evidence ladder, counterfactual controls, and remediation replay."
+    },
+    {
+      "skill": "regression-matrix-testing",
+      "role": "remediation-workflow",
+      "causal_owners": [],
+      "rationale": "Runs regression combinations across versions/configurations after fixes; it is verification infrastructure."
+    },
+    {
+      "skill": "remediation-and-regression",
+      "role": "remediation-workflow",
+      "causal_owners": [],
+      "rationale": "Coordinates remediation and regression closure after causal validation."
+    },
+    {
+      "skill": "reproduction-environment-capture",
+      "role": "evidence-workflow",
+      "causal_owners": [],
+      "rationale": "Pins environments, revisions, and configuration for reproducibility across every domain."
+    },
+    {
+      "skill": "research-route-selection",
+      "role": "orchestration-workflow",
+      "causal_owners": [],
+      "rationale": "Selects research paths and skills based on the case; it is orchestration, not a causal defect class."
+    },
+    {
+      "skill": "root-cause-impact-separation",
+      "role": "evidence-workflow",
+      "causal_owners": [],
+      "rationale": "Separates primitive/root cause from consequence so profiles stop at evidence-supported impact."
+    },
+    {
+      "skill": "sandbox-boundary-analysis",
+      "role": "operator-depth-profile",
+      "causal_owners": [
+        "sandbox-boundary-analysis"
+      ],
+      "rationale": "Owns a distinct CI-enforced causal security mechanism with an operator runbook, deterministic review matrix, evidence ladder, counterfactual controls, and remediation replay."
+    },
+    {
+      "skill": "sanitizer-guided-memory-analysis",
+      "role": "analysis-workflow",
+      "causal_owners": [
+        "memory-lifetime-analysis",
+        "bounds-and-integer-analysis",
+        "type-confusion-analysis"
+      ],
+      "rationale": "Uses instrumentation to discover memory symptoms; causal ownership belongs to lifetime, bounds, type, or neighboring mechanisms."
+    },
+    {
+      "skill": "secrets-and-token-flow-analysis",
+      "role": "operator-depth-profile",
+      "causal_owners": [
+        "secrets-and-token-flow-analysis"
+      ],
+      "rationale": "Owns a distinct CI-enforced causal security mechanism with an operator runbook, deterministic review matrix, evidence ladder, counterfactual controls, and remediation replay."
+    },
+    {
+      "skill": "secure-code-review",
+      "role": "analysis-workflow",
+      "causal_owners": [],
+      "rationale": "Performs broad static review and hypothesis generation before mechanism-specific validation."
+    },
+    {
+      "skill": "security-research-case-management",
+      "role": "orchestration-workflow",
+      "causal_owners": [],
+      "rationale": "Manages scoped research-case lifecycle, artifacts, and state transitions."
+    },
+    {
+      "skill": "security-research-reporting",
+      "role": "reporting-workflow",
+      "causal_owners": [],
+      "rationale": "Produces evidence-bounded reports after validation; it does not define a failure mechanism."
+    },
+    {
+      "skill": "security-research-router",
+      "role": "orchestration-workflow",
+      "causal_owners": [],
+      "rationale": "Routes cases through graph prerequisites and packs; causal ownership stays with selected domain profiles."
+    },
+    {
+      "skill": "security-scope-and-authorization",
+      "role": "governance-workflow",
+      "causal_owners": [],
+      "rationale": "Establishes authorization and safety scope before intrusive validation; it is a global gate."
+    },
+    {
+      "skill": "server-side-request-boundary-analysis",
+      "role": "operator-depth-profile",
+      "causal_owners": [
+        "server-side-request-boundary-analysis"
+      ],
+      "rationale": "Owns a distinct CI-enforced causal security mechanism with an operator runbook, deterministic review matrix, evidence ladder, counterfactual controls, and remediation replay."
+    },
+    {
+      "skill": "smart-contract-invariant-analysis",
+      "role": "operator-depth-profile",
+      "causal_owners": [
+        "smart-contract-invariant-analysis"
+      ],
+      "rationale": "Owns a distinct CI-enforced causal security mechanism with an operator runbook, deterministic review matrix, evidence ladder, counterfactual controls, and remediation replay."
+    },
+    {
+      "skill": "smart-contract-reentrancy-state-analysis",
+      "role": "operator-depth-profile",
+      "causal_owners": [
+        "smart-contract-reentrancy-state-analysis"
+      ],
+      "rationale": "Owns a distinct CI-enforced causal security mechanism with an operator runbook, deterministic review matrix, evidence ladder, counterfactual controls, and remediation replay."
+    },
+    {
+      "skill": "smart-contract-upgradeability-analysis",
+      "role": "operator-depth-profile",
+      "causal_owners": [
+        "smart-contract-upgradeability-analysis"
+      ],
+      "rationale": "Owns a distinct CI-enforced causal security mechanism with an operator runbook, deterministic review matrix, evidence ladder, counterfactual controls, and remediation replay."
+    },
+    {
+      "skill": "stateful-protocol-fuzzing",
+      "role": "fuzzing-workflow",
+      "causal_owners": [
+        "protocol-state-machine-analysis"
+      ],
+      "rationale": "Generates stateful protocol sequences; the causal protocol-state mechanism is owned by the protocol profile."
+    },
+    {
+      "skill": "static-dataflow-analysis",
+      "role": "analysis-workflow",
+      "causal_owners": [],
+      "rationale": "Discovers data/control-flow hypotheses; security consequence must be validated by an owning causal profile."
+    },
+    {
+      "skill": "static-dynamic-correlation",
+      "role": "analysis-workflow",
+      "causal_owners": [],
+      "rationale": "Correlates static hypotheses with runtime evidence across causal domains."
+    },
+    {
+      "skill": "supply-chain-dependency-review",
+      "role": "operator-depth-profile",
+      "causal_owners": [
+        "supply-chain-dependency-review"
+      ],
+      "rationale": "Owns a distinct CI-enforced causal security mechanism with an operator runbook, deterministic review matrix, evidence ladder, counterfactual controls, and remediation replay."
+    },
+    {
+      "skill": "symbolic-execution-workflow",
+      "role": "analysis-workflow",
+      "causal_owners": [],
+      "rationale": "Explores symbolic paths for discovery; path feasibility and security mechanism are validated elsewhere."
+    },
+    {
+      "skill": "template-expression-boundary-analysis",
+      "role": "operator-depth-profile",
+      "causal_owners": [
+        "template-expression-boundary-analysis"
+      ],
+      "rationale": "Owns a distinct CI-enforced causal security mechanism with an operator runbook, deterministic review matrix, evidence ladder, counterfactual controls, and remediation replay."
+    },
+    {
+      "skill": "tool-capability-and-confirmation-analysis",
+      "role": "operator-depth-profile",
+      "causal_owners": [
+        "tool-capability-and-confirmation-analysis"
+      ],
+      "rationale": "Owns a distinct CI-enforced causal security mechanism with an operator runbook, deterministic review matrix, evidence ladder, counterfactual controls, and remediation replay."
+    },
+    {
+      "skill": "type-confusion-analysis",
+      "role": "operator-depth-profile",
+      "causal_owners": [
+        "type-confusion-analysis"
+      ],
+      "rationale": "Owns a distinct CI-enforced causal security mechanism with an operator runbook, deterministic review matrix, evidence ladder, counterfactual controls, and remediation replay."
+    },
+    {
+      "skill": "variant-hunting",
+      "role": "discovery-workflow",
+      "causal_owners": [],
+      "rationale": "Searches for related manifestations of a validated root cause; ownership remains with that root-cause profile."
+    },
+    {
+      "skill": "virtual-device-model-analysis",
+      "role": "domain-surface-specialist",
+      "causal_owners": [
+        "guest-host-boundary-analysis",
+        "driver-ioctl-surface-analysis",
+        "parser-state-machine-analysis"
+      ],
+      "rationale": "Maps virtual-device emulation surfaces; guest/host, device interface, and parser mechanisms have causal owners."
+    },
+    {
+      "skill": "vulnerability-hypothesis-generation",
+      "role": "discovery-workflow",
+      "causal_owners": [],
+      "rationale": "Generates falsifiable candidate vulnerabilities and hands them to evidence and mechanism-specific validation."
+    },
+    {
+      "skill": "web-routing-and-middleware-analysis",
+      "role": "operator-depth-profile",
+      "causal_owners": [
+        "web-routing-and-middleware-analysis"
+      ],
+      "rationale": "Owns a distinct CI-enforced causal security mechanism with an operator runbook, deterministic review matrix, evidence ladder, counterfactual controls, and remediation replay."
+    }
+  ]
+}
