@@ -8,7 +8,7 @@ A weak contribution is a thin wrapper around one scanner, shell command, payload
 
 The Wave 10 release baseline is intentionally closed at **83 canonical skills, 20 packs, and 40 operator-depth profiles**. Expansion beyond that baseline is not the default. New canonical skills, packs, or depth profiles should require a concrete uncovered mechanism, non-duplicative design, and an explicit architecture change.
 
-See `docs/wave10-closure-audit.md`.
+See `release-baseline.json`, `docs/release-baseline-contract.md`, and `docs/wave10-closure-audit.md`.
 
 ## Canonical skill structure
 
@@ -99,6 +99,7 @@ Run the complete architectural validation path:
 ```bash
 python scripts/validate_skills.py
 python scripts/validate_operator_depth.py
+python scripts/validate_release_baseline.py
 python scripts/validate_graph.py
 python scripts/build_catalog.py
 python scripts/build_graph.py
@@ -112,7 +113,7 @@ python scripts/run_benchmarks.py benchmarks/suites/core.json
 python -m unittest discover -s tests -v
 ```
 
-The test suite includes a Wave 10 closure regression that freezes the published 83 / 20 / 40 architecture and Apache-2.0 license baseline.
+The machine-readable `release-baseline.json` is validated directly by CI, and the test suite includes closure regressions that consume the same authority instead of duplicating the published 83 / 20 / 40 architecture and Apache-2.0 license baseline.
 
 CI repeats critical gates on Linux, macOS, and Windows with Python 3.11 and 3.13 and runs dedicated benchmark, cross-agent, and controlled comparative-regression jobs.
 
