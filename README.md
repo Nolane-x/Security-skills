@@ -1,118 +1,100 @@
 # Security Skills
 
 [![CI](https://github.com/Nolane-x/Security-skills/actions/workflows/validate.yml/badge.svg)](https://github.com/Nolane-x/Security-skills/actions/workflows/validate.yml)
+[![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 
 **English** · [Tiếng Việt](README-VN.md) · [简体中文](README-CN.md)
 
-A **verification-first security skill graph and deterministic cross-agent evaluation framework for AI agents**.
+**Security Skills** is a verification-first security skill graph and deterministic evaluation framework for AI agents.
 
-Security Skills gives coding agents, research agents, and autonomous security systems a portable set of reusable security reasoning skills — plus the evidence gates, routing logic, benchmarks, cross-agent conformance tooling, and selectively deep operator runbooks needed to verify that those skills are being used correctly.
+It provides portable security reasoning skills, explicit evidence contracts, prerequisite-aware routing, reproducible benchmarks, selective operator-depth methodology, and vendor-neutral agent evaluation. The goal is not to make security claims faster; it is to make them **more reproducible, reviewable, bounded, and difficult to overstate**.
 
-> **Wave 10 depth expansion complete** — 83 canonical skills, 20 packs, 40 CI-enforced operator-depth profiles with machine-readable matrices, 36 deterministic benchmark fixtures, and a vendor-neutral cross-agent evaluation harness.
+> **Stable baseline: Wave 10 closed** — **83 canonical skills**, **20 packs**, **40 CI-enforced operator-depth profiles**, **36 deterministic benchmark fixtures**, **12 portability fixtures**, **6 CI environments**, **0 required third-party Python packages**, licensed under **Apache-2.0**.
 
-## Why this project exists
+## Why this repository exists
 
-Security agents should not jump from a scanner alert, crash, static-analysis warning, or model hypothesis directly to “confirmed vulnerability.” Good security research requires explicit scope, evidence, controls, causal reasoning, reproducibility, and regression validation.
+A security agent should not jump from a scanner alert, crash, suspicious trace, static-analysis warning, or model hypothesis directly to “confirmed vulnerability.”
 
-This repository turns that discipline into a portable machine-readable system.
+Reliable security work requires a chain of evidence:
 
 ```text
-security knowledge
-      │
-      ▼
-83 canonical Agent Skills
-      │
-      ├──► 40 matrix-enforced operator-depth profiles (Wave 8 + Wave 10 expansion)
-      │
-      ▼
-deterministic research router
-      │
-      ▼
-evidence-state machine
-      │
-      ▼
-Wave 5 benchmark authority
-      │
-      ▼
-Wave 6 cross-agent evaluator
+scope + authorization
+        ↓
+hypothesis
+        ↓
+observation
+        ↓
+causal validation
+        ↓
+false-positive controls
+        ↓
+bounded security consequence
+        ↓
+remediation
+        ↓
+regression verification
 ```
 
-The result is not just a collection of prompts. It is a **security intelligence system that can validate its own routing, enforce depth contracts, and evaluate how external AI agents follow the same security contract**.
+Security Skills turns that discipline into portable Agent Skills plus machine-checkable contracts.
 
-## What it is — and what it is not
+## Current architecture
 
-**Security Skills is:**
+```text
+                         ┌─────────────────────────────┐
+                         │ 83 canonical Agent Skills   │
+                         └──────────────┬──────────────┘
+                                        │
+                         ┌──────────────▼──────────────┐
+                         │ 20 curated routing packs    │
+                         └──────────────┬──────────────┘
+                                        │
+                 ┌──────────────────────▼──────────────────────┐
+                 │ deterministic case validation + routing     │
+                 └──────────────────────┬──────────────────────┘
+                                        │
+                 ┌──────────────────────▼──────────────────────┐
+                 │ 40 selective operator-depth profiles        │
+                 │ runbooks + machine-readable safe cases      │
+                 └──────────────────────┬──────────────────────┘
+                                        │
+        ┌───────────────────────────────▼───────────────────────────────┐
+        │ benchmarks · cross-agent evaluation · regression authorities │
+        └───────────────────────────────────────────────────────────────┘
+```
 
-- a portable security reasoning graph for AI agents;
-- a set of reusable Agent Skills with explicit applicability and evidence contracts;
-- selectively deep operator runbooks and machine-readable safe review contracts for complex high-value domains;
-- a deterministic prerequisite-aware router;
-- a machine-readable research-case and evidence-state model;
-- a benchmark suite for routing, authorization, evidence, false-positive control, and remediation;
-- a vendor-neutral harness for comparing normalized agent runs;
-- a defensive research framework designed for local, owned, sandboxed, CTF, benchmark, or explicitly authorized targets.
+Canonical skill prose lives once under `skills/`. Packs, operator-depth profiles, benchmarks, and evaluation layers reference that canonical authority rather than forking it per vendor.
 
-**Security Skills is not:**
+## What the project provides
 
-- an offensive code collection;
-- a replacement for authorization or human security judgment;
-- a mechanism for declaring vulnerabilities from tool output alone;
-- a vendor-specific prompt pack;
-- a benchmark of “general intelligence.” Cross-agent scores measure conformance to this repository's reviewed security contract.
+### 1. Canonical security reasoning graph
 
-## Current snapshot
-
-| Capability | Current baseline |
-| --- | ---: |
-| Canonical skills | **83** |
-| Validated packs | **20** |
-| Operator-depth profiles | **40** |
-| Benchmark fixtures | **36** |
-| Benchmark categories | **6** |
-| Cross-agent portability fixtures | **12** |
-| Evidence states | **4** |
-| CI environments | **6** |
-| Python dependencies | **0 third-party packages** |
-
-CI validates Linux, macOS, and Windows on Python 3.11 and 3.13.
-
-## Four-layer architecture
-
-### 1. Security intelligence graph
-
-Each canonical capability lives once under:
+Each canonical capability is defined as:
 
 ```text
 skills/<skill-name>/
 ├── SKILL.md
-└── skill.meta.json
+├── skill.meta.json
+└── references/        # optional deeper local resources
 ```
 
-`SKILL.md` follows the open Agent Skills model. `skill.meta.json` adds Nolane graph metadata such as domains, prerequisites, composition edges, maturity, and evidence stage without polluting portable skill frontmatter.
+A skill encodes a reusable decision process: when it applies, prerequisites, workflow, evidence requirements, stop conditions, and expected output.
 
-Packs under `packs/` reference canonical skills instead of duplicating them.
+`skill.meta.json` adds graph metadata such as domains, prerequisites, composition edges, maturity, and evidence stage.
 
-### 2. Selective operator depth
+### 2. Deterministic research routing
 
-Wave 8 established the reviewed domain-runbook + CI-enforced machine-readable matrix contract. Each registered profile must cover attack surface, falsifiable hypotheses, controlled validation, false-positive controls, evidence capture, and remediation regression. Each case must additionally provide a benign oracle, positive and negative controls, an explicit stop condition, and a remediation oracle.
+Research cases are validated before routing. The router closes transitive prerequisites, applies domain/context filters, preserves evidence-state constraints, and returns a deterministic skill order.
 
-Wave 8 established eight profiles covering AI-agent security, authorization boundaries, cloud IAM paths, container isolation, driver interfaces, exploitability/evidence triage, server-side request boundaries, and web routing/middleware. Wave 10 adds `prompt-injection-boundary-analysis` as the ninth profile, `rag-memory-data-isolation-analysis` as the tenth, `connector-plugin-trust-analysis` as the eleventh, `tool-capability-and-confirmation-analysis` as the twelfth, `canonicalization-and-namespace-analysis` as the thirteenth, `confused-deputy-analysis` as the fourteenth, `cache-key-identity-analysis` as the fifteenth, `secrets-and-token-flow-analysis` as the sixteenth, `multi-tenant-data-isolation-analysis` as the seventeenth, `supply-chain-dependency-review` as the eighteenth, `browser-process-boundary-analysis` as the nineteenth, `boot-chain-and-secure-boot-analysis` as the twentieth, `deserialization-trust-analysis` as the twenty-first, `certificate-and-hostname-validation-analysis` as the twenty-second, and `cryptographic-protocol-misuse-analysis` as the twenty-third, and `guest-host-boundary-analysis` as the twenty-fourth, and `memory-lifetime-analysis` as the twenty-fifth, and `concurrency-race-analysis` as the twenty-sixth, and `sandbox-boundary-analysis` as the twenty-seventh, and `parser-state-machine-analysis` as the twenty-eighth, and `protocol-state-machine-analysis` as the twenty-ninth, and `bounds-and-integer-analysis` as the thirtieth, and `type-confusion-analysis` as the thirty-first, and `jit-invariant-analysis` as the thirty-second, and `firmware-update-trust-chain-analysis` as the thirty-third, and `nonce-and-randomness-lifecycle-analysis` as the thirty-fourth, and `oracle-and-external-data-trust-analysis` as the thirty-fifth, and `file-upload-processing-analysis` as the thirty-sixth, and `template-expression-boundary-analysis` as the thirty-seventh, and `smart-contract-invariant-analysis` as the thirty-eighth, and `smart-contract-reentrancy-state-analysis` as the thirty-ninth, and `smart-contract-upgradeability-analysis` as the fortieth. Prompt-injection depth adds instruction-lineage, provenance, authority-conflict, decision/effect, counterfactual, and evidence-ceiling contracts. RAG/memory depth adds end-to-end principal binding, derived-state lineage, retrieval-policy traces, lifecycle/revocation generations, bounded convergence, cache/memory coherence, and R0–R5 evidence ceilings. Connector/plugin trust depth adds integration provenance, effective-permission traces, schema/argument state, response binding, composition boundaries, lifecycle generations, C0–C5 evidence ceilings, and deterministic audit-only review cases. Tool capability/confirmation depth adds request-to-action binding, argument-normalization traces, effective-authority reasoning, confirmation tuples, execution-state drift, transaction/retry/idempotency semantics, post-action receipt/final-state verification, and T0–T5 evidence ceilings. Canonicalization/namespace depth adds typed representation-to-identity traces, transformation ordering and non-commutativity, normalization idempotence, policy-key-to-resolved-identity binding, namespace-root and name-to-object state, namespace generations, counterfactual controls, deterministic audit-only review cases, and N0–N5 evidence ceilings. Confused-deputy depth adds causal authority-transfer traces, delegated-versus-ambient authority distinctions, monotonic attenuation, operation/resource and resolved-target binding, delegation generation/lifecycle reasoning, result/receipt binding, counterfactual controls, deterministic audit-only review cases, and D0–D5 evidence ceilings. Cache-key identity depth adds semantic dependency-to-key completeness, canonical key/namespace/entry identity traces, writer/reader provenance, first-writer and reverse-order controls, lifecycle/invalidation generations, deterministic audit-only review cases, counterfactual controls, and K0–K5 evidence ceilings. Secrets/token-flow depth adds credential-class semantics, issuance provenance, possession/storage/propagation boundary traces, verifier-decision reasoning, audience/resource binding, represented-authority and delegation-attenuation traces, lifecycle/revocation generations, deterministic audit-only review cases, counterfactual controls, and S0–S5 evidence ceilings. Multi-tenant isolation depth adds canonical tenant identity and membership/role binding, tenant-context generations, representation/propagation traces, policy/filter and namespace decisions, resolved object/result identity, async/job context, lifecycle/migration generations, ambient-authority controls, deterministic audit-only review cases, counterfactual controls, and M0–M5 evidence ceilings. Supply-chain dependency depth adds source/namespace resolution, immutable artifact identity, integrity/signature/provenance-verifier reasoning, build-hook and toolchain identity, CI trust and cache/reuse binding, release authority, produced-to-released-to-distributed-to-deployed artifact binding, lifecycle/revocation/update generations, deterministic audit-only review cases, counterfactual controls, and SC0–SC5 evidence ceilings. Browser-process boundary depth adds origin/site/frame-to-process identity binding, process and routed-object generations, normalized IPC routing and ownership validation, brokered capability attenuation, ambient-versus-delegated authority separation, privileged-consumer receipt/result binding, lifecycle/revocation controls, deterministic audit-only review cases, counterfactual controls, and B0–B5 evidence ceilings. Boot-chain depth adds root/policy/key-generation provenance, boot-mode and selector identity, signer authorization, rollback/freshness generation, candidate-to-selected-to-loaded component binding, authenticated handoff inheritance, recovery/alternate-path equivalence controls, receipt/attestation correlation, deterministic benign review cases, counterfactual controls, and BC0–BC5 evidence ceilings. Deserialization trust depth adds serialized-artifact/authenticity provenance, parser/canonical-field and schema/version binding, discriminator-to-canonical-runtime-type resolution, resolver/registry generations, construction/hook/secondary-interpretation traces, requested-to-effective reconstructed authority, privileged-consumer receipt/result binding, lifecycle controls, deterministic benign review cases, counterfactual controls, and DT0–DT5 evidence ceilings. Certificate/hostname depth adds intended peer identity, original/redirect/transport/SNI/reference-identity separation, verifier and trust-store generations, selected certification path and trust anchor, certificate constraints, SAN/hostname binding, pin/revocation/callback final-decision traces, authenticated peer/session and mTLS mapping, lifecycle-generation controls, deterministic benign review cases, counterfactual controls, and PKI0–PKI5 evidence ceilings. Cryptographic-protocol depth adds security-goal/protocol intent, peer/role/session and negotiated-suite identity, transcript/authenticated-negotiation binding, key-schedule role/direction/epoch and domain separation, nonce/sequence/record identity, protocol-phase authenticated context, auth-before-use ordering, replay/freshness, rekey/resumption/early-data lifecycle generations, privileged-consumer receipt/result binding, deterministic benign review cases, counterfactual controls, and CP0–CP5 evidence ceilings. Guest-host boundary depth adds guest principal/security-domain binding, interface/device/channel and queue-generation identity, guest-controlled object and descriptor provenance, address-translation/IOMMU/memory-slot generations, shared-object ownership/lifetime, backend/emulation-thread consumer identity, effective host capability, reset/hot-unplug/migration/snapshot lifecycle revocation, privileged-consumer receipt/result binding, deterministic benign review cases, counterfactual controls, and GH0–GH5 evidence ceilings. Memory-lifetime depth adds logical-object versus address/handle identity, allocation/acquisition generations, owner/alias and retain/borrow/refcount provenance, invalidation/destruction/reuse binding, async callback/work-item lifecycle, final-consumer capability and receipt/result binding, deterministic benign review cases, counterfactual controls, alternative-explanation elimination, and ML0–ML5 evidence ceilings. Concurrency-race depth adds shared-invariant and state-generation identity, actor/operation generations, scheduler/executor identity, synchronization epochs and happens-before edges, check/use and interfering-transition binding, commit points, cancellation/retry/teardown generations, single-effect semantics, final-consumer capability and receipt/result binding, deterministic schedule controls, counterfactual schedules, alternative-explanation elimination, and CR0–CR5 evidence ceilings. Sandbox-boundary depth adds sandbox-principal/session and policy generations, broker/service and caller-request binding, requested-to-canonical/resolved resource identity, inherited/delegated capability provenance, namespace/object and shared-state generations, lifecycle/revocation state, privileged-consumer and effective crossed-capability binding, deterministic benign controls, counterfactuals, alternative-explanation elimination, and SB0–SB5 evidence ceilings. Parser-state-machine depth adds input/parser/phase/state generations, transition identity, first-invalid-transition reasoning, structural-metadata-to-semantic-object lineage, explicit recovery/deferred-validation state, nested parser and cross-record provenance, downstream-consumer binding, deterministic benign review cases, counterfactual parser controls, alternative-explanation elimination, and PS0–PS5 evidence ceilings. Protocol-state-machine depth adds peer/connection/session/role/stream/transaction generations, transition-guard and authenticated-context binding, replay/retry/idempotency semantics, timeout/cancellation/reset/reconnect and late-completion lifecycle state, commit-versus-acknowledgment and terminal-cleanup separation, downstream-action binding, deterministic benign review cases, counterfactual protocol controls, alternative-explanation elimination, and PST0–PST5 evidence ceilings. Bounds-and-integer depth adds source-value identity/generation, units and mathematical-versus-machine representation binding, width/signedness and cast/promotion/truncation traces, arithmetic-expression generations, check-domain-to-use-domain comparison, allocation/object/usable-size identity, index/offset/stride/access-width equations, aggregate/alignment/nested-size arithmetic, deterministic benign review cases, counterfactual arithmetic controls, alternative-explanation elimination, and BND0–BND5 evidence ceilings. Type-confusion depth adds logical-object and storage generations, logical-versus-actual dynamic type identity, type-identity mechanism/generation, representation/layout and active-member generations, producer/transition and cast/downcast/variant traces, validator/check generation, consumer interpreted-type and wrong-field/dispatch binding, deterministic benign review cases, counterfactual type controls, alternative-explanation elimination, and TCF0–TCF5 evidence ceilings. JIT-invariant depth adds runtime/build and program/input generations, tier and optimized-code generations, feedback/profile and speculative-dependency provenance, guard/invalidation and optimization-transform binding, OSR/inlining/specialization state, deopt frame-state reconstruction, baseline/reference semantic-consumer binding, deterministic benign review cases, counterfactual JIT controls, alternative-explanation elimination, and JIT0–JIT5 evidence ceilings. Firmware-update trust-chain depth adds device/update-attempt and signer-policy generations, authenticated bundle/manifest/hardware/version binding, component-set and transformed/delta artifact lineage, staging and activation transaction identity, rollback/version-state commit ordering, recovery/fallback policy generations, final update-state consumer binding, deterministic benign review cases, counterfactual update controls, alternative-explanation elimination, and FWU0–FWU5 evidence ceilings. Nonce/randomness lifecycle depth adds value-property/security-scope binding, generator/state/seed/reseed generations, fork/snapshot/restart lifecycle, counter namespace and reservation provenance, persistence checkpoint ordering, transform/encoding/truncation binding, final consumer/construction identity, deterministic benign review cases, counterfactual randomness controls, alternative-explanation elimination, and NRL0–NRL5 evidence ceilings. Oracle/external-data trust depth adds datum-class/trust-property and source/source-set generations, round/heartbeat/freshness policy binding, unit/decimal/normalization generations, aggregation/source-diversity/quorum provenance, fallback/liveness trust transitions, authenticity/replay/origin-domain binding, consumer-snapshot/invariant-reference lineage, deterministic benign review cases, counterfactual external-data controls, alternative-explanation elimination, and OED0–OED5 evidence ceilings. File-upload processing depth adds uploader/request/artifact generations, representation/classification binding, scanner/verdict/quarantine generations, parser/delegate and derived-artifact provenance, permanent object/version and serving-policy binding, cleanup/tombstone lifecycle state, downstream-consumer receipts, deterministic benign review cases, counterfactual upload controls, alternative-explanation elimination, and UPL0–UPL5 evidence ceilings. Template-expression boundary depth adds principal/render/source/data generations, data-to-source promotion traces, compile/cache/source-trust binding, evaluation-context/helper/object-graph generations, include/import/inheritance lineage, escaping/output-context separation, downstream renderer receipts, deterministic benign review cases, counterfactual template-expression controls, alternative-explanation elimination, and TEB0–TEB5 evidence ceilings. Smart-contract invariant depth adds protocol/deployment/state generations, invariant identity/domain/observation-point binding, actor/entrypoint/transition traces, asset/accounting/conservation equations, external-dependency assumptions, reachable violation witnesses, downstream protocol-consumer receipts, deterministic benign local-chain review cases, counterfactual invariant controls, alternative-explanation elimination, and SCI0–SCI5 evidence ceilings. Smart-contract reentrancy depth adds outer transaction/call-frame/callback generations, external-call and reentrant-entry binding, transient-state/update-order traces, lock/guard invariant-scope reasoning, cross-function/cross-contract/hook/read-only lineage, outer-continuation/commit binding, deterministic benign local-chain review cases, counterfactual reentrancy controls, alternative-explanation elimination, and SCR0–SCR5 evidence ceilings. Smart-contract upgradeability depth adds proxy/implementation/governance generations, upgrade authorization and commit binding, storage-layout/state-interpretation traces, initializer/reinitializer/migration generations, selector/fallback/beacon/facet routing, rollback/downgrade lifecycle state, downstream proxy-consumer receipts, deterministic benign local-upgrade review cases, counterfactual upgradeability controls, alternative-explanation elimination, and SCU0–SCU5 evidence ceilings. All profiles remain lab/owned/sandbox/authorized-only and prefer synthetic canaries, mock services, fake identities, policy simulation, inert action sinks, and read-only evidence over risky real-world proof.
+```bash
+python scripts/validate_case.py examples/research-case.example.json
+python scripts/route_skills.py examples/research-case.example.json --limit 12
+```
 
-See [docs/operator-depth-contract.md](docs/operator-depth-contract.md).
+Routing is advisory. Authorization and evidence requirements remain authoritative.
 
-### 3. Deterministic benchmark authority
+### 3. Evidence-state model
 
-Wave 5 evaluates the production case validator and router against reviewed synthetic fixtures. Hard failures such as unauthorized acceptance, invalid evidence promotion, domain leakage, or broken prerequisite ordering cannot be averaged away by a high score.
-
-### 4. Cross-agent evaluation
-
-Wave 6 converts reviewed benchmark fixtures into **oracle-free agent tasks**, accepts normalized `agent-run` artifacts from external wrappers, and scores them using deterministic repository code.
-
-The core does not hard-code model vendors or proprietary CLIs. Any agent host can integrate through the same normalized artifact contract.
-
-## Evidence model
-
-Every investigation moves through explicit states:
+Security claims move through explicit states:
 
 ```text
 hypothesis
@@ -124,46 +106,107 @@ validated
 regression-verified
 ```
 
-A finding is not promoted just because a tool, fuzzer, model, or analyzer says so.
+A tool result alone does not promote a finding.
 
-A validated case requires, at minimum, evidence such as:
-
-- a pinned environment or target revision;
-- a reproducible observation;
-- a causal root cause;
-- a bounded security consequence;
-- positive and negative controls;
-- reproducer steps and fixture identity.
-
-`regression-verified` additionally requires evidence that the fixed revision no longer reproduces the issue while controls still behave correctly.
+A validated finding requires evidence such as a pinned target/environment, reproducible observation, causal root cause, bounded consequence, positive and negative controls, and reproducer identity. Regression verification additionally requires the fixed revision to stop reproducing the issue while controls still behave correctly.
 
 See [docs/research-case-contract.md](docs/research-case-contract.md).
 
-## Capability coverage
+### 4. Operator depth
 
-The graph currently includes deep workflows across:
+Wave 10 closes with **40 selective CI-enforced operator-depth profiles**.
 
-- scope, authorization, research routing, attack-surface mapping, and hypothesis generation;
-- fuzz harness design, corpus engineering, coverage-guided fuzzing, grammar-aware fuzzing, and stateful fuzzing;
-- crash triage, minimization, sanitizer-guided analysis, root-cause analysis, and exploitability triage;
-- static/dataflow analysis, symbolic execution, differential testing, binary reconnaissance, and variant hunting;
-- memory lifetime, bounds/integer safety, type confusion, and concurrency/race analysis;
-- parser/protocol state machines, canonicalization, deserialization boundaries, and namespace confusion;
-- authorization, confused-deputy, cache identity, secret/token flow, and tenant isolation;
-- kernel, driver/IOCTL, sandbox, browser-process, and JIT invariant analysis;
-- containers, cloud IAM, supply-chain review, and dependency trust;
-- Android/iOS security, mobile trust boundaries, and local storage/keystore analysis;
-- firmware, update trust chains, secure boot, and embedded debug surfaces;
-- virtualization guest-host boundaries, virtual devices, and shared memory;
+Operator depth is intentionally selective: not every canonical skill needs a large runbook. Profiles are used where deeper causal methodology materially improves reliability.
+
+Each registered profile combines:
+
+- a reviewed operator runbook;
+- machine-readable synthetic or controlled scenarios/review cases;
+- explicit safe oracles;
+- evidence ladders;
+- counterfactual and false-positive controls;
+- stop conditions;
+- remediation and regression checks;
+- dedicated deterministic tests.
+
+Coverage spans authorization and identity, parser/protocol boundaries, memory/runtime behavior, sandbox/browser/driver boundaries, firmware and virtualization trust, cryptographic and external-data trust, AI-agent security, web framework internals, and smart-contract invariants/reentrancy/upgradeability.
+
+See [docs/operator-depth-contract.md](docs/operator-depth-contract.md), [operator-depth/profiles.json](operator-depth/profiles.json), and the [Wave 10 closure audit](docs/wave10-closure-audit.md).
+
+### 5. Deterministic benchmarks
+
+Wave 5 established **36 deterministic fixtures** across six categories:
+
+1. authorization;
+2. domain isolation;
+3. evidence-state conformance;
+4. false-positive control;
+5. remediation/regression routing;
+6. representative routing correctness.
+
+```bash
+python scripts/validate_benchmarks.py
+python scripts/run_benchmarks.py benchmarks/suites/portability.json
+python scripts/run_benchmarks.py benchmarks/suites/core.json
+```
+
+Hard failures such as unauthorized acceptance, evidence-state violations, or domain leakage cannot be hidden by a high average score.
+
+See [docs/benchmark-contract.md](docs/benchmark-contract.md).
+
+### 6. Cross-agent evaluation
+
+The evaluation layer converts reviewed benchmark fixtures into oracle-free tasks and scores normalized `agent-run` artifacts using deterministic repository code.
+
+It does not hard-code a model vendor or proprietary CLI. External hosts integrate through a normalized artifact contract.
+
+```bash
+python scripts/prepare_agent_tasks.py benchmarks/suites/portability.json --out /tmp/agent-tasks
+
+python scripts/prepare_replay_runs.py benchmarks/suites/portability.json \
+  --profile reference \
+  --out /tmp/reference-runs
+
+python scripts/validate_agent_runs.py /tmp/reference-runs
+
+python scripts/evaluate_agent_runs.py \
+  benchmarks/suites/portability.json \
+  /tmp/reference-runs
+```
+
+The committed replay profiles include a conforming reference baseline and deterministic negative controls.
+
+See [agent-eval/README.md](agent-eval/README.md).
+
+### 7. Controlled comparative regression
+
+The repository also contains a deterministic “superiority-court” regression harness for controlled internal contestant views. It is an engineering test authority, **not an external model leaderboard and not evidence of universal superiority**.
+
+Any empirical comparison with another system requires matched tasks, controlled conditions, disclosed limitations, and direct evidence.
+
+## Security coverage
+
+The canonical graph spans:
+
+- scope, authorization, attack-surface mapping, and hypothesis generation;
+- fuzz harnesses, corpora, coverage-guided, grammar-aware, and stateful fuzzing;
+- crash triage, minimization, sanitizer evidence, and exploitability triage;
+- static/dataflow analysis, symbolic execution, differential testing, and variant hunting;
+- memory lifetime, bounds/integer safety, type confusion, concurrency, and JIT invariants;
+- parser/protocol state machines, canonicalization, deserialization, and namespace confusion;
+- authorization, confused-deputy, cache identity, secrets/tokens, and tenant isolation;
+- kernel, drivers/IOCTL, sandboxing, browser process boundaries, and virtualization;
+- containers, cloud IAM, supply-chain review, firmware, secure boot, and updates;
+- Android/iOS security and local-storage/keystore boundaries;
 - web routing, server-side request boundaries, uploads, templates, and multi-tenant internals;
-- cryptographic protocol misuse, randomness lifecycle, certificates, and hostname validation;
+- cryptographic protocols, randomness lifecycle, certificates, and hostname validation;
 - smart-contract invariants, reentrancy, upgradeability, and oracle trust;
-- prompt-injection boundaries, tool confirmation, RAG/memory isolation, connector/plugin trust;
-- controlled experiments, evidence ledgers, false-positive elimination, static/dynamic correlation, remediation, regression validation, and reporting.
+- prompt injection, RAG/memory isolation, tool confirmation, connectors/plugins, and AI-agent assessment;
+- evidence ledgers, false-positive elimination, remediation, regression validation, and reporting.
 
 ## Quick start
 
-Clone the repository and run the full deterministic validation stack:
+No third-party Python package is required for the core validation path.
 
 ```bash
 git clone https://github.com/Nolane-x/Security-skills.git
@@ -176,241 +219,16 @@ python scripts/validate_benchmarks.py
 python -m unittest discover -s tests -v
 ```
 
-Generate the human and machine indexes on demand:
+Generate and verify indexes:
 
 ```bash
 python scripts/build_catalog.py
 python scripts/build_graph.py
-```
-
-Generated catalog/graph artifacts are intentionally ignored. Canonical truth remains in `SKILL.md`, `skill.meta.json`, pack manifests, and the selective operator-depth registry/runbooks/machine-readable matrices.
-
-## Research-case engine
-
-Validate and route a machine-readable research case:
-
-```bash
-python scripts/validate_case.py examples/research-case.example.json
-python scripts/route_skills.py examples/research-case.example.json --limit 12
-```
-
-The router is advisory-only. It validates authorization and case state first, closes transitive prerequisites, applies domain/context filtering, and returns a deterministic skill order.
-
-A representative memory-safety route may look like:
-
-```text
-scope + authorization
-  → attack surface
-  → fuzzing
-  → crash minimization
-  → sanitizer evidence
-  → lifetime / bounds / type / race analysis
-  → evidence validation
-  → conservative exploitability triage
-  → variant hunt
-  → remediation
-  → regression verification
-```
-
-## Operator depth
-
-Wave 8 established scenario-enforced operator depth for eight profiles. Wave 10 completes the planned registry at forty with `prompt-injection-boundary-analysis` as the ninth profile, `rag-memory-data-isolation-analysis` as the tenth, `connector-plugin-trust-analysis` as the eleventh, `tool-capability-and-confirmation-analysis` as the twelfth, `canonicalization-and-namespace-analysis` as the thirteenth, `confused-deputy-analysis` as the fourteenth, `cache-key-identity-analysis` as the fifteenth, `secrets-and-token-flow-analysis` as the sixteenth, `multi-tenant-data-isolation-analysis` as the seventeenth, `supply-chain-dependency-review` as the eighteenth, `browser-process-boundary-analysis` as the nineteenth, `boot-chain-and-secure-boot-analysis` as the twentieth, `deserialization-trust-analysis` as the twenty-first, `certificate-and-hostname-validation-analysis` as the twenty-second, `cryptographic-protocol-misuse-analysis` as the twenty-third, and `guest-host-boundary-analysis` as the twenty-fourth, and `memory-lifetime-analysis` as the twenty-fifth, and `concurrency-race-analysis` as the twenty-sixth, and `sandbox-boundary-analysis` as the twenty-seventh, and `parser-state-machine-analysis` as the twenty-eighth, and `protocol-state-machine-analysis` as the twenty-ninth, and `bounds-and-integer-analysis` as the thirtieth, and `type-confusion-analysis` as the thirty-first, and `jit-invariant-analysis` as the thirty-second, and `firmware-update-trust-chain-analysis` as the thirty-third, and `nonce-and-randomness-lifecycle-analysis` as the thirty-fourth, and `oracle-and-external-data-trust-analysis` as the thirty-fifth, and `file-upload-processing-analysis` as the thirty-sixth, and `template-expression-boundary-analysis` as the thirty-seventh, and `smart-contract-invariant-analysis` as the thirty-eighth, and `smart-contract-reentrancy-state-analysis` as the thirty-ninth, and `smart-contract-upgradeability-analysis` as the fortieth:
-
-- `ai-agent-security-assessment`
-- `authorization-boundary-analysis`
-- `boot-chain-and-secure-boot-analysis`
-- `bounds-and-integer-analysis`
-- `browser-process-boundary-analysis`
-- `cache-key-identity-analysis`
-- `canonicalization-and-namespace-analysis`
-- `certificate-and-hostname-validation-analysis`
-- `cloud-iam-path-analysis`
-- `concurrency-race-analysis`
-- `confused-deputy-analysis`
-- `connector-plugin-trust-analysis`
-- `container-isolation-review`
-- `cryptographic-protocol-misuse-analysis`
-- `deserialization-trust-analysis`
-- `driver-ioctl-surface-analysis`
-- `exploitability-triage`
-- `file-upload-processing-analysis`
-- `firmware-update-trust-chain-analysis`
-- `guest-host-boundary-analysis`
-- `jit-invariant-analysis`
-- `memory-lifetime-analysis`
-- `multi-tenant-data-isolation-analysis`
-- `nonce-and-randomness-lifecycle-analysis`
-- `oracle-and-external-data-trust-analysis`
-- `parser-state-machine-analysis`
-- `prompt-injection-boundary-analysis`
-- `protocol-state-machine-analysis`
-- `rag-memory-data-isolation-analysis`
-- `sandbox-boundary-analysis`
-- `secrets-and-token-flow-analysis`
-- `smart-contract-invariant-analysis`
-- `smart-contract-reentrancy-state-analysis`
-- `smart-contract-upgradeability-analysis`
-- `server-side-request-boundary-analysis`
-- `supply-chain-dependency-review`
-- `template-expression-boundary-analysis`
-- `tool-capability-and-confirmation-analysis`
-- `type-confusion-analysis`
-- `web-routing-and-middleware-analysis`
-
-Validate them with:
-
-```bash
-python scripts/validate_operator_depth.py
-```
-
-The validator rejects unsafe paths, missing artifacts, duplicate profiles or scenario IDs, malformed or incomplete matrices, disabled lab-only policy, missing required methodology sections, insufficient authorization/evidence/control discipline, unspecified benign oracles, and missing explicit stop conditions. It intentionally does not reward file length or payload volume.
-
-See [docs/operator-depth-contract.md](docs/operator-depth-contract.md).
-
-## Benchmark engine
-
-Wave 5 provides 36 deterministic fixtures across six categories:
-
-1. authorization;
-2. domain isolation;
-3. evidence-state conformance;
-4. false-positive control;
-5. remediation/regression routing;
-6. representative routing correctness.
-
-Run the portability or full core suite:
-
-```bash
-python scripts/run_benchmarks.py benchmarks/suites/portability.json
-python scripts/run_benchmarks.py benchmarks/suites/core.json
-```
-
-Produce machine and human reports:
-
-```bash
-python scripts/run_benchmarks.py benchmarks/suites/core.json \
-  --json /tmp/security-skills-benchmark.json \
-  --report /tmp/security-skills-benchmark.md
-```
-
-See [docs/benchmark-contract.md](docs/benchmark-contract.md).
-
-## Cross-agent evaluation
-
-Wave 6 lets external AI agents be evaluated against the same reviewed security authority without exposing fixture oracles in the task artifact.
-
-Prepare oracle-free tasks:
-
-```bash
-python scripts/prepare_agent_tasks.py benchmarks/suites/portability.json --out /tmp/agent-tasks
-```
-
-Generate the deterministic reference replay profile:
-
-```bash
-python scripts/prepare_replay_runs.py benchmarks/suites/portability.json \
-  --profile reference \
-  --out /tmp/reference-runs
-```
-
-Validate and score normalized runs:
-
-```bash
-python scripts/validate_agent_runs.py /tmp/reference-runs
-python scripts/evaluate_agent_runs.py benchmarks/suites/portability.json /tmp/reference-runs \
-  --json /tmp/agent-evaluation.json \
-  --report /tmp/agent-evaluation.md
-```
-
-The committed replay profiles are:
-
-- `reference` — conforming deterministic baseline;
-- `cautious` — safe but intentionally incomplete `needs-evidence` behavior;
-- `faulty` — deterministic negative controls that must fail.
-
-See [agent-eval/README.md](agent-eval/README.md).
-
-## Safe adapter boundary
-
-External agent wrappers may use `scripts/run_agent_adapter.py` with an explicit argv vector.
-
-The adapter boundary is intentionally defensive:
-
-- `shell=False`;
-- explicit argv, no shell interpolation;
-- timeout enforcement;
-- streaming stdout/stderr byte caps;
-- child termination on overflow;
-- sanitized environment by default;
-- credential-like variables only through explicit allowlists;
-- untrusted agent output parsed only as data;
-- subprocess pipes closed deterministically;
-- hidden reasoning / chain-of-thought is neither requested nor stored.
-
-## Portability
-
-`skills/` is the single canonical source. Do not fork skill prose per vendor.
-
-A broadly interoperable project layout is:
-
-```text
-<project>/
-└── .agents/
-    └── skills/
-        └── <skill-name>/
-            ├── SKILL.md
-            └── ...optional local resources...
-```
-
-The repository is designed to be usable by modern coding/agent hosts that understand Agent Skills or can consume explicit repository context. Vendor-specific discovery paths can point to the same canonical skill content.
-
-See [docs/compatibility.md](docs/compatibility.md).
-
-## Packs
-
-Packs are curated routing manifests under `packs/`. Major packs include:
-
-- `fuzzing-research`
-- `memory-safety`
-- `parsers-and-protocols`
-- `trust-and-authorization`
-- `kernel-sandbox-browser`
-- `cloud-and-supply-chain`
-- `verification-engineering`
-- `mobile-security`
-- `firmware-and-boot`
-- `virtualization-boundaries`
-- `web-framework-internals`
-- `cryptographic-assurance`
-- `smart-contracts`
-- `ai-agent-deep-security`
-- `autonomous-research-orchestration`
-
-See [packs/README.md](packs/README.md) for the full set.
-
-## Repository layout
-
-```text
-Security-skills/
-├── skills/              # canonical Agent Skills and selective depth resources
-├── operator-depth/      # CI-enforced operator-depth profile registry
-├── packs/               # curated skill routing manifests
-├── benchmarks/          # Wave 5 deterministic fixtures and suites
-├── agent-eval/          # Wave 6 cross-agent contracts and suites
-├── schemas/             # machine-readable schemas
-├── scripts/             # validators, routers, evaluators, builders
-├── tests/               # deterministic regression tests
-├── examples/            # research-case examples
-├── docs/                # contracts, compatibility, design documentation
-├── sources/             # research-system lineage metadata
-├── AGENTS.md             # repository-level agent guidance
-├── SECURITY.md           # safety and authorization boundary
-└── CONTRIBUTING.md       # contribution requirements
+python scripts/build_catalog.py --check
+python scripts/build_graph.py --check
 ```
 
 ## Full validation
-
-No third-party Python package is required.
 
 ```bash
 python scripts/validate_skills.py
@@ -432,35 +250,100 @@ python scripts/evaluate_agent_runs.py benchmarks/suites/portability.json /tmp/ag
 python -m unittest discover -s tests -v
 ```
 
-CI repeats the critical gates across Ubuntu, macOS, and Windows on Python 3.11 and 3.13, then runs dedicated deterministic `benchmark-core`, `agent-eval-core`, and `superiority-court-core` jobs.
+CI repeats the critical gates on Ubuntu, macOS, and Windows with Python 3.11 and 3.13, then runs dedicated benchmark, cross-agent, and comparative regression jobs.
 
-## Adding a skill
+## Portability
 
-Read [CONTRIBUTING.md](CONTRIBUTING.md) before adding capabilities.
+`skills/` is the canonical source. Do not fork skill prose per vendor.
 
-A canonical skill should encode a reusable **decision process**, not a thin wrapper around a tool command. It needs explicit:
+A portable host layout can point directly to the same content:
 
-- applicability;
-- preconditions;
-- workflow;
-- evidence contract;
-- stop conditions;
-- output contract;
-- graph metadata.
+```text
+<project>/
+└── .agents/
+    └── skills/
+        └── <skill-name>/
+            ├── SKILL.md
+            └── ...optional local resources...
+```
 
-For selective deep methodology on an existing high-value skill, follow [the operator-depth contract](docs/operator-depth-contract.md) instead of creating a near-duplicate skill.
+Any agent host that can consume Agent Skills or explicit repository context can integrate without changing the underlying security authority.
 
-## Security boundary
+See [docs/compatibility.md](docs/compatibility.md).
+
+## Safe adapter boundary
+
+The local adapter path is deliberately defensive:
+
+- `shell=False`;
+- explicit argv vectors;
+- enforced timeouts;
+- stdout/stderr byte caps;
+- child termination on overflow;
+- sanitized environment by default;
+- credential-like variables only through explicit allowlists;
+- untrusted agent output parsed as data;
+- deterministic pipe cleanup;
+- hidden reasoning / chain-of-thought is neither requested nor stored.
+
+## Repository layout
+
+```text
+Security-skills/
+├── skills/              # 83 canonical Agent Skills
+├── operator-depth/      # registry for 40 selective deep profiles
+├── packs/               # 20 curated routing manifests
+├── benchmarks/          # deterministic routing/evidence fixtures
+├── agent-eval/          # vendor-neutral cross-agent contracts
+├── superiority/         # controlled comparative regression authority
+├── schemas/             # machine-readable schemas
+├── scripts/             # validators, routers, evaluators, builders
+├── tests/               # deterministic regression tests
+├── examples/            # research-case examples
+├── docs/                # contracts and architecture documentation
+├── sources/             # research-system lineage metadata
+├── AGENTS.md             # repository-level agent guidance
+├── SECURITY.md           # authorization and responsible-use boundary
+├── CONTRIBUTING.md       # contribution requirements
+└── LICENSE               # Apache License 2.0
+```
+
+## Safety boundary
 
 Intrusive techniques are restricted to local, owned, sandboxed, benchmark/CTF, or explicitly authorized targets.
 
-Proofs should prefer controlled and non-destructive evidence such as assertions, sanitizer reports, minimized crashes, synthetic resources, marker files, policy simulation, mock services, synthetic canaries, and regression tests rather than uncontrolled or destructive proof.
+Proofs should prefer the least harmful evidence that establishes the claim: assertions, sanitizer reports, minimized crashes, synthetic resources, marker files, policy simulation, mock services, read-only snapshots, synthetic canaries, and regression tests.
 
 See [SECURITY.md](SECURITY.md).
 
+## Wave 10 closure
+
+Wave 10 is intentionally **closed at 40 operator-depth profiles**. The project does not treat repository size, skill count, profile count, or line count as a quality metric.
+
+Future work should default to:
+
+- correctness and maintenance;
+- stronger evidence and controls;
+- safer oracles;
+- better benchmarks;
+- portability;
+- research-lineage updates;
+- targeted defect fixes;
+- documentation and onboarding.
+
+Expansion beyond the 83 / 20 / 40 baseline should require a concrete non-duplicative mechanism and an explicit architecture decision.
+
+See [docs/wave10-closure-audit.md](docs/wave10-closure-audit.md).
+
+## Contributing
+
+Read [CONTRIBUTING.md](CONTRIBUTING.md) before changing canonical skills, graph metadata, packs, operator-depth contracts, benchmarks, or agent-evaluation authority.
+
+A strong contribution adds a reusable decision process or strengthens an existing contract. A weak contribution only adds another tool wrapper, payload list, or duplicated prompt.
+
 ## Research lineage
 
-Security Skills distills original workflows from reproducible vulnerability research, autonomous Cyber Reasoning Systems, fuzzing infrastructure, program analysis, reverse engineering, web/mobile/firmware/cloud security, smart-contract analysis, and modern AI-agent security research.
+Security Skills distills original workflows from reproducible vulnerability research, autonomous cyber-reasoning systems, fuzzing infrastructure, program analysis, reverse engineering, web/mobile/firmware/cloud security, smart-contract analysis, and modern AI-agent security research.
 
 The repository does **not** vendor third-party offensive code or copy third-party prompts.
 
@@ -470,6 +353,7 @@ See [docs/sources.md](docs/sources.md) and [sources/research-systems.json](sourc
 
 - [Vietnamese README](README-VN.md)
 - [Simplified Chinese README](README-CN.md)
+- [Wave 10 closure audit](docs/wave10-closure-audit.md)
 - [Compatibility](docs/compatibility.md)
 - [Research-case contract](docs/research-case-contract.md)
 - [Operator-depth contract](docs/operator-depth-contract.md)
@@ -480,6 +364,10 @@ See [docs/sources.md](docs/sources.md) and [sources/research-systems.json](sourc
 - [Security policy](SECURITY.md)
 - [Contributing](CONTRIBUTING.md)
 
+## License
+
+Licensed under the [Apache License 2.0](LICENSE).
+
 ---
 
-**Security Skills** is built around a simple rule: **a security claim is only as strong as the evidence, controls, and reproducibility behind it.**
+**Security Skills follows one rule: a security claim is only as strong as the evidence, controls, and reproducibility behind it.**

@@ -2,9 +2,13 @@
 
 ## What belongs here
 
-A good skill captures a reusable security-research decision process: when to use a technique, assumptions, evidence collection, false-positive discrimination, stop conditions, and a structured output.
+A good contribution captures or strengthens a reusable security-research decision process: when to use a technique, assumptions, evidence collection, false-positive discrimination, stop conditions, remediation, and structured output.
 
-A weak contribution is a thin wrapper around one scanner, shell command, or exploit recipe.
+A weak contribution is a thin wrapper around one scanner, shell command, payload list, or duplicated prompt.
+
+The Wave 10 release baseline is intentionally closed at **83 canonical skills, 20 packs, and 40 operator-depth profiles**. Expansion beyond that baseline is not the default. New canonical skills, packs, or depth profiles should require a concrete uncovered mechanism, non-duplicative design, and an explicit architecture change.
+
+See `docs/wave10-closure-audit.md`.
 
 ## Canonical skill structure
 
@@ -57,6 +61,26 @@ Rules:
 
 A `packs/<name>.json` manifest must declare one or more routing `domains` and list every skill used by its `default_flow`. Pack entrypoints and members must reference canonical skill names. When a prerequisite and its dependent both appear in `default_flow`, the prerequisite must come first. Packs never duplicate skill prose.
 
+The Wave 10 closure baseline contains exactly **20 packs**. Changing that count is an architecture change, not routine maintenance.
+
+## Operator depth
+
+Operator depth is selective and CI-enforced.
+
+A registered profile must preserve the contract in `docs/operator-depth-contract.md` and provide:
+
+- an existing canonical skill identity;
+- a reviewed operator runbook;
+- a machine-readable scenario/review-case matrix;
+- `lab_only: true`;
+- explicit safe oracles;
+- evidence and counterfactual controls;
+- stop conditions;
+- remediation/regression checks;
+- deterministic tests.
+
+The Wave 10 baseline contains exactly **40 profiles**. Routine contributions should improve existing profiles rather than add new ones.
+
 ## Evidence language
 
 Use statuses consistently:
@@ -66,21 +90,31 @@ Use statuses consistently:
 - **validated** — claimed vulnerability behavior and causal root cause have evidence under stated conditions;
 - **regression-verified** — the same evidence fails on the fixed build while controls still behave correctly.
 
+Do not promote findings solely because a scanner, fuzzer, model, static analyzer, or tool says so.
+
 ## Validation
 
-Run:
+Run the complete architectural validation path:
 
 ```bash
 python scripts/validate_skills.py
+python scripts/validate_operator_depth.py
 python scripts/validate_graph.py
 python scripts/build_catalog.py
 python scripts/build_graph.py
 python scripts/build_catalog.py --check
 python scripts/build_graph.py --check
+python scripts/validate_case.py examples/research-case.example.json
+python scripts/route_skills.py examples/research-case.example.json --limit 12
+python scripts/validate_benchmarks.py
+python scripts/run_benchmarks.py benchmarks/suites/portability.json
+python scripts/run_benchmarks.py benchmarks/suites/core.json
 python -m unittest discover -s tests -v
 ```
 
-CI repeats the stale checks and tests on Linux, macOS, and Windows. Research-case and router changes must also keep `examples/research-case.example.json` valid and routeable.
+The test suite includes a Wave 10 closure regression that freezes the published 83 / 20 / 40 architecture and Apache-2.0 license baseline.
+
+CI repeats critical gates on Linux, macOS, and Windows with Python 3.11 and 3.13 and runs dedicated benchmark, cross-agent, and controlled comparative-regression jobs.
 
 ## Benchmark fixtures
 
@@ -88,7 +122,7 @@ Benchmark changes live under `benchmarks/` and measure the production validator/
 
 Each fixture declares required, optional, and forbidden skills/packs plus any ordering, issue-path, and hard-gate expectations. Required entries should capture durable invariants; optional entries describe currently acceptable route space; forbidden entries should target meaningful false positives or cross-domain leaks. Do not snapshot every route output as “required.”
 
-The initial Wave 5 corpus is intentionally fixed at six fixtures per category and 36 total. New fixtures after Wave 5 may increase the corpus, but removing coverage or lowering `core.minimum_score` requires an explicit reviewed contract change.
+The Wave 5 corpus is fixed at six fixtures per category and 36 total. Removing coverage or lowering `core.minimum_score` requires an explicit reviewed contract change.
 
 Validate and run both suites before submitting benchmark changes:
 
@@ -98,23 +132,24 @@ python scripts/run_benchmarks.py benchmarks/suites/portability.json
 python scripts/run_benchmarks.py benchmarks/suites/core.json
 ```
 
-See `docs/benchmark-contract.md` for schema semantics, hard gates, scoring, determinism requirements, and future extension boundaries.
+See `docs/benchmark-contract.md` for schema semantics, hard gates, scoring, determinism requirements, and extension boundaries.
 
 ## Cross-agent evaluation contributions
 
-Wave 6 agent-facing tasks must be built from existing benchmark fixtures through `scripts/prepare_agent_tasks.py`; do not hand-copy fixture oracles into public task files. Prepared tasks may contain the research case and response contract, but never fixture `expect`, weights, required/optional/forbidden route oracle fields, required issue paths, minimum score, or hard-gate oracle data.
+Agent-facing tasks must be built from existing benchmark fixtures through `scripts/prepare_agent_tasks.py`; do not hand-copy fixture oracles into public task files. Prepared tasks may contain the research case and response contract, but never fixture `expect`, weights, required/optional/forbidden route oracle fields, required issue paths, minimum score, or hard-gate oracle data.
 
-Normalized runs must follow `schemas/agent-run.schema.json`. Adapters are transport only: they must not alter evaluator authority, and they must not store credentials, raw environment variables, browser profiles, hidden reasoning, or chain-of-thought. Vendor-specific wrappers should remain outside the core contract. For local subprocess integration, use the explicit JSON stdin/stdout protocol documented in `agent-eval/adapters/README.md`.
+Normalized runs must follow `schemas/agent-run.schema.json`. Adapters are transport only: they must not alter evaluator authority, and they must not store credentials, raw environment variables, browser profiles, hidden reasoning, or chain-of-thought.
 
-Before submitting agent-evaluation changes, run an offline reference replay and preserve negative controls:
+Before submitting agent-evaluation changes, run an offline reference replay and preserve negative controls.
 
-```bash
-python scripts/prepare_agent_tasks.py benchmarks/suites/portability.json --out /tmp/agent-tasks
-python scripts/prepare_replay_runs.py benchmarks/suites/portability.json --profile reference --out /tmp/reference
-python scripts/prepare_replay_runs.py benchmarks/suites/portability.json --profile cautious --out /tmp/cautious
-python scripts/prepare_replay_runs.py benchmarks/suites/portability.json --profile faulty --out /tmp/faulty
-python scripts/validate_agent_runs.py /tmp/reference
-python scripts/evaluate_agent_runs.py benchmarks/suites/portability.json /tmp/reference
-```
+Do not weaken hard gates, fixture oracles, closure invariants, or replay negative controls merely to make a real agent score higher.
 
-Do not weaken hard gates, fixture oracles, or replay negative controls merely to make a real agent score higher.
+## Safety
+
+Intrusive work remains restricted to local, owned, sandboxed, benchmark/CTF, or explicitly authorized targets.
+
+Prefer bounded, reversible, non-destructive evidence. See `SECURITY.md`.
+
+## License
+
+Contributions to this repository are distributed under the repository's [Apache License 2.0](LICENSE) unless a file explicitly states otherwise.

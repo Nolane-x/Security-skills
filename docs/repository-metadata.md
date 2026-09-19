@@ -4,7 +4,7 @@ Canonical GitHub repository metadata for `Nolane-x/Security-skills`.
 
 ## Description
 
-Verification-first security skill graph and deterministic cross-agent evaluation framework for AI agents — 83 skills, 20 packs, evidence gates, benchmarks, and portable Agent Skills.
+Verification-first security skill graph and deterministic cross-agent evaluation framework for AI agents — 83 skills, 20 packs, 40 CI-enforced operator-depth profiles, evidence gates, benchmarks, and portable Agent Skills.
 
 ## Topics
 
@@ -28,6 +28,16 @@ Verification-first security skill graph and deterministic cross-agent evaluation
 - `evidence-driven`
 - `cross-agent`
 - `python`
+
+## Current release baseline
+
+- Wave 10 operator-depth program: **closed**
+- Canonical skills: **83**
+- Packs: **20**
+- CI-enforced operator-depth profiles: **40**
+- License: **Apache-2.0**
+
+See `docs/wave10-closure-audit.md` for the closure contract.
 
 ## Language landing pages
 
