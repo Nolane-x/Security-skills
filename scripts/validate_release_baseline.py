@@ -89,8 +89,10 @@ def validate(root: Path, baseline_path: Path | None = None) -> list[str]:
     if not isinstance(registry_version, int) or isinstance(registry_version, bool):
         errors.append("operator_depth_registry_version must be an integer")
 
-    public_readmes = _validate_string_list(
-        baseline.get("public_readmes"), label="public_readmes", errors=errors
+    published_documents = _validate_string_list(
+        baseline.get("published_release_documents"),
+        label="published_release_documents",
+        errors=errors,
     )
     required_tokens = _validate_string_list(
         baseline.get("required_readme_tokens"),
@@ -189,19 +191,21 @@ def validate(root: Path, baseline_path: Path | None = None) -> list[str]:
             if not (root / "benchmarks" / fixture).is_file():
                 errors.append(f"{suite_name} benchmark fixture is missing: {fixture}")
 
-    for readme in public_readmes:
-        readme_path = root / readme
+    for document in published_documents:
+        document_path = root / document
         try:
-            text = readme_path.read_text(encoding="utf-8")
+            text = document_path.read_text(encoding="utf-8")
         except FileNotFoundError:
-            errors.append(f"public README is missing: {readme}")
+            errors.append(f"published release document is missing: {document}")
             continue
         except (OSError, UnicodeError) as exc:
-            errors.append(f"cannot read public README {readme}: {exc}")
+            errors.append(f"cannot read published release document {document}: {exc}")
             continue
         for token in required_tokens:
             if token not in text:
-                errors.append(f"{readme} is missing release-baseline token '{token}'")
+                errors.append(
+                    f"{document} is missing release-baseline token '{token}'"
+                )
 
     license_path = root / "LICENSE"
     try:
