@@ -30,6 +30,9 @@ jobs:
       - name: Validate operator depth profiles
         run: python scripts/validate_operator_depth.py
 
+      - name: Validate release baseline
+        run: python scripts/validate_release_baseline.py
+
       - name: Validate skill graph
         run: python scripts/validate_graph.py
 
