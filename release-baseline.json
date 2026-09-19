@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "release": "wave10-closure",
+  "status": "closed",
+  "counts": {
+    "canonical_skills": 83,
+    "packs": 20,
+    "operator_depth_profiles": 40,
+    "benchmark_core_fixtures": 36,
+    "benchmark_portability_fixtures": 12
+  },
+  "operator_depth_registry_version": 2,
+  "license": "Apache-2.0",
+  "public_readmes": [
+    "README.md",
+    "README-VN.md",
+    "README-CN.md"
+  ],
+  "required_readme_tokens": [
+    "Wave 10",
+    "83",
+    "20",
+    "40",
+    "Apache-2.0"
+  ],
+  "required_paths": [
+    "LICENSE",
+    "SECURITY.md",
+    "CONTRIBUTING.md",
+    "operator-depth/profiles.json",
+    "benchmarks/suites/core.json",
+    "benchmarks/suites/portability.json",
+    "docs/wave10-closure-audit.md"
+  ]
+}
