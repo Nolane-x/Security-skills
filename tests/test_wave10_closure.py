@@ -42,8 +42,8 @@ class Wave10ClosureTests(unittest.TestCase):
                 self.assertTrue((skill_dir / profile["runbook"]).is_file())
                 self.assertTrue((skill_dir / profile["scenario_matrix"]).is_file())
 
-    def test_public_readmes_publish_release_authority(self):
-        for name in BASELINE["public_readmes"]:
+    def test_published_documents_publish_release_authority(self):
+        for name in BASELINE["published_release_documents"]:
             text = (ROOT / name).read_text(encoding="utf-8")
             with self.subTest(readme=name):
                 for token in BASELINE["required_readme_tokens"]:
